@@ -15,7 +15,7 @@
 			font-family: 'Spinnaker', sans-serif;
 			text-align: center;
 			font-size: 1.2em;
-			margin-top: 100px;
+			margin-top: 50px;
 		}
 		
 		a {
@@ -31,10 +31,24 @@
 	
 	<p>This is Orbital Core version <?php echo $this->config->item('orbital_core_version'); ?> at <?php echo $this->config->item('orbital_institution_name'); ?>.</p>
 	
-	<p>Want more? Hit up the API's 'ping' command by firing a HTTP GET to <a href="<?php echo site_url('core/ping'); ?>"><?php echo site_url('core/ping'); ?></a></p>
+	<?php
 	
-	<p><a href="https://github.com/lncd/Orbital-Core">Orbital Core on Github</a></p>
-	<p><a href="http://orbital.blogs.lincoln.ac.uk/">Orbital Blog</a></p>
+	if ($this->config->item('orbital_operation_mode') == 'maintenance')
+	{
+		echo '<p>' . $this->config->item('orbital_status_message_maintenance') . '</p>';
+	}
+	else if ($this->config->item('orbital_operation_mode') == 'readonly')
+	{
+		echo '<p>' . $this->config->item('orbital_status_message_readonly') . '</p>';
+	}
+	else
+	{
+		echo '<p>Orbital is currently operating in normal mode.</p>';
+	}
+	
+	?>
+	
+	<p><a href="https://github.com/lncd/Orbital-Core">Orbital Core on Github</a> &middot; <a href="http://orbital.blogs.lincoln.ac.uk/">Orbital Blog</a></p>
 
 </body>
 </html>
