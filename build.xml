@@ -22,8 +22,6 @@
     <target name="dist" depends="build">
         <echo msg="Distributing..." />
         
-        <includepath classpath="/usr/local/docblox" />
-        
         <docblox title="API Documentation"
 			destdir="docs">
 			<fileset dir="./application/controllers/api">
