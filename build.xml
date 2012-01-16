@@ -21,13 +21,6 @@
     <!-- ============================================  -->
     <target name="dist" depends="build">
         <echo msg="Distributing..." />
-        
-        <docblox title="API Documentation"
-			destdir="docs">
-			<fileset dir="./application/controllers/api">
-				<include name="**/*.php" />
-			</fileset>
-		</docblox>
 		
 		<echo msg="Documentation build complete." />
 
