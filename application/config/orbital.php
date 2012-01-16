@@ -23,7 +23,7 @@ $config['orbital_institution_name'] = 'University of Lincoln';
 |   normal		- Normal behaviour.
 |
 */
-$config['orbital_operation_mode'] = 'maintenance';
+$config['orbital_operation_mode'] = 'normal';
 
 /*
 |--------------------------------------------------------------------------
