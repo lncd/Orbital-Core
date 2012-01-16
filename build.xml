@@ -2,6 +2,8 @@
 
 <project name="Orbital Core" default="dist">
 
+	<includepath classpath="/usr/bin/docblox" />
+
 	<!-- ============================================  -->
     <!-- Target: prepare                               -->
     <!-- ============================================  -->
