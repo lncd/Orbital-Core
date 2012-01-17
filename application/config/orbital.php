@@ -8,7 +8,7 @@
 | The name of the institution responsible for this Orbital Core installation.
 |
 */
-$config['orbital_institution_name'] = 'University of Lincoln';
+$config['orbital_institution_name'] = '##ORBITAL_INSTITUTION_NAME##';
 
 /*
 |--------------------------------------------------------------------------

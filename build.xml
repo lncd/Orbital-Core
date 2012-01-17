@@ -21,8 +21,55 @@
     <!-- ============================================  -->
     <target name="dist" depends="build">
         <echo msg="Distributing..." />
+        
+        <reflexive>
+			<fileset dir=".">
+				<include pattern="index.php">
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="CI_ENVIRONMENT" value="${CI_ENVIRONMENT}" />
+				</replacetokens>
+			</filterchain>
+		</reflexive>
 		
-		<echo msg="Documentation build complete." />
+		<reflexive>
+			<fileset dir="./application/config">
+				<include pattern="config.php">
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="CI_BASEURL" value="${CI_BASEURL}" />
+					<token key="CI_INDEXPAGE" value="${CI_INDEXPAGE}" />
+				</replacetokens>
+			</filterchain>
+		</reflexive>
+		
+		<reflexive>
+			<fileset dir="./application/config">
+				<include pattern="orbital.php">
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="ORBITAL_INSTITUTION_NAME" value="${ORBITAL_INSTITUTION_NAME}" />
+				</replacetokens>
+			</filterchain>
+		</reflexive>
+		
+		<reflexive>
+			<fileset dir="./application/config">
+				<include pattern="mongodb.php">
+			</fileset>
+			<filterchain>
+				<replacetokens begintoken="##" endtoken="##">
+					<token key="MONGO_SERVERS" value="${MONGO_SERVERS}" />
+					<token key="MONGO_PORT" value="${MONGO_PORT}" />
+					<token key="MONGO_DATABASE" value="${MONGO_DATABASE}" />
+				</replacetokens>
+			</filterchain>
+		</reflexive>
+		
+		<echo msg="Configuration token replacement complete." />
 
     </target>
 

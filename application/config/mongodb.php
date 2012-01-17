@@ -1,13 +1,13 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 // Generally will be localhost if you're querying from the machine that Mongo is installed on
-$config['mongo_host'] = "10.177.11.170";
+$config['mongo_host'] = "##MONGO_SERVERS##";
 
 // Generally will be 27017 unless you've configured Mongo otherwise
-$config['mongo_port'] = 27017;
+$config['mongo_port'] = ##MONGO_PORT##;
 
 // The database you want to work from (required)
-$config['mongo_db'] = "orbital";
+$config['mongo_db'] = "##MONGO_DATABASE##";
 
 // Leave blank if Mongo is not running in auth mode
 $config['mongo_user'] = "";
