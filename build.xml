@@ -24,7 +24,7 @@
         
         <reflexive>
 			<fileset dir=".">
-				<include pattern="index.php">
+				<include pattern="index.php" />
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
@@ -35,7 +35,7 @@
 		
 		<reflexive>
 			<fileset dir="./application/config">
-				<include pattern="config.php">
+				<include pattern="config.php" />
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
@@ -47,7 +47,7 @@
 		
 		<reflexive>
 			<fileset dir="./application/config">
-				<include pattern="orbital.php">
+				<include pattern="orbital.php" />
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
@@ -58,7 +58,7 @@
 		
 		<reflexive>
 			<fileset dir="./application/config">
-				<include pattern="mongodb.php">
+				<include pattern="mongodb.php" />
 			</fileset>
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
