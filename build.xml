@@ -15,7 +15,7 @@
     <target name="build" depends="prepare">
         <echo msg="Building..." />
         
-        <exec command="phpcs --standard=ZEND --report=checkstyle ${ws}/src/ > ${builddir}/reports/checkstyle.xml" escape="false" />
+        <exec command="phpcs --standard=ZEND --report=checkstyle ${ws}/src/ > ./reports/checkstyle.xml" escape="false" />
         
         <echo msg="PHP Check Style complete." />
         
