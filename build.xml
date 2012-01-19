@@ -8,8 +8,6 @@
     <target name="prepare">
     
         <echo msg="Preparing..." />
-		
-		<echo msg="Configuration token replacement complete." />
         
     </target>
 
@@ -20,10 +18,10 @@
     
         <echo msg="Building..." />
         
-        <copy todir="./build">
-			<fileset dir="./src">
-			<include>**</include>
-			<exclude>**/.git/**</exclude>
+        <copy todir="build">
+			<fileset dir="src">
+				<include>**</include>
+				<exclude>**/.git/**</exclude>
 			</fileset>
 		</copy>
         
