@@ -6,27 +6,35 @@
     <!-- Target: prepare                               -->
     <!-- ============================================  -->
     <target name="prepare">
+    
         <echo msg="Preparing..." />
+		
+		<echo msg="Configuration token replacement complete." />
+        
     </target>
 
     <!-- ============================================  -->
     <!-- Target: build                                 -->
     <!-- ============================================  -->
     <target name="build" depends="prepare">
+    
         <echo msg="Building..." />
         
-        <exec command="phpcs --standard=CodeIgniter --report=checkstyle ./application > ./reports/checkstyle.xml" escape="false" />
-        
-        <echo msg="PHP Check Style complete." />
-        
+        <copy todir="./build">
+			<fileset dir="./src">
+			<include>**</include>
+			<exclude>**/.git/**</exclude>
+			</fileset>
+		</copy>
         
     </target>
-
+    
+	<!-- ============================================  -->
+    <!-- Target: configure                               -->
     <!-- ============================================  -->
-    <!-- (DEFAULT)  Target: dist                       --> 
-    <!-- ============================================  -->
-    <target name="dist" depends="build">
-        <echo msg="Distributing..." />
+    <target name="configure" depends="build">
+    
+        <echo msg="Configuring..." />
         
         <reflexive>
 			<fileset dir=".">
@@ -76,6 +84,37 @@
 		</reflexive>
 		
 		<echo msg="Configuration token replacement complete." />
+        
+    </target>
+    
+    <!-- ============================================  -->
+    <!-- Target: test                                 -->
+    <!-- ============================================  -->
+    <target name="test" depends="configure">
+    
+        <echo msg="Testing..." />
+        
+    </target>
+    
+    <!-- ============================================  -->
+    <!-- Target: report                                 -->
+    <!-- ============================================  -->
+    <target name="report" depends="test">
+    
+        <echo msg="Reporting..." />
+        
+        <exec command="phpcs --standard=CodeIgniter --report=checkstyle ./build > ./reports/checkstyle.xml" escape="false" />
+        
+        <echo msg="PHP Check Style complete." />
+        
+    </target>
+
+    <!-- ============================================  -->
+    <!-- (DEFAULT)  Target: dist                       --> 
+    <!-- ============================================  -->
+    <target name="dist" depends="report">
+    
+        <echo msg="Distributing..." />
 
     </target>
 
