@@ -101,7 +101,7 @@
     
         <echo msg="Reporting..." />
         
-        <exec command="phpcs --standard=CodeIgniter --report=checkstyle ./build > ./reports/checkstyle.xml" escape="false" />
+        <exec command="phpcs --standard=CodeIgniter --report=checkstyle --ignore=./system,index.php ./build > ./reports/checkstyle.xml" escape="false" />
         
         <echo msg="PHP Check Style complete." />
         
