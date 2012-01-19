@@ -13,15 +13,13 @@
  * @link		https://github.com/lncd/Orbital-Core
 */
 
-/*
-|--------------------------------------------------------------------------
-| Institution Name
-|--------------------------------------------------------------------------
-|
-| The name of the institution responsible for this Orbital Core
-| installation.
-|
+/**
+ * Institution Name
+ *
+ * The name of the institution responsible for this Orbital Core
+ * installation.
 */
+
 $config['orbital_institution_name'] = '##ORBITAL_INSTITUTION_NAME##';
 
 /*
@@ -70,4 +68,4 @@ $config['orbital_status_message_readonly'] = 'Orbital is currently in read-only 
 $config['orbital_core_version'] = '0.0.1';
 
 /* End of file orbital.php */
-/* Location: ./application/config/orbital.php */
+/* Location: ./config/orbital.php */
