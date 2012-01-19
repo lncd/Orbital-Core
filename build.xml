@@ -18,10 +18,10 @@
     
         <echo msg="Building..." />
         
-        <copy todir="build">
-			<fileset dir="src">
-				<include>**</include>
-				<exclude>**/.git/**</exclude>
+        <copy todir="./build" includeemptydirs="true">
+			<fileset dir="./src">
+				<include name="**" />
+				<exclude name="**/.git/**" />
 			</fileset>
 		</copy>
         
