@@ -3,14 +3,13 @@
 /**
  * Orbital Configuration File
  *
- * This is an example of a few basic user interaction methods you could use
- * all done with a hardcoded array.
+ * Configuration for this Orbital Core instance.
  *
- * @package		Orbital
- * @subpackage	Core
- * @category	Configuration
- * @author		Nick Jackson
- * @link		https://github.com/lncd/Orbital-Core
+ * @category   Configuration
+ * @package    Orbital
+ * @subpackage Core
+ * @author     Nick Jackson <nijackson@lincoln.ac.uk>
+ * @link       https://github.com/lncd/Orbital-Core
 */
 
 defined('BASEPATH') OR exit('No direct script access allowed');
