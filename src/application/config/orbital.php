@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
 
 /**
  * Orbital Configuration File
@@ -12,6 +12,8 @@
  * @author		Nick Jackson
  * @link		https://github.com/lncd/Orbital-Core
 */
+
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Institution Name
