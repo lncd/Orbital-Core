@@ -18,6 +18,13 @@
     
         <echo msg="Building..." />
         
+        <copy todir="./build" includeemptydirs="true">
+			<fileset dir="./src">
+				<include name="**" />
+				<exclude name="**/.git/**" />
+			</fileset>
+		</copy>
+        
     </target>
     
 	<!-- ============================================  -->
@@ -28,7 +35,7 @@
         <echo msg="Configuring..." />
         
         <reflexive>
-			<fileset dir=".">
+			<fileset dir="./build">
 				<include pattern="index.php" />
 			</fileset>
 			<filterchain>
@@ -39,7 +46,7 @@
 		</reflexive>
 		
 		<reflexive>
-			<fileset dir="./application/config">
+			<fileset dir="./build/application/config">
 				<include pattern="config.php" />
 			</fileset>
 			<filterchain>
@@ -51,7 +58,7 @@
 		</reflexive>
 		
 		<reflexive>
-			<fileset dir="./application/config">
+			<fileset dir="./build/application/config">
 				<include pattern="orbital.php" />
 			</fileset>
 			<filterchain>
@@ -62,7 +69,7 @@
 		</reflexive>
 		
 		<reflexive>
-			<fileset dir="./application/config">
+			<fileset dir="./build/application/config">
 				<include pattern="mongodb.php" />
 			</fileset>
 			<filterchain>
@@ -94,7 +101,7 @@
     
         <echo msg="Reporting..." />
         
-        <exec command="phpcs --standard=CodeIgniter --report=checkstyle --ignore=./system,index.php . > ./reports/checkstyle.xml" escape="false" />
+        <exec command="phpcs --standard=CodeIgniter --report=checkstyle --ignore=./system,index.php ./build > ./reports/checkstyle.xml" escape="false" />
         
         <echo msg="PHP Check Style complete." />
         
