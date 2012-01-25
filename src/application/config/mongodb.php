@@ -10,8 +10,8 @@ $config['mongo_port'] = ##MONGO_PORT##;
 $config['mongo_db'] = "##MONGO_DATABASE##";
 
 // Leave blank if Mongo is not running in auth mode
-$config['mongo_user'] = "";
-$config['mongo_pass'] = "";
+$config['mongo_user'] = "##MONGO_USER##";
+$config['mongo_pass'] = "##MONGO_PASSWORD##";
 
 // Persistant connections
 $config['mongo_persist'] = TRUE;
