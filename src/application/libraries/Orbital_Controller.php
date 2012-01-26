@@ -7,6 +7,9 @@ class Orbital_Controller extends REST_Controller {
 	{
 		parent::__construct();
 
+		// Before anything else, all exceptions will be elegantly caught.
+		set_exception_handler($this->_handle_exception);
+
 		// Lets grab the config and get ready to party
 		$this->load->config('orbital');
 		
@@ -16,6 +19,15 @@ class Orbital_Controller extends REST_Controller {
 			$this->response(array('message' => $this->config->item('orbital_status_message_maintenance')), 503);
 		}
 		
+	}
+	
+	/*
+	 * Exception Handler
+	 */
+	 
+	private function _handle_exception($exception)
+	{
+		die ('Uncaught exception: ' . $exception->getMessage);
 	}
 
 	/*

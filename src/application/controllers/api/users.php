@@ -17,7 +17,7 @@ class Users extends Orbital_Controller
 
         else
         {
-            $this->response(array('error' => 'User could not be found'), 404);
+            $this->response(array('error' => 'Unable to find users.'), 404);
         }
     }
 }
