@@ -29,6 +29,7 @@ class Orbital_Controller extends REST_Controller {
 	
 	private function _handle_exception($exception)
 	{
+		log_message('error', 'Uncaught exception: ' . $exception->getMessage);
 		die ('Uncaught exception: ' . $exception->getMessage);
 	}
 

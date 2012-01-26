@@ -1410,6 +1410,9 @@ class Mongo_db {
 		} 
 		catch (MongoConnectionException $e)
 		{
+		
+			log_message('error', "Unable to connect to MongoDB: {$e->getMessage()}");
+		
 			if($this->CI->config->item('mongo_supress_connect_error'))
 			{
 				show_error("Unable to connect to MongoDB", 500);
