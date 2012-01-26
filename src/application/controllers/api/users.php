@@ -8,11 +8,11 @@ class Users extends Orbital_Controller
 {
 	function list_get()
     {
-        $user = $this->mongo_db->get('users');
+        $users->result = $this->mongo_db->get('users');
     	
-        if($user)
+        if($users)
         {
-            $this->response($user, 200); // 200 being the HTTP response code
+            $this->response($users, 200); // 200 being the HTTP response code
         }
 
         else

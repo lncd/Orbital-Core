@@ -9,9 +9,7 @@ class Core extends Orbital_Controller
 	function ping_get()
 	{
 	
-		$ping = array(
-			'message'		=>	'pong'
-		);
+		$ping->message = 'pong';
 		
 		$this->response($ping, 200); // 200 being the HTTP response code
 		
