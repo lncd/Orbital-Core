@@ -26,11 +26,9 @@ class Orbital_Controller extends REST_Controller {
 	public function response($data = array(), $http_code = null)
 	{
 	
-		$data['orbital'] = array(
-			'institution_name'	=>	$this->config->item('orbital_institution_name'),
-			'core_version'		=>	$this->config->item('orbital_core_version'),
-			'request_timestamp'	=>	time()
-		);
+		$data->orbital->institution_name = $this->config->item('orbital_institution_name');
+		$data->orbital->institution_namecore_version = $this->config->item('orbital_core_version');
+		$data->orbital->institution_namerequest_timestamp = time();
 		
 		// If data is empty and not code provide, error and bail
 		if (empty($data) && $http_code === null)
