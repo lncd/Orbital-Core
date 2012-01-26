@@ -26,7 +26,7 @@ $config['mongo_return'] = 'object'; // Set to object
 $config['mongo_query_safety'] = 'safe';
 
 // Supress connection error password display
-$config['mongo_supress_connect_error'] = FALSE;
+$config['mongo_supress_connect_error'] = TRUE;
 
 // If you are having problems connecting try changing this to TRUE
 $config['host_db_flag'] = TRUE;
