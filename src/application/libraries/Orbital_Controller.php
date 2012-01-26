@@ -21,17 +21,19 @@ class Orbital_Controller extends REST_Controller {
 		
 	}
 	
-	/*
+	/**
 	 * Exception Handler
+	 *
+	 * Global exception handling for all Orbital API functions.
 	 */
-	 
+	
 	private function _handle_exception($exception)
 	{
 		die ('Uncaught exception: ' . $exception->getMessage);
 	}
 
-	/*
-	 * response
+	/**
+	 * API Response
 	 *
 	 * Takes pure data and optionally a status code, then creates the response
 	 */
