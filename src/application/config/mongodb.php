@@ -29,4 +29,4 @@ $config['mongo_query_safety'] = 'safe';
 $config['mongo_supress_connect_error'] = FALSE;
 
 // If you are having problems connecting try changing this to TRUE
-$config['host_db_flag'] = FALSE;
+$config['host_db_flag'] = TRUE;
