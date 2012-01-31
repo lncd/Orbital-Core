@@ -107,6 +107,10 @@
         
         <echo msg="PHP Check Style complete." />
         
+        <exec command="docblox -d build/application -t docs" />
+		
+		<echo msg="DocBlox complete." />
+        
     </target>
 
     <!-- ============================================  -->
