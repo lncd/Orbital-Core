@@ -1,5 +1,16 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * Orbital Output Library
+ *
+ * Prepares Orbital Core responses for output.
+ *
+ * @package		Orbital
+ * @subpackage  Core
+ * @author		Nick Jackson
+ * @link		https://github.com/lncd/Orbital-Core
+ */
+
 class Orbital_Controller extends REST_Controller {
 
 	// Constructor function

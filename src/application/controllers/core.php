@@ -33,12 +33,12 @@ class Core extends Orbital_Controller
 	
 		$auth_types = $this->mongo_db->get('auth_types');
 	
-		if (length($auth_types) > 0)
+		if (count($auth_types) > 0)
 		{
 	
 			$response->auth_types = $auth_types;
 			
-			$this->response($response, 200); // 200 being the HTTP response code
+			$this->response($response, 200);
 			
 		}
 		else
@@ -46,7 +46,7 @@ class Core extends Orbital_Controller
 		
 			$response->message = 'No authentication types are configured.';
 			
-			$this->response($response, 500); // 200 being the HTTP response code
+			$this->response($response, 500);
 		
 		}
 		
