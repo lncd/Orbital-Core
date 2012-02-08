@@ -5,22 +5,26 @@
  *
  * Prepares Orbital Core responses for output.
  *
- * @package		Orbital
- * @subpackage  Core
- * @author		Nick Jackson
- * @link		https://github.com/lncd/Orbital-Core
- */
+ * @category   Library
+ * @package    Orbital
+ * @subpackage Core
+ * @autho      Nick Jackson <nijackson@lincoln.ac.uk>
+ * @link       https://github.com/lncd/Orbital-Core
+*/
 
 class Orbital_Controller extends REST_Controller {
 
 	private $response_clock;
 
-	// Constructor function
+	/**
+	 * Constructor
+	*/
+	
 	public function __construct()
 	{
 	
 		// Start the clock
-		$response_clock = microtime();
+		$this->response_clock = microtime();
 		
 		parent::__construct();
 
@@ -39,14 +43,14 @@ class Orbital_Controller extends REST_Controller {
 	 * API Response
 	 *
 	 * Takes pure data and optionally a status code, then creates the response
-	 */
+	*/
 	public function response($response, $http_code = null)
 	{
 	
 		$data->response = $response;
 		
 		// Stop the clock!
-		$data->response_time = microtime() - $response_clock;
+		$data->response_time = microtime() - $this->response_clock;
 		
 		$data->orbital->institution_name = $this->config->item('orbital_institution_name');
 		$data->orbital->core_version = $this->config->item('orbital_core_version');
