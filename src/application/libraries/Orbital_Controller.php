@@ -23,8 +23,10 @@ class Orbital_Controller extends REST_Controller {
 	 *
 	 * Takes pure data and optionally a status code, then creates the response
 	 */
-	public function response($data, $http_code = null)
+	public function response($response, $http_code = null)
 	{
+	
+		$data->response = $response;
 	
 		$data->orbital->institution_name = $this->config->item('orbital_institution_name');
 		$data->orbital->core_version = $this->config->item('orbital_core_version');

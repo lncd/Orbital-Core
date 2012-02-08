@@ -6,12 +6,49 @@ require APPPATH.'/libraries/Orbital_Controller.php';
 
 class Core extends Orbital_Controller
 {
-	function ping_get()
+
+	/**
+	 * Returns a 'pong' response message.
+	 *
+	 * @access public
+	 */
+
+	public function ping_get()
 	{
 	
 		$ping->message = 'pong';
 		
 		$this->response($ping, 200); // 200 being the HTTP response code
+		
+	}
+	
+	/**
+	 * Returns a list of all supported authentication types
+	 *
+	 * @access public
+	 */
+	
+	public function auth_types_get()
+	{
+	
+		$auth_types = $this->mongo_db->get('auth_types');
+	
+		if (length($auth_types) > 0)
+		{
+	
+			$response->auth_types = $auth_types;
+			
+			$this->response($response, 200); // 200 being the HTTP response code
+			
+		}
+		else
+		{
+		
+			$response->message = 'No authentication types are configured.';
+			
+			$this->response($response, 500); // 200 being the HTTP response code
+		
+		}
 		
 	}
 }
