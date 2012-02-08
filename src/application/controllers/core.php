@@ -35,8 +35,12 @@ class Core extends Orbital_Controller
 	
 		if (count($auth_types) > 0)
 		{
-	
-			$response->auth_types = $auth_types;
+		
+			foreach ($auth_types as $auth_type)
+			{
+				$auth_type->uri = site_url('signin/' . $auth_type->shortname);
+				$response->auth_types[] = $auth_type;
+			}
 			
 			$this->response($response, 200);
 			
