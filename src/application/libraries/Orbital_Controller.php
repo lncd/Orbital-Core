@@ -13,9 +13,15 @@
 
 class Orbital_Controller extends REST_Controller {
 
+	private $response_clock;
+
 	// Constructor function
 	public function __construct()
 	{
+	
+		// Start the clock
+		$response_clock = microtime();
+		
 		parent::__construct();
 
 		// Lets grab the config and get ready to party
@@ -38,7 +44,10 @@ class Orbital_Controller extends REST_Controller {
 	{
 	
 		$data->response = $response;
-	
+		
+		// Stop the clock!
+		$data->response_time = microtime() - $response_clock;
+		
 		$data->orbital->institution_name = $this->config->item('orbital_institution_name');
 		$data->orbital->core_version = $this->config->item('orbital_core_version');
 		$data->orbital->request_timestamp = time();
