@@ -1,32 +1,26 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-// Generally will be localhost if you're querying from the machine that Mongo is installed on
-$config['mongo_host'] = "##MONGO_SERVERS##";
+/* -------------------------------------------------------------------
+ * EXPLANATION OF VARIABLES
+ * -------------------------------------------------------------------
+ *
+ * ['mongo_hostbase'] The hostname (and port number) of your MongoDB server.
+ * ['mongo_database'] The name of the database you want to connect to
+ * ['mongo_username'] The username used to connect to the database (if auth mode is enabled)
+ * ['mongo_password'] The password used to connect to the database (if auth mode is enabled)
+ * ['mongo_persist']  Persist the connection
+ * ['mongo_persist_key'] The persistant connection key
+ * ['mongo_query_safety'] Safety level of write queries. "safe" = committed in memory, "fsync" = committed to harddisk
+ * ['mongo_supress_connect_error'] If the driver can't connect by default it will throw an error which dislays the username and password used to connect. Set to TRUE to hide these details.
+ * ['mongo_host_db_flag']   If running in auth mode and the user does not have global read/write then set this to true
+ */
 
-// Generally will be 27017 unless you've configured Mongo otherwise
-$config['mongo_port'] = ##MONGO_PORT##;
-
-// The database you want to work from (required)
-$config['mongo_db'] = "##MONGO_DATABASE##";
-
-// Leave blank if Mongo is not running in auth mode
-$config['mongo_user'] = "##MONGO_USER##";
-$config['mongo_pass'] = "##MONGO_PASSWORD##";
-
-// Persistant connections
-$config['mongo_persist'] = TRUE;
-$config['mongo_persist_key'] = 'ci_mongo_persist_orbital';
-
-// Get results as an object instead of an array
-$config['mongo_return'] = 'array'; // Set to object
-
-// When you run an insert/update/delete how sure do you want to be that the database has received the query?
-// safe = the database has receieved and executed the query
-// fysnc = as above + the change has been committed to harddisk <- NOTE: will introduce a performance penalty
-$config['mongo_query_safety'] = 'safe';
-
-// Supress connection error password display
-$config['mongo_supress_connect_error'] = TRUE;
-
-// If you are having problems connecting try changing this to TRUE
-$config['host_db_flag'] = TRUE;
+$config['default']['mongo_hostbase'] = '##MONGO_SERVERS##';
+$config['default']['mongo_database'] = '##MONGO_DATABASE##';
+$config['default']['mongo_username'] = '##MONGO_USER##';
+$config['default']['mongo_password'] = '##MONGO_PASSWORD##';
+$config['default']['mongo_persist']  = TRUE;
+$config['default']['mongo_persist_key']	 = 'orbital_core_persist_key';
+$config['default']['mongo_query_safety'] = 'safe';
+$config['default']['mongo_supress_connect_error'] = TRUE;
+$config['default']['mongo_host_db_flag']   = TRUE;
