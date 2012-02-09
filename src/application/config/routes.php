@@ -38,12 +38,11 @@
 |
 */
 
-$route['signin/callback/(:any)'] = "signin/callback/$1";
-$route['signin/(:any)'] = "signin/signin/$1";
-
 $route['default_controller'] = "splash";
 $route['404_override'] = '';
 
+$route['signin/callback/(:any)'] = "signin/callback/$1";
+$route['signin/(:any)'] = "signin/signin/$1";
 
-/* End of file routes.php */
-/* Location: ./application/config/routes.php */
+// End of file routes.php
+// Location: ./config/routes.php
