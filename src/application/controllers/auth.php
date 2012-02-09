@@ -41,6 +41,12 @@ class Auth extends CI_Controller {
 			show_404();
 		}
 	}
+	
+	function signout()
+	{
+		$this->session->sess_destroy();
+		redirect();
+	}
 }
 
 // EOF

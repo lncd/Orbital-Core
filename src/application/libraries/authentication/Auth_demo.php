@@ -7,7 +7,7 @@ class Auth_demo {
 	
 		echo '<h1>Sign In Demo</h1>';
 		
-		echo '<p><a href="http://core.orbital.lncd.org/auth/callback/demo?u=orbital@lncd.org">Sign in as orbital@lncd.org</a></p>'.
+		echo '<p><a href="http://core.orbital.lncd.org/auth/callback/demo?u=orbital@lncd.org">Sign in as orbital@lncd.org</a></p>';
 	
 	}
 	
