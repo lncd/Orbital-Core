@@ -2,6 +2,13 @@
 
 class Auth_demo {
 
+	private $_ci;
+	
+	function __construct()
+	{
+		$this->_ci = get_instance();
+	}
+
 	function signin()
 	{
 	
@@ -13,7 +20,7 @@ class Auth_demo {
 	
 	function callback()
 	{
-		echo 'SIGN IN ' . $this->input->get('u');
+		echo 'SIGN IN ' . $this->_ci->get('u');
 	}
 
 }
