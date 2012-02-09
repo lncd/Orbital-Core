@@ -200,7 +200,7 @@ class Mongo_db {
 			show_error('The MongoDB PECL extension has not been installed or enabled', 500);
 		}
 		
-		$this->ci = get_instance();
+		$this->_ci = get_instance();
 		$this->load();
 	}
 	
@@ -216,9 +216,9 @@ class Mongo_db {
 	 */	
 	public function load($config_name = 'default')
 	{
-		$this->ci->config->load($this->config_file);
-		$this->config_data = $this->ci->config->item($config_name);
-		$this->connection_string();
+		$this->_ci->config->load($this->_config_file);
+		$this->_config_data = $this->_ci->config->item($config_name);
+		$this->_connection_string();
 		$this->connect();
 	}	
 
@@ -244,8 +244,8 @@ class Mongo_db {
 		try
 		{
 			// Regenerate the connection string and reconnect
-			$this->config_data['mongo_database'] = $database;
-			$this->connection_string();
+			$this->_config_data['mongo_database'] = $database;
+			$this->_connection_string();
 			$this->connect();
 		}
 		
