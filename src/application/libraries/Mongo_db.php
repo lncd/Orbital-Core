@@ -69,14 +69,6 @@ class Mongo_db {
 	private $_host = 'localhost';
 	
 	/**
-	 * Database host port.
-	 * 
-	 * @var mixed
-	 * @access private
-	 */
-	private $_port = 27017;
-	
-	/**
 	 * Database user.
 	 * 
 	 * @var mixed
@@ -1797,13 +1789,13 @@ class Mongo_db {
 	 */
 	private function _connection_string() 
 	{		
-		$this->host = trim($this->_config_data['mongo_hostbase']);
-		$this->user = trim($this->_config_data['mongo_username']);
-		$this->pass = trim($this->_config_data['mongo_password']);
-		$this->dbname = trim($this->_config_data['mongo_database']);
-		$this->persist = trim($this->_config_data['mongo_persist']);
-		$this->persist_key = trim($this->_config_data['mongo_persist_key']);
-		$this->query_safety = trim($this->_config_data['mongo_query_safety']);
+		$this->_host = trim($this->_config_data['mongo_hostbase']);
+		$this->_user = trim($this->_config_data['mongo_username']);
+		$this->_pass = trim($this->_config_data['mongo_password']);
+		$this->_dbname = trim($this->_config_data['mongo_database']);
+		$this->_persist = trim($this->_config_data['mongo_persist']);
+		$this->_persist_key = trim($this->_config_data['mongo_persist_key']);
+		$this->_query_safety = trim($this->_config_data['mongo_query_safety']);
 		$dbhostflag = (bool) $this->_config_data['mongo_host_db_flag'];
 		
 		$connection_string = 'mongodb://';
