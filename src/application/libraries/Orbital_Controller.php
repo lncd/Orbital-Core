@@ -50,7 +50,7 @@ class Orbital_Controller extends REST_Controller {
 		$data->response = $response;
 		
 		// Stop the clock!
-		$data->response_time = microtime() - $this->response_clock;
+		$data->response_time = round(microtime() - $this->response_clock, 5);
 		
 		$data->orbital->institution_name = $this->config->item('orbital_institution_name');
 		$data->orbital->core_version = $this->config->item('orbital_core_version');
