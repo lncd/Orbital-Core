@@ -53,6 +53,8 @@
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="CI_BASEURL" value="${CI_BASEURL}" />
 					<token key="CI_INDEXPAGE" value="${CI_INDEXPAGE}" />
+					<token key="CI_ENCRYPTKEY" value="${CI_ENCRYPTKEY}" />
+					<token key="CI_NAME_PREFIX" value="${CI_NAME_PREFIX}" />
 				</replacetokens>
 			</filterchain>
 		</reflexive>
