@@ -20,14 +20,14 @@ class Auth extends CI_Controller {
 
 	function signin($endpoint)
 	{
-		$this->load->library('authentication/Auth_' . $endpoint);
-		$this->auth_{$endpoint}->signin();
+		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
+		$this->auth_endpoint->signin();
 	}
 	
 	function callback($endpoint)
 	{
-		$this->load->library('authentication/Auth_' . $endpoint);
-		$this->auth_{$endpoint}->callback();
+		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
+		$this->auth_endpoint->callback();
 	}
 	
 	function signout()
