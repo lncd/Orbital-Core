@@ -1740,7 +1740,7 @@ class Mongo_db {
 	 */
 	public function last_query()
 	{
-		return $_query_log;
+		return $this->_query_log;
 	}
 		
 	/**
@@ -1840,12 +1840,11 @@ class Mongo_db {
 			'collection'	=> $collection,
 			'action' 		=> $action,
 			'wheres' 		=> $this->wheres,
-			'inserts'		=> $insert,
 			'updates'		=> $this->updates,
-			'selects'		=> $this->selects,
-			'limit'	 		=> $this->limit,
-			'offset' 		=> $this->offset,
-			'sorts'	 		=> $this->sorts
+			'selects'		=> $this->_selects,
+			'limit'	 		=> $this->_limit,
+			'offset' 		=> $this->_offset,
+			'sorts'	 		=> $this->_sorts
 		);
 			
 		$this->_selects	= array();
