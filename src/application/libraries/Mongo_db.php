@@ -216,8 +216,8 @@ class Mongo_db {
 	 */	
 	public function load($config_name = 'default')
 	{
-		$this->CI->config->load($this->config_file);
-		$this->config_data = $this->CI->config->item($config_name);
+		$this->ci->config->load($this->config_file);
+		$this->config_data = $this->ci->config->item($config_name);
 		$this->connection_string();
 		$this->connect();
 	}	
