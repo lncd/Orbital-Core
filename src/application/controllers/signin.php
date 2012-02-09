@@ -20,7 +20,7 @@ class Signin extends CI_Controller {
 
 	function signin($endpoint)
 	{
-		if (@$this->load->library('authentication/Auth_' . $endpoint))
+		if ($this->load->library('authentication/Auth_' . $endpoint))
 		{
 			$this->Auth_{$endpoint}->signin();
 		}
@@ -32,7 +32,7 @@ class Signin extends CI_Controller {
 	
 	function callback()
 	{
-		if (@$this->load->library('authentication/Auth_' . $endpoint))
+		if ($this->load->library('authentication/Auth_' . $endpoint))
 		{
 			$this->Auth_{$endpoint}->callback();
 		}
