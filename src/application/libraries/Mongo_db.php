@@ -211,7 +211,7 @@ class Mongo_db {
 		$this->_ci->config->load($this->_config_file);
 		$this->_config_data = $this->_ci->config->item($config_name);
 		$this->_connection_string();
-		$this->connect();
+		$this->_connect();
 	}	
 
 	/**
@@ -238,7 +238,7 @@ class Mongo_db {
 			// Regenerate the connection string and reconnect
 			$this->_config_data['mongo_database'] = $database;
 			$this->_connection_string();
-			$this->connect();
+			$this->_connect();
 		}
 		
 		catch (Exception $exception)
