@@ -1797,14 +1797,14 @@ class Mongo_db {
 	 */
 	private function _connection_string() 
 	{		
-		$this->host = trim($this->config_data['mongo_hostbase']);
-		$this->user = trim($this->config_data['mongo_username']);
-		$this->pass = trim($this->config_data['mongo_password']);
-		$this->dbname = trim($this->config_data['mongo_database']);
-		$this->persist = trim($this->config_data['mongo_persist']);
-		$this->persist_key = trim($this->config_data['mongo_persist_key']);
-		$this->query_safety = trim($this->config_data['mongo_query_safety']);
-		$dbhostflag = (bool) $this->config_data['mongo_host_db_flag'];
+		$this->host = trim($this->_config_data['mongo_hostbase']);
+		$this->user = trim($this->_config_data['mongo_username']);
+		$this->pass = trim($this->_config_data['mongo_password']);
+		$this->dbname = trim($this->_config_data['mongo_database']);
+		$this->persist = trim($this->_config_data['mongo_persist']);
+		$this->persist_key = trim($this->_config_data['mongo_persist_key']);
+		$this->query_safety = trim($this->_config_data['mongo_query_safety']);
+		$dbhostflag = (bool) $this->_config_data['mongo_host_db_flag'];
 		
 		$connection_string = 'mongodb://';
 		
