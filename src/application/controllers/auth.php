@@ -21,7 +21,7 @@ class Auth extends CI_Controller {
 	function signin($endpoint)
 	{
 		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
-		$state['client_id'] = $this->_ci->input->get('client_id');
+		$state['client_id'] = $this->input->get('client_id');
 		$this->auth_endpoint->signin($state);
 	}
 	
