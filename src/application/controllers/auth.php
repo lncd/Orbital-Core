@@ -27,13 +27,14 @@ class Auth extends CI_Controller {
 	function callback($endpoint)
 	{
 		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
-		$this->auth_endpoint->callback();
-	}
-	
-	function signout()
-	{
-		$this->session->sess_destroy();
-		redirect();
+		if ($response = $this->auth_endpoint->callback())
+		{
+			print_r($response);
+		}
+		else
+		{
+			show_404();
+		}
 	}
 }
 
