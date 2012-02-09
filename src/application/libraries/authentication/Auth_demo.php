@@ -20,7 +20,7 @@ class Auth_demo {
 	
 	function callback()
 	{
-		echo 'SIGN IN ' . $this->_ci->get('u');
+		echo 'SIGN IN ' . $this->_ci->input->get('u');
 	}
 
 }
