@@ -6,7 +6,7 @@ class Auth_demo {
 	
 	function __construct()
 	{
-		$this->_ci = get_instance();
+		$this->_ci =& get_instance();
 	}
 
 	function signin()

@@ -192,7 +192,7 @@ class Mongo_db {
 			show_error('The MongoDB PECL extension has not been installed or enabled', 500);
 		}
 		
-		$this->_ci = get_instance();
+		$this->_ci =& get_instance();
 		$this->load();
 	}
 	
