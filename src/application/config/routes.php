@@ -38,6 +38,8 @@
 |
 */
 
+$route['signin/(:any)'] = "signin/$1";
+
 $route['default_controller'] = "splash";
 $route['404_override'] = '';
 
