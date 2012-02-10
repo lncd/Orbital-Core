@@ -66,7 +66,7 @@ $config['orbital_status_message_readonly'] = 'Orbital is currently in read-only 
 | The version of the Orbital Core.
 |
 */
-$config['orbital_core_version'] = '0.0.1';
+$config['orbital_core_version'] = '0.0.2';
 
 /* End of file orbital.php */
 /* Location: ./config/orbital.php */
