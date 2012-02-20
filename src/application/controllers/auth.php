@@ -24,7 +24,7 @@ class Auth extends CI_Controller {
 	 * Builds state variable and routes sign-in requests to the appropriate
 	 * authentication library.
 	 *
-	 * @property $endpoint The designated sign-in endpoint.
+	 * @parameter $endpoint The designated sign-in endpoint.
 	 */
 
 	function signin($endpoint)
@@ -41,7 +41,7 @@ class Auth extends CI_Controller {
 	 * validates the user data, performs any necessary user creation, builds
 	 * the OAuth response for the client, and redirects accordingly.
 	 *
-	 * @property $endpoint The designated sign-in endpoint.
+	 * @parameter $endpoint The designated sign-in endpoint.
 	 */
 	
 	function callback($endpoint)
