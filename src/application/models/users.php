@@ -9,7 +9,7 @@ class Users extends CI_Model {
 
 	function get_user($email)
 	{
-		if ($user = $this->mongo_db->where(array('email' => $email)))
+		if ($user = $this->mongo_db->where(array('email' => $email))->get('users'))
 		{
 			if (count($user) == 1)
 			{
