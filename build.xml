@@ -66,6 +66,8 @@
 			<filterchain>
 				<replacetokens begintoken="##" endtoken="##">
 					<token key="ORBITAL_INSTITUTION_NAME" value="${ORBITAL_INSTITUTION_NAME}" />
+					<token key="ORBITAL_CONTACT_NAME" value="${ORBITAL_CONTACT_NAME}" />
+					<token key="ORBITAL_CONTACT_EMAIL" value="${ORBITAL_CONTACT_EMAIL}" />
 				</replacetokens>
 			</filterchain>
 		</reflexive>

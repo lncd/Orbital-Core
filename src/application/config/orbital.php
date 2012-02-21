@@ -23,6 +23,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['orbital_institution_name'] = '##ORBITAL_INSTITUTION_NAME##';
 
+/**
+ * Contact Name
+ *
+ * The name of an administrative contact for this instance.
+*/
+
+$config['orbital_contact_name'] = '##ORBITAL_CONTACT_NAME##';
+
+/**
+ * Contact Email Address
+ *
+ * The email address of an administrative contact for this instance.
+*/
+
+$config['orbital_contact_email'] = '##ORBITAL_CONTACT_EMAIL##';
+
 /*
 |--------------------------------------------------------------------------
 | Operation Mode
