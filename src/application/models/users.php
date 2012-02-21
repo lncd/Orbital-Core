@@ -52,49 +52,41 @@ class Users extends CI_Model {
 	{
 		if ($user = $this->mongo_db->where(array('email' => $email))->get('users'))
 		{
-			// Sanity check, does this user exist?
-			if (count($user) == 1)
-			{
-				// User exists, throw a FALSE.
-				return FALSE;
-			}
-			else
-			{
-				// User does not exist, carry on!
-				
-				/**
-				 * @todo Email address validation.
-				 */
-				
-				$insert = array(
-					'email' => $email,
-					'name' => $name
-				);
-				
-				/**
-				 * @todo URI validation.
-				 */
-				
-				if ($rdf != NULL)
-				{
-					$insert['rdf'] = $rdf;
-				}
-				
-				// Attempt insert
-				
-				if ($this->mongo_db->insert('users', $insert))
-				{
-					return TRUE;
-				}
-				else
-				{
-					return FALSE;
-				}
-			}
+			// User exists, throw a FALSE.
+			return FALSE;
 		}
 		else
 		{
-			return FALSE;
+			// User does not exist, carry on!
+			
+			/**
+			 * @todo Email address validation.
+			 */
+			
+			$insert = array(
+				'email' => $email,
+				'name' => $name
+			);
+			
+			/**
+			 * @todo URI validation.
+			 */
+			
+			if ($rdf != NULL)
+			{
+				$insert['rdf'] = $rdf;
+			}
+			
+			// Attempt insert
+			
+			if ($this->mongo_db->insert('users', $insert))
+			{
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
 		}
 	}
 
