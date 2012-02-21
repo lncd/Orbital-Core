@@ -64,7 +64,7 @@ $autoload['libraries'] = array('mongo_db');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url');
+$autoload['helper'] = array('url', 'string');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array();
+$autoload['model'] = array('oauth', 'users');
 
 
 /* End of file autoload.php */
