@@ -102,8 +102,17 @@ class Auth extends CI_Controller {
 					}
 				}
 				
-				// Begin the magical OAuth process. Generate a code.
+				// Begin OAuth
 				
+				// Generate all-purpose redirect URI
+				$redirect_uri =  $state->redirect_uri . '?code=' . $code;
+					
+				if (isset($state->state))
+				{
+					$redirect_uri .= '&state=' . $state->state;
+				}
+				
+				// Generate code and perform redirect
 				if ($code = $this->oauth->generate_code($state->client_id, $response->user_email, $state->scope))
 				{
 				
@@ -114,7 +123,11 @@ class Auth extends CI_Controller {
 						$redirect_uri .= '&state=' . $state->state;
 					}
 				
-					$this->_ci->output->set_header('Location: ' . $redirect_uri);
+					$this->output->set_header('Location: ' . $redirect_uri);
+				}
+				else
+				{
+					$this->output->set_header('Location: ' . $redirect_uri . '&error=server_error&error_description=Unable to generate code.);
 				}
 
 			}
