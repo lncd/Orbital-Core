@@ -62,14 +62,18 @@ class Users extends CI_Model {
 			{
 				// User does not exist, carry on!
 				
-				// @todo Email address validation.
+				/**
+				 * @todo Email address validation.
+				 */
 				
 				$insert = array(
 					'email' => $email,
 					'name' => $name
 				);
 				
-				// @todo URI validation.
+				/**
+				 * @todo URI validation.
+				 */
 				
 				if ($rdf != NULL)
 				{

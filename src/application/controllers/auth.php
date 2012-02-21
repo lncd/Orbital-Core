@@ -34,16 +34,9 @@ class Auth extends CI_Controller {
 		if ($this->input->get('client_id') && $this->input->get('redirect_uri'))
 		{
 	
-			if ($this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint'))
-			{
-				$state['client_id'] = $this->input->get('client_id');
-				$state['redirect_uri'] = $this->input->get('redirect_uri');
-				$this->auth_endpoint->signin($state);
-			}
-			else
-			{
-				$this->load->view('error', array('message' => 'Unable to load requested sign-in library.'));
-			}
+			$state['client_id'] = $this->input->get('client_id');
+			$state['redirect_uri'] = $this->input->get('redirect_uri');
+			$this->auth_endpoint->signin($state);
 			
 		}
 		else
@@ -90,7 +83,9 @@ class Auth extends CI_Controller {
 				
 					// User does not exist, try to create!
 					
-					// @todo Include RDF magic
+					/**
+					 * @todo Include RDF magic
+					 */
 					
 					if (!$this->users->create_user($response['user_email'], $response['user_name']))
 					{
