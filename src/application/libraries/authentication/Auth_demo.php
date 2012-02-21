@@ -9,12 +9,12 @@ class Auth_demo {
 		$this->_ci =& get_instance();
 	}
 
-	function signin()
+	function signin($state)
 	{
 	
 		echo '<h1>Sign In Demo</h1>';
 		
-		echo '<p><a href="http://core.orbital.lncd.org/auth/callback/demo?u=orbital@lncd.org&client_id=' . $this->_ci->input->get('client_id') . '">Sign in as orbital@lncd.org</a></p>';
+		echo '<p><a href="http://core.orbital.lncd.org/auth/callback/demo?state=' . serialize($state) . '">Sign in as orbital@lncd.org</a></p>';
 	
 	}
 	
@@ -22,8 +22,9 @@ class Auth_demo {
 	{
 		if ($this->_ci->input->get('u'))
 		{
-			$response->email = $this->_ci->input->get('u');
-			$response->app_id = $this->_ci->input->get('client_id');
+			$return->state = unserialize($this->_ci->input->get('state'));
+			$return->user_email = 'orbital-demo@lncd.org';
+			$return->user_name = 'Orbital Demo User';
 			
 			return $response;
 		}
