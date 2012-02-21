@@ -31,7 +31,7 @@ class OAuth extends CI_Model {
 		
 		// Generate a new code
 		$insert = array(
-			'code' = uniqid(random_string('alnum', TRUE)),
+			'code' => uniqid(random_string('alnum', TRUE)),
 			'client_id' => $client_id,
 			'user' => $user,
 			'expires' => time() + 300
