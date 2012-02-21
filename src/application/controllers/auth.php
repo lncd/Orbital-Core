@@ -127,7 +127,7 @@ class Auth extends CI_Controller {
 				}
 				else
 				{
-					$this->output->set_header('Location: ' . $redirect_uri . '&error=server_error&error_description=Unable to generate code.);
+					$this->output->set_header('Location: ' . $redirect_uri . '&error=server_error&error_description=Unable to generate code.');
 				}
 
 			}
