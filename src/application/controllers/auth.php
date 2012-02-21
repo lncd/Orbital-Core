@@ -66,7 +66,7 @@ class Auth extends CI_Controller {
 			$this->load->model('users');
 			
 			// Ensure that all expected fields are present
-			if (isset($response['state']) && isset($response['user_email']) && isset($response['user_name']))
+			if (isset($response->state) && isset($response->user_email) && isset($response->user_name))
 			{
 			
 				// Unserialise the state
