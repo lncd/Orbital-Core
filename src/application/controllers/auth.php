@@ -88,7 +88,7 @@ class Auth extends CI_Controller {
 					 * @todo Include RDF magic
 					 */
 					
-					if (!$this->users->create_user($response['user_email'], $response['user_name']))
+					if (!$this->users->create_user($response->user_email, $response->user_name))
 					{
 						$this->load->view('error', array('message' => 'Unable to create user object.'));
 						return;
