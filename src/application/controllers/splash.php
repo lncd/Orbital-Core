@@ -20,7 +20,6 @@ class Splash extends CI_Controller {
 
 	function index()
 	{
-		$this->config->load('orbital');
 		$this->load->view('splash');
 	}
 }
