@@ -29,9 +29,21 @@ class Auth extends CI_Controller {
 
 	function signin($endpoint)
 	{
-		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
-		$state['client_id'] = $this->input->get('client_id');
-		$this->auth_endpoint->signin($state);
+	
+		// Make sure client_id and redirect_uri exist
+		if ($this->input->get('client_id') && $this->input->get('redirect_uri'))
+		{
+	
+			$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
+			$state['client_id'] = $this->input->get('client_id');
+			$state['redirect_uri'] = $this->input->get('redirect_uri');
+			$this->auth_endpoint->signin($state);
+			
+		}
+		else
+		{
+			$this->load->view('error', array('message' => 'Client ID or Redirect URI not present in sign-in request.'));
+		}
 	}
 	
 	/**
@@ -63,7 +75,7 @@ class Auth extends CI_Controller {
 		}
 		else
 		{
-			show_404();
+			$this->load->view('error', array('message' => 'Unexpected response from sign-in service.'));
 		}
 	}
 }
