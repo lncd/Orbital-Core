@@ -84,10 +84,6 @@ class Auth extends CI_Controller {
 				
 					// User does not exist, try to create!
 					
-					/**
-					 * @todo Include RDF magic
-					 */
-					
 					if (!$this->users->create_user($response->user_email, $response->user_name))
 					{
 						$this->load->view('error', array('message' => 'Unable to create user object.'));
