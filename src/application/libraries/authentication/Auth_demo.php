@@ -14,18 +14,18 @@ class Auth_demo {
 	
 		echo '<h1>Sign In Demo</h1>';
 		
-		echo '<p><a href="http://core.orbital.lncd.org/auth/callback/demo?state=' . serialize($state) . '">Sign in as orbital@lncd.org</a></p>';
+		echo '<p><a href="http://core.orbital.lncd.org/auth/callback/demo?state=' . urlencode(serialize($state)) . '">Sign in as orbital@lncd.org</a></p>';
 	
 	}
 	
 	function callback()
 	{
 	
-		$return->state = unserialize($this->_ci->input->get('state'));
+		$return->state = $this->_ci->input->get('state');
 		$return->user_email = 'orbital-demo@lncd.org';
 		$return->user_name = 'Orbital Demo User';
 		
-		return $response;
+		return $return;
 	}
 
 }

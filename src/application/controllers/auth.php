@@ -70,7 +70,7 @@ class Auth extends CI_Controller {
 			{
 			
 				// Unserialise the state
-				$state = unserialize($response['state']);
+				$state = unserialize($response->state);
 			
 				// Fields present!
 			
