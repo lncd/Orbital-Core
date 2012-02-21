@@ -31,13 +31,13 @@ class OAuth extends CI_Model {
 		
 		// Generate a new code
 		$insert = array(
-			'code' => uniqid(random_string('alnum'), TRUE),
+			'code' => random_string('alnum', 32),
 			'client_id' => $client_id,
 			'user' => $user,
 			'expires' => time() + 300
 		);
 		
-		if ($this->mongo_db->insert('users', $insert))
+		if ($this->mongo_db->insert('oauth_codes', $insert))
 		{
 			return $insert['code'];
 		}
