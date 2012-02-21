@@ -26,7 +26,7 @@ class OAuth extends CI_Model {
 		if ($codes = $this->mongo_db->where(array('client_id' => $client_id, 'user' => $user))->get('oauth_codes'))
 		{
 			// An existing code exists for this client/user combination. Destroy it with fire.
-			$this->mongo_db>where(array('client_id' => $client_id, 'user' => $user))->remove('oauth_codes');
+			$this->mongo_db->where(array('client_id' => $client_id, 'user' => $user))->remove('oauth_codes');
 		}
 		
 		// Generate a new code
