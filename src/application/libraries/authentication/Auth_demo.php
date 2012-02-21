@@ -20,18 +20,12 @@ class Auth_demo {
 	
 	function callback()
 	{
-		if ($this->_ci->input->get('u'))
-		{
-			$return->state = unserialize($this->_ci->input->get('state'));
-			$return->user_email = 'orbital-demo@lncd.org';
-			$return->user_name = 'Orbital Demo User';
-			
-			return $response;
-		}
-		else
-		{
-			return FALSE;
-		}
+	
+		$return->state = unserialize($this->_ci->input->get('state'));
+		$return->user_email = 'orbital-demo@lncd.org';
+		$return->user_name = 'Orbital Demo User';
+		
+		return $response;
 	}
 
 }
