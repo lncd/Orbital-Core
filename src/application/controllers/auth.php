@@ -64,8 +64,6 @@ class Auth extends CI_Controller {
 		
 		$response = $this->auth_endpoint->callback();
 		
-		print_r($response);
-		
 		$this->load->model('users');
 		
 		// Ensure that all expected fields are present
