@@ -24,7 +24,7 @@ class Auth extends CI_Controller {
 	 * Builds state variable and routes sign-in requests to the appropriate
 	 * authentication library.
 	 *
-	 * @parameter $endpoint The designated sign-in endpoint.
+	 * @param string $endpoint The designated sign-in endpoint.
 	 */
 
 	function signin($endpoint)
@@ -34,10 +34,16 @@ class Auth extends CI_Controller {
 		if ($this->input->get('client_id') && $this->input->get('redirect_uri'))
 		{
 	
-			$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
-			$state['client_id'] = $this->input->get('client_id');
-			$state['redirect_uri'] = $this->input->get('redirect_uri');
-			$this->auth_endpoint->signin($state);
+			if ($this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint'))
+			{
+				$state['client_id'] = $this->input->get('client_id');
+				$state['redirect_uri'] = $this->input->get('redirect_uri');
+				$this->auth_endpoint->signin($state);
+			}
+			else
+			{
+				$this->load->view('error', array('message' => 'Unable to load requested sign-in library.'));
+			}
 			
 		}
 		else
@@ -53,7 +59,9 @@ class Auth extends CI_Controller {
 	 * validates the user data, performs any necessary user creation, builds
 	 * the OAuth response for the client, and redirects accordingly.
 	 *
-	 * @parameter $endpoint The designated sign-in endpoint.
+	 * @param string $endpoint The designated sign-in endpoint.
+	 *
+	 * @todo Rewrite this to use exceptions.
 	 */
 	
 	function callback($endpoint)
@@ -63,19 +71,46 @@ class Auth extends CI_Controller {
 		{
 			$this->load->model('users');
 			
-			// Test to see if user exists
-			if ($this->users->get_user($response->user_email))
+			// Ensure that all expected fields are present
+			if (isset($response['state']) && isset($response['user_email']) && isset($response['user_name']))
 			{
-				echo $response->user_email . ' exists!';
+			
+				// Unserialise the state
+				$state = unserialize($response['state']);
+			
+				// Fields present!
+			
+				// Test to see if user exists
+				if ($this->users->get_user($response->user_email))
+				{
+					echo $response->user_email . ' exists!';
+				}
+				else
+				{
+				
+					// User does not exist, try to create!
+					
+					// @todo Include RDF magic
+					
+					if (!$this->users->create_user($response['user_email'], $response['user_name']))
+					{
+						$this->load->view('error', array('message' => 'Unable to create user object.'));
+						return;
+					}
+				}
+				
 			}
 			else
 			{
-				echo $response->user_email . ' does not exist!';
+				// Required fields not present
+				$this->load->view('error', array('message' => 'Required details not provided by sign-in library.'));
 			}
+			
 		}
 		else
 		{
-			$this->load->view('error', array('message' => 'Unexpected response from sign-in service.'));
+			// Sign-in library has returned FALSE, or nothing at all.
+			$this->load->view('error', array('message' => 'Unexpected response from sign-in library.'));
 		}
 	}
 }
