@@ -61,48 +61,53 @@ class Auth extends CI_Controller {
 	function callback($endpoint)
 	{
 		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
-		
-		$response = $this->auth_endpoint->callback();
-		
-		$this->load->model('users');
-		
-		// Ensure that all expected fields are present
-		if (isset($response->state) && isset($response->user_email) && isset($response->user_name))
+		if ($response = $this->auth_endpoint->callback())
 		{
-		
-			// Unserialise the state
-			$state = unserialize($response['state']);
-		
-			// Fields present!
-		
-			// Test to see if user exists
-			if ($this->users->get_user($response->user_email))
+			$this->load->model('users');
+			
+			// Ensure that all expected fields are present
+			if (isset($response->state) && isset($response->user_email) && isset($response->user_name))
 			{
-				echo $response->user_email . ' exists!';
+			
+				// Unserialise the state
+				$state = unserialize($response['state']);
+			
+				// Fields present!
+			
+				// Test to see if user exists
+				if ($this->users->get_user($response->user_email))
+				{
+					echo $response->user_email . ' exists!';
+				}
+				else
+				{
+				
+					// User does not exist, try to create!
+					
+					/**
+					 * @todo Include RDF magic
+					 */
+					
+					if (!$this->users->create_user($response['user_email'], $response['user_name']))
+					{
+						$this->load->view('error', array('message' => 'Unable to create user object.'));
+						return;
+					}
+				}
+				
 			}
 			else
 			{
-			
-				// User does not exist, try to create!
-				
-				/**
-				 * @todo Include RDF magic
-				 */
-				
-				if (!$this->users->create_user($response['user_email'], $response['user_name']))
-				{
-					$this->load->view('error', array('message' => 'Unable to create user object.'));
-					return;
-				}
+				// Required fields not present
+				$this->load->view('error', array('message' => 'Required details not provided by sign-in library.'));
 			}
 			
 		}
 		else
 		{
-			// Required fields not present
-			$this->load->view('error', array('message' => 'Required details not provided by sign-in library.'));
+			// Sign-in library has returned FALSE, or nothing at all.
+			$this->load->view('error', array('message' => 'Unexpected response from sign-in library.'));
 		}
-			
 	}
 }
 
