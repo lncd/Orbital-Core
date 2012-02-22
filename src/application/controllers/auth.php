@@ -25,8 +25,6 @@ class Auth extends CI_Controller {
 	 * authentication library.
 	 *
 	 * @param string $endpoint The designated sign-in endpoint.
-	 *
-	 * @todo Validate Client ID and Redirect URI match
 	 */
 
 	function signin($endpoint)
@@ -36,25 +34,33 @@ class Auth extends CI_Controller {
 		if ($this->input->get('client_id') && $this->input->get('redirect_uri'))
 		{
 
-			$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
-			$state->client_id = $this->input->get('client_id');
-			$state->redirect_uri = $this->input->get('redirect_uri');
-			
-			if ($this->input->get('state'))
+			if ($this->oauth->validate_app_credentials($this->input->get('client_id'), $this->input->get('redirect_uri')))
 			{
-				$state->state = $this->input->get('state');
-			}
-			
-			if ($this->input->get('scope'))
-			{
-				$state->scope = $this->input->get('scope');
+
+				$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
+				$state->client_id = $this->input->get('client_id');
+				$state->redirect_uri = $this->input->get('redirect_uri');
+
+				if ($this->input->get('state'))
+				{
+					$state->state = $this->input->get('state');
+				}
+
+				if ($this->input->get('scope'))
+				{
+					$state->scope = $this->input->get('scope');
+				}
+				else
+				{
+					$state->scope = 'access';
+				}
+
+				$this->auth_endpoint->signin($state);
 			}
 			else
 			{
-				$state->scope = 'access';
+				$this->load->view('error', array('message' => 'Client ID or Redirect URI are not recognised or are not valid.'));
 			}
-			
-			$this->auth_endpoint->signin($state);
 
 		}
 		else
@@ -101,34 +107,32 @@ class Auth extends CI_Controller {
 						return;
 					}
 				}
-				
+
 				// Begin OAuth
-				
-				
-				
+
 				// Generate code and perform redirect
 				if ($code = $this->oauth->generate_code($state->client_id, $response->user_email, $state->scope))
 				{
-				
+
 					$redirect_uri = $state->redirect_uri . '?code=' . $code;
-					
+
 					if (isset($state->state))
 					{
 						$redirect_uri .= '&state=' . $state->state;
 					}
-				
+
 					$this->output->set_header('Location: ' . $redirect_uri);
 				}
 				else
 				{
-				
+
 					$redirect_uri =  $state->redirect_uri . '?error=server_error&error_description=Unable to generate code';
-						
+
 					if (isset($state->state))
 					{
 						$redirect_uri .= '&state=' . $state->state;
 					}
-				
+
 					$this->output->set_header('Location: ' . $redirect_uri);
 				}
 
@@ -142,9 +146,76 @@ class Auth extends CI_Controller {
 		}
 		else
 		{
-		
+
 			// Sign-in library has returned FALSE, or nothing at all.
 			$this->load->view('error', array('message' => 'Unexpected or invalid response from sign-in library.'));
+		}
+	}
+
+	/**
+	 * Access Token Swap
+	 *
+	 * Swaps a code for an access token and refresh token.
+	 */
+
+	function access_token()
+	{
+		if ($this->input->post('client_id') && $this->input->post('redirect_uri') && $this->input->post('client_secret') && $this->input->post('code'))
+		{
+
+			// All fields present. Validate them!
+			if ($this->oauth->validate_app_credentials($this->input->post('client_id'), $this->input->post('redirect_uri'), $this->input->post('client_secret')))
+			{
+			
+				// Client credentials valid, try perform swap
+				if ($tokens = $this->oauth->swap_code($this->input->post('code'), $this->input->post('client_id')))
+				{
+			
+					$this->output
+						->set_content_type('application/json')
+						->set_output(json_encode(array(
+							'access_token' => $tokens['access_token'],
+							'token_type' => 'bearer',
+							'expires_in' => $tokens['expires_in'],
+							'refresh_token' => $tokens['refresh_token'],
+							'scope' => implode(' ', $tokens['scope']),
+							'user' => $tokens['user']
+						)));
+						
+				}
+				else
+				{
+				
+					// Code swap failed. Probably invalid.
+				
+					$this->output
+						->set_content_type('application/json')
+						->set_output(json_encode(array(
+							'error' => 'invalid_grant',
+							'error_description' => 'The provided code is not valid for these credentials, has already been used, or has expired.'
+						)));
+				}
+			}
+			else
+			{
+				$this->output
+					->set_content_type('application/json')
+					->set_output(json_encode(array(
+						'error' => 'access_denied',
+						'invalid_client' => 'The provided credentials did not match those expected.'
+					)));
+			}
+
+		}
+		else
+		{
+			// Something is missing. Abort!
+			$this->output
+				->set_content_type('application/json')
+				->set_output(json_encode(array(
+					'error' => 'invalid_request',
+					'error_description' => 'The request did not include all required elements.'
+				)));
 		}
 	}
 }
