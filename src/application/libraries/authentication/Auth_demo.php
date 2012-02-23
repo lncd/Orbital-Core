@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Authentication Demo
+ *
+ * Demonstration of response for authentication.
+ *
+ * @package     Orbital
+ * @subpackage  Authentication
+ * @author      Nick Jackson
+ * @copyright   2012 University of Lincoln
+ * @link        https://github.com/lncd/Orbital-Core
+ */
+
 class Auth_demo {
 
 	private $_ci;
@@ -14,7 +26,7 @@ class Auth_demo {
 	
 		echo '<h1>Sign In Demo</h1>';
 		
-		echo '<p><a href="http://core.orbital.lncd.org/auth/callback/demo?state=' . urlencode(serialize($state)) . '">Sign in as orbital-demo@lncd.org</a></p>';
+		echo '<p><a href="https://core.orbital.lncd.org/auth/callback/demo?state=' . urlencode(serialize($state)) . '">Sign in as orbital-demo@lncd.org</a></p>';
 	
 	}
 	
