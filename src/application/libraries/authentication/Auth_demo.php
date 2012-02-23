@@ -6,7 +6,7 @@
  * Demonstration of response for authentication.
  *
  * @package     Orbital
- * @subpackage  Authentication
+ * @subpackage  Core
  * @author      Nick Jackson
  * @copyright   2012 University of Lincoln
  * @link        https://github.com/lncd/Orbital-Core

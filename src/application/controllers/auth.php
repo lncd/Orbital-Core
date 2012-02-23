@@ -14,6 +14,10 @@
 
 class Auth extends CI_Controller {
 
+	/**
+	 * Constructor
+	 */
+
 	function __construct()
 	{
 		parent::__construct();
@@ -25,7 +29,7 @@ class Auth extends CI_Controller {
 	 * Builds state variable and routes sign-in requests to the appropriate
 	 * authentication library.
 	 *
-	 * @param string $endpoint The designated sign-in endpoint.
+	 * @param string $endpoint  The designated sign-in endpoint.
 	 */
 
 	function signin($endpoint)
@@ -77,7 +81,7 @@ class Auth extends CI_Controller {
 	 * validates the user data, performs any necessary user creation, builds
 	 * the OAuth response for the client, and redirects accordingly.
 	 *
-	 * @param string $endpoint The designated sign-in endpoint.
+	 * @param string $endpoint  The designated sign-in endpoint.
 	 *
 	 * @todo Rewrite this to use exceptions.
 	 */
@@ -221,4 +225,5 @@ class Auth extends CI_Controller {
 	}
 }
 
-// EOF
+// End of file auth.php
+// Location: ./controllers/auth.php
