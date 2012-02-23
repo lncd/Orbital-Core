@@ -5,11 +5,11 @@
  *
  * Provides interaction with the OAuth database collections.
  *
- * @package     Orbital
- * @subpackage  Core
- * @author      Nick Jackson
- * @copyright   2012 University of Lincoln
- * @link        https://github.com/lncd/Orbital-Core
+ * @package    Orbital
+ * @subpackage Core
+ * @author     Nick Jackson <nijackson@lincoln.ac.uk>
+ * @copyright  2012 University of Lincoln
+ * @link       https://github.com/lncd/Orbital-Core
  */
 
 class Oauth extends CI_Model {
@@ -22,6 +22,40 @@ class Oauth extends CI_Model {
 	{
 		parent::__construct();
 	}
+
+	/**
+	 * Validate Token
+	 *
+	 * Tests to see if provided token and client ID are valid, and token has
+	 * not expired.
+	 *
+	 * @param string $client_id    Client ID to be tested.
+	 * @param string $access_token Redirect URI to be tested.
+	 *
+	 * @return bool TRUE if token is valid, FALSE if not.
+	 */
+
+	function validate_token($client_id, $access_token)
+	{
+		if ($token = $this->mongo_db->where(array(
+			'client_id' => $client_id,
+			'access_token' => $access_token
+		))->where_gt('expires', time())->get('applications'))
+		{
+			if (count($token) === 1)
+			{
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
+
 
 	/**
 	 * Validate Application Credentials
@@ -169,6 +203,73 @@ class Oauth extends CI_Model {
 					'scope' => $code_data['scopes'],
 					'expires_in' => $expires_in,
 					'user' => $code_data['user']
+				);
+			}
+			else
+			{
+				return FALSE;
+			}
+
+		}
+		else
+		{
+			// This code doesn't exist or is invalid.
+			return FALSE;
+		}
+
+	}
+	
+	/**
+	 * Swap Refresh Token for new Access Token
+	 *
+	 * Generates a new access token and refresh token for the given refresh
+	 * token.
+	 *
+	 * @param string $refresh_token Code to perform the swap for.
+	 * @param string $client_id     Client ID for this token.
+	 *
+	 * @return object|false An object containing the tokens, or FALSE if the
+	 *                      swap fails for any reason.
+	 */
+
+	function swap_refresh_token($refresh_token, $client_id)
+	{
+
+		// Ensure this token exists.
+		if ($tokens = $this->mongo_db->where(array(
+				'refresh_token' => $refresh_token,
+				'client_id' => $client_id
+			))->get('oauth_access_tokens'))
+		{
+			// Grab the code for scopes and user
+			$token_data = $tokens[0];
+
+			// Remove the existing AT/RT pari.
+			$this->mongo_db->where(array('client_id' => $client_id, 'refresh_token' => $refresh_token))->delete('oauth_access_tokens');
+
+			// Generate new AT and RT
+
+			$access_token = random_string('alnum', 64);
+			$refresh_token = random_string('alnum', 64);
+			$expires_in = 43200;
+
+			$insert = array(
+				'access_token' => $access_token,
+				'refresh_token' => $refresh_token,
+				'user' => $token_data['user'],
+				'client_id' => $client_id,
+				'scopes' => $token_data['scopes'],
+				'expires' => time() + $expires_in
+			);
+
+			if ($this->mongo_db->insert('oauth_access_tokens', $insert))
+			{
+				return array(
+					'access_token' => $access_token,
+					'refresh_token' => $refresh_token,
+					'scope' => $token_data['scopes'],
+					'expires_in' => $expires_in,
+					'user' => $token_data['user']
 				);
 			}
 			else

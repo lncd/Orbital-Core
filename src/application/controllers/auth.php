@@ -5,11 +5,11 @@
  *
  * Marshals sign-in request to the appropriate sign-in endpoint.
  *
- * @package     Orbital
- * @subpackage  Core
- * @author      Nick Jackson
- * @copyright   2012 University of Lincoln
- * @link        https://github.com/lncd/Orbital-Core
+ * @package    Orbital
+ * @subpackage Core
+ * @author     Nick Jackson <nijackson@lincoln.ac.uk>
+ * @copyright  2012 University of Lincoln
+ * @link       https://github.com/lncd/Orbital-Core
  */
 
 class Auth extends CI_Controller {
