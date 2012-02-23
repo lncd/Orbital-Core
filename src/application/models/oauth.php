@@ -89,6 +89,7 @@ class OAuth extends CI_Model {
 			'scopes' => explode(' ', $scopes)
 		);
 		
+		// If code is OK, return it. If not, return false.
 		if ($this->mongo_db->insert('oauth_codes', $insert))
 		{
 			return $insert['code'];
