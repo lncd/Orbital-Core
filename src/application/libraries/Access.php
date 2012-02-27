@@ -14,8 +14,11 @@
 
 class Access {
 	
+	private $_ci;
+	
 	function __construct()
 	{
+		$this->_ci =& get_instance();
 	}
 
 	/**
@@ -28,18 +31,20 @@ class Access {
 	{
 	
 		// Is there a present HTTP user? If not, demand authentication.
-		if (!$this->input->server('PHP_AUTH_USER'))
+		if (!$this->_ci->input->server('PHP_AUTH_USER'))
 		{
-			header('HTTP/1.0 401 Unauthorized');
-			header('WWW-Authenticate: Basic realm="Orbital Core"');
-			// Nothing else can possibly happen at this point. Wrap it up.
-			return FALSE;
+			// Hijack everything!
+			$this->_ci->output
+				->set_status_header('401')
+				->set_header('WWW-Authenticate: Basic realm="Orbital Core"');
+			// Nothing else can or should happen at this point. Wrap it up.
+			return FALSE();
 		}
 		else
 		{
 			// Check to see if credentials are valid.
 			
-			if ($this->oauth->validate_app_credentials($this->input->server('PHP_AUTH_USER'), NULL, $this->input->server('PHP_AUTH_PW')))
+			if ($this->_ci->oauth->validate_app_credentials($this->_ci->input->server('PHP_AUTH_USER'), NULL, $this->_ci->input->server('PHP_AUTH_PW')))
 			{
 				return TRUE;
 			}

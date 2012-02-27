@@ -304,7 +304,6 @@ class Auth extends CI_Controller {
 		{
 			$this->output
 				->set_content_type('application/json')
-				->set_status_header('400')
 				->set_output(json_encode(array(
 					'error' => 'access_denied',
 					'invalid_client' => 'The provided credentials did not match those expected.'
