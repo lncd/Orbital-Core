@@ -91,7 +91,7 @@ class Oauth extends CI_Model {
 			return FALSE;
 		}
 
-		$credentials['client_id'] = $client_id;
+		$credentials['app_id'] = $client_id;
 
 		// Only check URI if it's provided
 		if ($redirect_uri !== NULL)
