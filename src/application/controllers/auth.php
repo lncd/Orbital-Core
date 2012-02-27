@@ -181,7 +181,7 @@ class Auth extends CI_Controller {
 	function access_token()
 	{
 	
-		if ($this->access->valid_application())
+		if ($application = $this->access->valid_application())
 		{
 	
 			if ($this->input->post('grant_type')
@@ -190,7 +190,7 @@ class Auth extends CI_Controller {
 			{
 				
 				// Client credentials valid, try perform swap
-				if ($tokens = $this->oauth->swap_code($this->input->post('code'), $this->input->post('client_id')))
+				if ($tokens = $this->oauth->swap_code($this->input->post('code'), $application))
 				{
 			
 					$this->output
@@ -236,7 +236,6 @@ class Auth extends CI_Controller {
 		{
 			$this->output
 				->set_content_type('application/json')
-				->set_status_header('400')
 				->set_output(json_encode(array(
 					'error' => 'access_denied',
 					'invalid_client' => 'The provided credentials did not match those expected.'
