@@ -171,13 +171,12 @@ class Auth extends CI_Controller {
 		if ($this->input->post('grant_type')
 			&& $this->input->post('grant_type') === 'authorization_code'
 			&& $this->input->post('client_id')
-			&& $this->input->post('redirect_uri')
 			&& $this->input->post('client_secret')
 			&& $this->input->post('code'))
 		{
 
 			// All fields present. Validate them!
-			if ($this->oauth->validate_app_credentials($this->input->post('client_id'), $this->input->post('redirect_uri'), $this->input->post('client_secret')))
+			if ($this->oauth->validate_app_credentials($this->input->post('client_id'), NULL, $this->input->post('client_secret')))
 			{
 			
 				// Client credentials valid, try perform swap
@@ -243,13 +242,12 @@ class Auth extends CI_Controller {
 		if ($this->input->post('grant_type')
 			&& $this->input->post('grant_type') === 'refresh_token'
 			&& $this->input->post('client_id')
-			&& $this->input->post('redirect_uri')
 			&& $this->input->post('client_secret')
 			&& $this->input->post('refresh_token'))
 		{
 
 			// All fields present. Validate them!
-			if ($this->oauth->validate_app_credentials($this->input->post('client_id'), $this->input->post('redirect_uri'), $this->input->post('client_secret')))
+			if ($this->oauth->validate_app_credentials($this->input->post('client_id'), NULL, $this->input->post('client_secret')))
 			{
 			
 				// Client credentials valid, try perform swap

@@ -72,7 +72,8 @@ class Oauth extends CI_Model {
 	/**
 	 * Validate Application Credentials
 	 *
-	 * Tests to see if provided application credentials are valid
+	 * Tests to see if provided application credentials are valid. Must
+	 * include Client ID, AND redirect URI OR client secret OR both.
 	 *
 	 * @param string $client_id      Client ID to be tested.
 	 * @param string $redirect_uri   Redirect URI to be tested.
@@ -81,24 +82,27 @@ class Oauth extends CI_Model {
 	 * @return bool TRUE if credentials match, FALSE if not.
 	 */
 
-	function validate_app_credentials($client_id, $redirect_uri, $client_secret = NULL)
+	function validate_app_credentials($client_id, $redirect_uri = NULL, $client_secret = NULL)
 	{
+	
+		// Ensure we have either redirect URI or client secret.
+		if ($redirect_uri === NULL && $client_secret === NULL)
+		{
+			return FALSE;
+		}
+
+		$credentials['client_id'] = $client_id;
+
+		// Only check URI if it's provided
+		if ($redirect_uri !== NULL)
+		{
+			$credentials['endpoint'] = $redirect_uri;
+		}
 
 		// Only check secret if it's provided
-		if ($client_secret === NULL)
+		if ($client_secret !== NULL)
 		{
-			$credentials = array(
-				'app_id' => $client_id,
-				'endpoint' => $redirect_uri
-			);
-		}
-		else
-		{
-			$credentials = array(
-				'app_id' => $client_id,
-				'endpoint' => $redirect_uri,
-				'app_secret' => $client_secret
-			);
+			$credentials['app_secret'] = $client_secret;
 		}
 
 		if ($application = $this->mongo_db->where($credentials)->get('applications'))
