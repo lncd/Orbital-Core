@@ -46,9 +46,9 @@ class Oauth extends CI_Model {
 		))->where_gt('expires', time());
 	
 		// Add the tokens to the evaluation
-		foreach ($tokens as $token)
+		foreach ($scopes as $scope)
 		{
-			$this->mongo_db->where(array('scopes' => $token));
+			$this->mongo_db->where(array('scopes' => $scope));
 		}
 	
 		if ($token = $this->mongo_db->get('oauth_access_tokens'))
