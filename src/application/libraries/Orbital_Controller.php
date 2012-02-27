@@ -27,9 +27,6 @@ class Orbital_Controller extends REST_Controller {
 		$this->response_clock = microtime();
 		
 		parent::__construct();
-
-		// Lets grab the config and get ready to party
-		$this->load->config('orbital');
 		
 		// Test for maintenance mode - if we are in maintenance then go no further!
 		if ($this->config->item('orbital_operation_mode') == 'maintenance')
