@@ -252,7 +252,7 @@ class Auth extends CI_Controller {
 
 	function refresh_token()
 	{
-		if ($this->access->valid_application())
+		if ($application = $this->access->valid_application())
 		{
 			if ($this->input->post('grant_type')
 				&& $this->input->post('grant_type') === 'refresh_token'
@@ -260,7 +260,7 @@ class Auth extends CI_Controller {
 			{
 				
 				// Client credentials valid, try perform swap
-				if ($tokens = $this->oauth->swap_refresh_token($this->input->post('refresh_token'), $this->input->post('client_id')))
+				if ($tokens = $this->oauth->swap_refresh_token($this->input->post('refresh_token'), $application))
 				{
 			
 					$this->output
@@ -282,6 +282,7 @@ class Auth extends CI_Controller {
 				
 					$this->output
 						->set_content_type('application/json')
+						->set_status_header('400')
 						->set_output(json_encode(array(
 							'error' => 'invalid_grant',
 							'error_description' => 'The provided refresh token is not valid for these credentials or has already been used.'
@@ -294,6 +295,7 @@ class Auth extends CI_Controller {
 				// Something is missing. Abort!
 				$this->output
 					->set_content_type('application/json')
+					->set_status_header('400')
 					->set_output(json_encode(array(
 						'error' => 'invalid_request',
 						'error_description' => 'The request did not include all required elements.'

@@ -22,9 +22,13 @@ class Access {
 	}
 
 	/**
-	 * Tests to ensure that application authentication is correct.
+	 * Valid Application
+	 *
+	 * Ensures that there is a valid application present.
 	 *
 	 * @access public
+	 *
+	 * @return string|FALSE Client ID if credentials match, FALSE if not.
 	 */
 
 	function valid_application()
@@ -46,7 +50,7 @@ class Access {
 			
 			if ($this->_ci->oauth->validate_app_credentials($this->_ci->input->server('PHP_AUTH_USER'), NULL, $this->_ci->input->server('PHP_AUTH_PW')))
 			{
-				return TRUE;
+				return $this->_ci->input->server('PHP_AUTH_USER');
 			}
 			else
 			{

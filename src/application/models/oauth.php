@@ -33,8 +33,8 @@ class Oauth extends CI_Model {
 	 * @param string $access_token Redirect URI to be tested.
 	 * @param array  $scopes       Scopes to ensure this token has.
 	 *
-	 * @return string|bool Email address of the user if token is valid, FALSE
-	 *                     if not.
+	 * @return string|FALSE Email address of the user if token is valid, FALSE
+	 *                      if not.
 	 */
 
 	function validate_token($client_id, $access_token, $scopes)
@@ -74,6 +74,8 @@ class Oauth extends CI_Model {
 	 *
 	 * Tests to see if provided application credentials are valid. Must
 	 * include Client ID, AND redirect URI OR client secret OR both.
+	 *
+	 * @access public
 	 *
 	 * @param string $client_id      Client ID to be tested.
 	 * @param string $redirect_uri   Redirect URI to be tested.
@@ -132,7 +134,7 @@ class Oauth extends CI_Model {
 	 * @param string $user       User for which this code is valid
 	 * @param array $scopes      Requested scopes for this token
 	 *
-	 * @return string|false The code which should be passed to the client, or
+	 * @return string|FALSE The code which should be passed to the client, or
 	 *                      FALSE if it cannot be generated.
 	 *
 	 * @todo Ensure that scopes requested are valid
@@ -174,7 +176,7 @@ class Oauth extends CI_Model {
 	 * @param string $code       Code to perform the swap for.
 	 * @param string $client_id  Client ID for this token.
 	 *
-	 * @return object|false An object containing the tokens, or FALSE if the
+	 * @return object|FALSE An object containing the tokens, or FALSE if the
 	 *                      swap fails for any reason.
 	 */
 
@@ -244,7 +246,7 @@ class Oauth extends CI_Model {
 	 * @param string $refresh_token Code to perform the swap for.
 	 * @param string $client_id     Client ID for this token.
 	 *
-	 * @return object|false An object containing the tokens, or FALSE if the
+	 * @return object|FALSE An object containing the tokens, or FALSE if the
 	 *                      swap fails for any reason.
 	 */
 
