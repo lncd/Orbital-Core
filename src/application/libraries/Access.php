@@ -38,7 +38,7 @@ class Access {
 				->set_status_header('401')
 				->set_header('WWW-Authenticate: Basic realm="Orbital Core"');
 			// Nothing else can or should happen at this point. Wrap it up.
-			return FALSE();
+			return FALSE;
 		}
 		else
 		{
