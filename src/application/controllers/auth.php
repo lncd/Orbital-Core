@@ -67,12 +67,14 @@ class Auth extends CI_Controller {
 			}
 			else
 			{
+				$this->output->set_status_header('400');
 				$this->load->view('error', array('message' => 'Client ID or redirect URI are not recognised or are not valid.'));
 			}
 
 		}
 		else
 		{
+			$this->output->set_status_header('400');
 			$this->load->view('error', array('message' => 'Client ID, redirect URI or response type not present in sign-in request.'));
 		}
 	}
@@ -111,7 +113,15 @@ class Auth extends CI_Controller {
 					// User does not exist, try to create!
 					if (!$this->users->create_user($response->user_email, $response->user_name))
 					{
-						$this->load->view('error', array('message' => 'Unable to create user object.'));
+						$this->output->set_status_header('500');						
+						$redirect_uri =  $state->redirect_uri . '?error=server_error&error_description=Unable to create user object.';
+
+						if (isset($state->state))
+						{
+							$redirect_uri .= '&state=' . $state->state;
+						}
+	
+						$this->output->set_header('Location: ' . $redirect_uri);
 						return;
 					}
 				}
@@ -148,6 +158,7 @@ class Auth extends CI_Controller {
 			else
 			{
 				// Required fields not present
+				$this->output->set_status_header('500');
 				$this->load->view('error', array('message' => 'Required details not provided by sign-in library.'));
 			}
 
@@ -156,6 +167,7 @@ class Auth extends CI_Controller {
 		{
 
 			// Sign-in library has returned FALSE, or nothing at all.
+			$this->output->set_status_header('500');
 			$this->load->view('error', array('message' => 'Unexpected or invalid response from sign-in library.'));
 		}
 	}
@@ -168,17 +180,15 @@ class Auth extends CI_Controller {
 
 	function access_token()
 	{
-		if ($this->input->post('grant_type')
-			&& $this->input->post('grant_type') === 'authorization_code'
-			&& $this->input->post('client_id')
-			&& $this->input->post('client_secret')
-			&& $this->input->post('code'))
+	
+		if ($this->access->valid_application())
 		{
-
-			// All fields present. Validate them!
-			if ($this->oauth->validate_app_credentials($this->input->post('client_id'), NULL, $this->input->post('client_secret')))
+	
+			if ($this->input->post('grant_type')
+				&& $this->input->post('grant_type') === 'authorization_code'
+				&& $this->input->post('code'))
 			{
-			
+				
 				// Client credentials valid, try perform swap
 				if ($tokens = $this->oauth->swap_code($this->input->post('code'), $this->input->post('client_id')))
 				{
@@ -202,31 +212,34 @@ class Auth extends CI_Controller {
 				
 					$this->output
 						->set_content_type('application/json')
+						->set_status_header('400')
 						->set_output(json_encode(array(
 							'error' => 'invalid_grant',
 							'error_description' => 'The provided code is not valid for these credentials, has already been used, or has expired.'
 						)));
 				}
+	
 			}
 			else
 			{
+				// Something is missing. Abort!
 				$this->output
 					->set_content_type('application/json')
+					->set_status_header('400')
 					->set_output(json_encode(array(
-						'error' => 'access_denied',
-						'invalid_client' => 'The provided credentials did not match those expected.'
+						'error' => 'invalid_request',
+						'error_description' => 'The request did not include all required elements.'
 					)));
 			}
-
 		}
 		else
 		{
-			// Something is missing. Abort!
 			$this->output
 				->set_content_type('application/json')
+				->set_status_header('400')
 				->set_output(json_encode(array(
-					'error' => 'invalid_request',
-					'error_description' => 'The request did not include all required elements.'
+					'error' => 'access_denied',
+					'invalid_client' => 'The provided credentials did not match those expected.'
 				)));
 		}
 	}
@@ -239,17 +252,13 @@ class Auth extends CI_Controller {
 
 	function refresh_token()
 	{
-		if ($this->input->post('grant_type')
-			&& $this->input->post('grant_type') === 'refresh_token'
-			&& $this->input->post('client_id')
-			&& $this->input->post('client_secret')
-			&& $this->input->post('refresh_token'))
+		if ($this->access->valid_application())
 		{
-
-			// All fields present. Validate them!
-			if ($this->oauth->validate_app_credentials($this->input->post('client_id'), NULL, $this->input->post('client_secret')))
+			if ($this->input->post('grant_type')
+				&& $this->input->post('grant_type') === 'refresh_token'
+				&& $this->input->post('refresh_token'))
 			{
-			
+				
 				// Client credentials valid, try perform swap
 				if ($tokens = $this->oauth->swap_refresh_token($this->input->post('refresh_token'), $this->input->post('client_id')))
 				{
@@ -278,26 +287,27 @@ class Auth extends CI_Controller {
 							'error_description' => 'The provided refresh token is not valid for these credentials or has already been used.'
 						)));
 				}
+	
 			}
 			else
 			{
+				// Something is missing. Abort!
 				$this->output
 					->set_content_type('application/json')
 					->set_output(json_encode(array(
-						'error' => 'access_denied',
-						'invalid_client' => 'The provided credentials did not match those expected.'
+						'error' => 'invalid_request',
+						'error_description' => 'The request did not include all required elements.'
 					)));
 			}
-
 		}
 		else
 		{
-			// Something is missing. Abort!
 			$this->output
 				->set_content_type('application/json')
+				->set_status_header('400')
 				->set_output(json_encode(array(
-					'error' => 'invalid_request',
-					'error_description' => 'The request did not include all required elements.'
+					'error' => 'access_denied',
+					'invalid_client' => 'The provided credentials did not match those expected.'
 				)));
 		}
 	}
