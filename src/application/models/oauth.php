@@ -26,21 +26,32 @@ class Oauth extends CI_Model {
 	/**
 	 * Validate Token
 	 *
-	 * Tests to see if provided token and client ID are valid, and token has
-	 * not expired.
+	 * Tests to see if provided token and client ID are valid, token has not
+	 * expired, and scopes are valid.
 	 *
 	 * @param string $client_id    Client ID to be tested.
 	 * @param string $access_token Redirect URI to be tested.
+	 * @param array  $scopes       Scopes to ensure this token has.
 	 *
-	 * @return bool TRUE if token is valid, FALSE if not.
+	 * @return string|bool Email address of the user if token is valid, FALSE
+	 *                     if not.
 	 */
 
-	function validate_token($client_id, $access_token)
+	function validate_token($client_id, $access_token, $scopes)
 	{
-		if ($token = $this->mongo_db->where(array(
+	
+		$this->mongo_db->where(array(
 			'client_id' => $client_id,
 			'access_token' => $access_token
-		))->where_gt('expires', time())->get('applications'))
+		))->where_gt('expires', time());
+	
+		// Add the tokens to the evaluation
+		foreach ($tokens as $token)
+		{
+			$this->mongo_db->where(array('))
+		}
+	
+		if ($token = $this->mongo_db->get('oauth_access_tokens'))
 		{
 			if (count($token) === 1)
 			{
@@ -55,6 +66,7 @@ class Oauth extends CI_Model {
 		{
 			return FALSE;
 		}
+	}
 
 
 	/**
