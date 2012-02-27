@@ -104,25 +104,43 @@ class Access {
 			
 			if (count($authorisation_header) === 2 && $authorisation_header[0] === 'Bearer')
 			{
-				// Looks the right length, has the right auth type - see if the token is valid for the scope.
-				if ($this->_ci->oauth->validate_token($authorisation_header[1], $scopes))
+				// Looks the right length, has the right auth type - see if the token is valid.
+				if ($user = $this->_ci->oauth->validate_token(base64_decode($authorisation_header[1])))
 				{
-					return TRUE;
+				
+					// Token is valid, hooray! But does it have the scopes?
+					if ($this->_ci->oauth->validate_scopes(base64_decode($authorisation_header[1]), $scopes))
+					{
+						return $user;
+					}
+					else
+					{
+						$this->_ci->output
+						->set_status_header('403')
+						->set_output(json_encode(array(
+							'error' => 'insufficient_scope',
+							'error_description' => 'The access token provided does not have sufficient scopes to perform this action.',
+							'scope' => implode(' ', $scopes)
+						)));
+						return FALSE;
+					}
 				}
 				else
 				{
+				
 					$this->_ci->output
 						->set_status_header('401')
-						->set_header('WWW-Authenticate: Bearer realm="Orbital Core: Application"');
+						->set_header('WWW-Authenticate: Bearer realm="Orbital Core: User", error="invalid_token", error_description="The access token is invalid, has expired or has been revoked."');
 					return FALSE;
 				}
 			}
 			else
 			{
+			
 				// Demand authentication
 				$this->_ci->output
 					->set_status_header('401')
-					->set_header('WWW-Authenticate: Bearer realm="Orbital Core: Application"');
+					->set_header('WWW-Authenticate: Bearer realm="Orbital Core: User"');
 				// Nothing else can or should happen at this point. Wrap it up.
 				return FALSE;
 			}
