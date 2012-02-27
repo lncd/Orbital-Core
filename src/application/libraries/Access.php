@@ -35,7 +35,7 @@ class Access {
 	{
 	
 		// Is there a present HTTP user? If not, demand authentication.
-		if (!$this->_ci->input->server('PHP_AUTH_USER'))
+		if ( ! $this->_ci->input->server('PHP_AUTH_USER'))
 		{
 			// Hijack everything!
 			$this->_ci->output
