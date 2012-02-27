@@ -36,7 +36,10 @@ class Auth extends CI_Controller {
 	{
 
 		// Make sure client_id and redirect_uri exist
-		if ($this->input->get('client_id') && $this->input->get('redirect_uri'))
+		if ($this->input->get('response_type')
+			&& $this->input->get('response_type') === 'code'
+			&& $this->input->get('client_id')
+			&& $this->input->get('redirect_uri'))
 		{
 
 			if ($this->oauth->validate_app_credentials($this->input->get('client_id'), $this->input->get('redirect_uri')))
@@ -64,13 +67,13 @@ class Auth extends CI_Controller {
 			}
 			else
 			{
-				$this->load->view('error', array('message' => 'Client ID or Redirect URI are not recognised or are not valid.'));
+				$this->load->view('error', array('message' => 'Client ID or redirect URI are not recognised or are not valid.'));
 			}
 
 		}
 		else
 		{
-			$this->load->view('error', array('message' => 'Client ID or Redirect URI not present in sign-in request.'));
+			$this->load->view('error', array('message' => 'Client ID, redirect URI or response type not present in sign-in request.'));
 		}
 	}
 
@@ -165,7 +168,12 @@ class Auth extends CI_Controller {
 
 	function access_token()
 	{
-		if ($this->input->post('client_id') && $this->input->post('redirect_uri') && $this->input->post('client_secret') && $this->input->post('code'))
+		if ($this->input->post('grant_type')
+			&& $this->input->post('grant_type') === 'authorization_code'
+			&& $this->input->post('client_id')
+			&& $this->input->post('redirect_uri')
+			&& $this->input->post('client_secret')
+			&& $this->input->post('code'))
 		{
 
 			// All fields present. Validate them!
@@ -198,6 +206,78 @@ class Auth extends CI_Controller {
 						->set_output(json_encode(array(
 							'error' => 'invalid_grant',
 							'error_description' => 'The provided code is not valid for these credentials, has already been used, or has expired.'
+						)));
+				}
+			}
+			else
+			{
+				$this->output
+					->set_content_type('application/json')
+					->set_output(json_encode(array(
+						'error' => 'access_denied',
+						'invalid_client' => 'The provided credentials did not match those expected.'
+					)));
+			}
+
+		}
+		else
+		{
+			// Something is missing. Abort!
+			$this->output
+				->set_content_type('application/json')
+				->set_output(json_encode(array(
+					'error' => 'invalid_request',
+					'error_description' => 'The request did not include all required elements.'
+				)));
+		}
+	}
+	
+	/**
+	 * Refresh Token Swap
+	 *
+	 * Swaps a refresh token for a new access token and refresh token.
+	 */
+
+	function refresh_token()
+	{
+		if ($this->input->post('grant_type')
+			&& $this->input->post('grant_type') === 'refresh_token'
+			&& $this->input->post('client_id')
+			&& $this->input->post('redirect_uri')
+			&& $this->input->post('client_secret')
+			&& $this->input->post('refresh_token'))
+		{
+
+			// All fields present. Validate them!
+			if ($this->oauth->validate_app_credentials($this->input->post('client_id'), $this->input->post('redirect_uri'), $this->input->post('client_secret')))
+			{
+			
+				// Client credentials valid, try perform swap
+				if ($tokens = $this->oauth->swap_refresh_token($this->input->post('refresh_token'), $this->input->post('client_id')))
+				{
+			
+					$this->output
+						->set_content_type('application/json')
+						->set_output(json_encode(array(
+							'access_token' => $tokens['access_token'],
+							'token_type' => 'bearer',
+							'expires_in' => $tokens['expires_in'],
+							'refresh_token' => $tokens['refresh_token'],
+							'scope' => implode(' ', $tokens['scope']),
+							'user' => $tokens['user']
+						)));
+						
+				}
+				else
+				{
+				
+					// Token swap failed. Probably invalid.
+				
+					$this->output
+						->set_content_type('application/json')
+						->set_output(json_encode(array(
+							'error' => 'invalid_grant',
+							'error_description' => 'The provided refresh token is not valid for these credentials or has already been used.'
 						)));
 				}
 			}
