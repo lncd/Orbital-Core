@@ -48,7 +48,7 @@ class Oauth extends CI_Model {
 		// Add the tokens to the evaluation
 		foreach ($tokens as $token)
 		{
-			$this->mongo_db->where(array('))
+			$this->mongo_db->where(array('scopes' => $token));
 		}
 	
 		if ($token = $this->mongo_db->get('oauth_access_tokens'))
