@@ -127,50 +127,17 @@
 	<target name="phpunit" description="Run unit tests with PHPUnit">
 	
 		<replace file="${basedir}/tests/phpunit.xml">
-			<replacefilter>
-				<replacetoken>@ORBITAL_CI_BASEURL@</replacetoken> 
-				<replacevalue>${ORBITAL_CI_BASEURL}</replacevalue>
-			</replacefilter>
-			<replacefilter>
-				<replacetoken>@ORBITAL_CI_INDEXPAGE@</replacetoken> 
-				<replacevalue>${ORBITAL_CI_INDEXPAGE}</replacevalue>
-			</replacefilter>
-			<replacefilter>
-				<replacetoken>@ORBITAL_CI_ENCRYPTKEY@</replacetoken> 
-				<replacevalue>${ORBITAL_CI_ENCRYPTKEY}</replacevalue>
-			</replacefilter>
-			<replacefilter>
-				<replacetoken>@ORBITAL_CI_COOKIE_NAME_PREFIX@</replacetoken> 
-				<replacevalue>${ORBITAL_CI_COOKIE_NAME_PREFIX}</replacevalue>
-			</replacefilter>
-			<replacefilter>
-				<replacetoken>@ORBITAL_INSTITUTION_NAME@</replacetoken> 
-				<replacevalue>${ORBITAL_INSTITUTION_NAME}</replacevalue>
-			</replacefilter>
-			<replacefilter>
-				<replacetoken>@ORBITAL_CONTACT_NAME@</replacetoken> 
-				<replacevalue>${ORBITAL_CONTACT_NAME}</replacevalue>
-			</replacefilter>
-			<replacefilter>
-				<replacetoken>@ORBITAL_CONTACT_EMAIL@</replacetoken> 
-				<replacevalue>${ORBITAL_CONTACT_EMAIL}</replacevalue>
-			</replacefilter>
-			<replacefilter>
-				<replacetoken>@ORBITAL_MONGO_SERVERS@</replacetoken> 
-				<replacevalue>${ORBITAL_MONGO_SERVERS}</replacevalue>
-			</replacefilter>
-			<replacefilter>
-				<replacetoken>@ORBITAL_MONGO_DATABASE@</replacetoken> 
-				<replacevalue>${ORBITAL_MONGO_DATABASE}</replacevalue>
-			</replacefilter>
-			<replacefilter>
-				<replacetoken>@ORBITAL_MONGO_USER@</replacetoken> 
-				<replacevalue>${ORBITAL_MONGO_USER}</replacevalue>
-			</replacefilter>
-			<replacefilter>
-				<replacetoken>@ORBITAL_MONGO_PASSWORD@</replacetoken> 
-				<replacevalue>${ORBITAL_MONGO_PASSWORD}</replacevalue>
-			</replacefilter>
+			<replacefilter token="@ORBITAL_CI_BASEURL@" property="ORBITAL_CI_BASEURL" />
+			<replacefilter token="@ORBITAL_CI_INDEXPAGE@" property="ORBITAL_CI_INDEXPAGE" />
+			<replacefilter token="@ORBITAL_CI_ENCRYPTKEY@" property="ORBITAL_CI_ENCRYPTKEY" />
+			<replacefilter token="@ORBITAL_CI_COOKIE_NAME_PREFIX@" property="ORBITAL_CI_COOKIE_NAME_PREFIX" />
+			<replacefilter token="@ORBITAL_INSTITUTION_NAME@" property="ORBITAL_INSTITUTION_NAME" />
+			<replacefilter token="@ORBITAL_CONTACT_NAME@" property="ORBITAL_CONTACT_NAME" />
+			<replacefilter token="@ORBITAL_CONTACT_EMAIL@" property="ORBITAL_CONTACT_EMAIL" />
+			<replacefilter token="@ORBITAL_MONGO_SERVERS@" property="ORBITAL_MONGO_SERVERS" />
+			<replacefilter token="@ORBITAL_MONGO_DATABASE@" property="ORBITAL_MONGO_DATABASE" />
+			<replacefilter token="@ORBITAL_MONGO_USER@" property="ORBITAL_MONGO_USER" />
+			<replacefilter token="@ORBITAL_MONGO_PASSWORD@" property="ORBITAL_MONGO_PASSWORD" />
 		</replace>
 	
 		<exec executable="phpunit" failonerror="true">
