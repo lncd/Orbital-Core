@@ -125,6 +125,54 @@
 	</target>
 	
 	<target name="phpunit" description="Run unit tests with PHPUnit">
+	
+		<replace file="${basedir}/tests/phpunit.xml">
+			<replacefilter>
+				<replacetoken>@ORBITAL_CI_BASEURL@</replacetoken> 
+				<replacevalue>${ORBITAL_CI_BASEURL}</replacevalue>
+			</replacefilter>
+			<replacefilter>
+				<replacetoken>@ORBITAL_CI_INDEXPAGE@</replacetoken> 
+				<replacevalue>${ORBITAL_CI_INDEXPAGE}</replacevalue>
+			</replacefilter>
+			<replacefilter>
+				<replacetoken>@ORBITAL_CI_ENCRYPTKEY@</replacetoken> 
+				<replacevalue>${ORBITAL_CI_ENCRYPTKEY}</replacevalue>
+			</replacefilter>
+			<replacefilter>
+				<replacetoken>@ORBITAL_CI_COOKIE_NAME_PREFIX@</replacetoken> 
+				<replacevalue>${ORBITAL_CI_COOKIE_NAME_PREFIX}</replacevalue>
+			</replacefilter>
+			<replacefilter>
+				<replacetoken>@ORBITAL_INSTITUTION_NAME@</replacetoken> 
+				<replacevalue>${ORBITAL_INSTITUTION_NAME}</replacevalue>
+			</replacefilter>
+			<replacefilter>
+				<replacetoken>@ORBITAL_CONTACT_NAME@</replacetoken> 
+				<replacevalue>${ORBITAL_CONTACT_NAME}</replacevalue>
+			</replacefilter>
+			<replacefilter>
+				<replacetoken>@ORBITAL_CONTACT_EMAIL@</replacetoken> 
+				<replacevalue>${ORBITAL_CONTACT_EMAIL}</replacevalue>
+			</replacefilter>
+			<replacefilter>
+				<replacetoken>@ORBITAL_MONGO_SERVERS@</replacetoken> 
+				<replacevalue>${ORBITAL_MONGO_SERVERS}</replacevalue>
+			</replacefilter>
+			<replacefilter>
+				<replacetoken>@ORBITAL_MONGO_DATABASE@</replacetoken> 
+				<replacevalue>${ORBITAL_MONGO_DATABASE}</replacevalue>
+			</replacefilter>
+			<replacefilter>
+				<replacetoken>@ORBITAL_MONGO_USER@</replacetoken> 
+				<replacevalue>${ORBITAL_MONGO_USER}</replacevalue>
+			</replacefilter>
+			<replacefilter>
+				<replacetoken>@ORBITAL_MONGO_PASSWORD@</replacetoken> 
+				<replacevalue>${ORBITAL_MONGO_PASSWORD}</replacevalue>
+			</replacefilter>
+		</replace>
+	
 		<exec executable="phpunit" failonerror="true">
 			<arg line="-c ${basedir}/tests/phpunit.xml" />
 		</exec>

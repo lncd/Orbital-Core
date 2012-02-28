@@ -5,7 +5,19 @@
 	bootstrap="../src/application/third_party/CIUnit/bootstrap_phpunit.php">
 	
 	<php>
-		<server name="SERVER_NAME" value="http://example.com" />
+		<server name="ORBITAL_CI_ENVIRONMENT" value="testing" />
+		<server name="ORBITAL_CI_BASEURL" value="@ORBITAL_CI_BASEURL@" />
+		<server name="ORBITAL_CI_INDEXPAGE" value="@ORBITAL_CI_INDEXPAGE@" />
+		<server name="ORBITAL_CI_ENCRYPTKEY" value="@ORBITAL_CI_ENCRYPTKEY@" />
+		<server name="ORBITAL_CI_COOKIE_NAME_PREFIX" value="@ORBITAL_CI_COOKIE_NAME_PREFIX@" />
+		<server name="ORBITAL_INSTITUTION_NAME" value="@ORBITAL_INSTITUTION_NAME@" />
+		<server name="ORBITAL_CONTACT_NAME" value="@ORBITAL_CONTACT_NAME@" />
+		<server name="ORBITAL_CONTACT_EMAIL" value="@ORBITAL_CONTACT_EMAIL@" />
+		<server name="ORBITAL_OPERATION_MODE" value="@ORBITAL_OPERATION_MODE@" />
+		<server name="ORBITAL_MONGO_SERVERS" value="@ORBITAL_MONGO_SERVERS@" />
+		<server name="ORBITAL_MONGO_DATABASE" value="@ORBITAL_MONGO_DATABASE@" />
+		<server name="ORBITAL_MONGO_USER" value="@ORBITAL_MONGO_USER@" />
+		<server name="ORBITAL_MONGO_PASSWORD" value="@ORBITAL_MONGO_PASSWORD@" />
 	</php>
 	
 	<logging>
