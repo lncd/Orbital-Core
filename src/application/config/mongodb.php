@@ -15,10 +15,10 @@
  * ['mongo_host_db_flag']   If running in auth mode and the user does not have global read/write then set this to true
  */
 
-$config['default']['mongo_hostbase'] = '##MONGO_SERVERS##';
-$config['default']['mongo_database'] = '##MONGO_DATABASE##';
-$config['default']['mongo_username'] = '##MONGO_USER##';
-$config['default']['mongo_password'] = '##MONGO_PASSWORD##';
+$config['default']['mongo_hostbase'] = $_SERVER['ORBITAL_MONGO_SERVERS'];
+$config['default']['mongo_database'] = $_SERVER['ORBITAL_MONGO_DATABASE'];
+$config['default']['mongo_username'] = $_SERVER['ORBITAL_MONGO_USER'];
+$config['default']['mongo_password'] = $_SERVER['ORBITAL_MONGO_PASSWORD'];
 $config['default']['mongo_persist']  = TRUE;
 $config['default']['mongo_persist_key']	 = 'orbital_core_persist_key';
 $config['default']['mongo_query_safety'] = 'safe';

@@ -21,7 +21,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * installation.
 */
 
-$config['orbital_institution_name'] = '##ORBITAL_INSTITUTION_NAME##';
+$config['orbital_institution_name'] = $_SERVER['ORBITAL_INSTITUTION_NAME'];
 
 /**
  * Contact Name
@@ -29,7 +29,7 @@ $config['orbital_institution_name'] = '##ORBITAL_INSTITUTION_NAME##';
  * The name of an administrative contact for this instance.
 */
 
-$config['orbital_contact_name'] = '##ORBITAL_CONTACT_NAME##';
+$config['orbital_contact_name'] = $_SERVER['ORBITAL_CONTACT_NAME'];
 
 /**
  * Contact Email Address
@@ -37,7 +37,7 @@ $config['orbital_contact_name'] = '##ORBITAL_CONTACT_NAME##';
  * The email address of an administrative contact for this instance.
 */
 
-$config['orbital_contact_email'] = '##ORBITAL_CONTACT_EMAIL##';
+$config['orbital_contact_email'] = $_SERVER['ORBITAL_CONTACT_EMAIL'];
 
 /*
 |--------------------------------------------------------------------------
@@ -54,7 +54,7 @@ $config['orbital_contact_email'] = '##ORBITAL_CONTACT_EMAIL##';
 |   normal - Normal behaviour.
 |
 */
-$config['orbital_operation_mode'] = 'normal';
+$config['orbital_operation_mode'] = $_SERVER['ORBITAL_OPERATION_MODE'];
 
 /*
 |--------------------------------------------------------------------------

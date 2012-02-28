@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= '##CI_BASEURL##';
+$config['base_url']	= $_SERVER['ORBITAL_CI_BASEURL'];
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +26,7 @@ $config['base_url']	= '##CI_BASEURL##';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = '##CI_INDEXPAGE##';
+$config['index_page'] = $_SERVER['ORBITAL_CI_INDEXPAGE'];
 
 /*
 |--------------------------------------------------------------------------
@@ -224,7 +224,7 @@ $config['cache_path'] = '';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = '##CI_ENCRYPTKEY##';
+$config['encryption_key'] = $_SERVER['ORBITAL_CI_ENCRYPTKEY'];
 
 /*
 |--------------------------------------------------------------------------
@@ -264,7 +264,7 @@ $config['sess_time_to_update']	= 300;
 | 'cookie_path'   =  Typically will be a forward slash
 |
 */
-$config['cookie_prefix']	= '##CI_NAME_PREFIX##';
+$config['cookie_prefix']	= $_SERVER['ORBITAL_CI_COOKIE_NAME_PREFIX'];
 $config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
 

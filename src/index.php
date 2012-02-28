@@ -18,7 +18,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	define('ENVIRONMENT', '##CI_ENVIRONMENT##');
+	define('ENVIRONMENT', $_SERVER['ORBITAL_CI_ENVIRONMENT']);
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
