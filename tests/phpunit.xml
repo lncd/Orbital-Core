@@ -13,7 +13,7 @@
 		<server name="ORBITAL_INSTITUTION_NAME" value="@ORBITAL_INSTITUTION_NAME@" />
 		<server name="ORBITAL_CONTACT_NAME" value="@ORBITAL_CONTACT_NAME@" />
 		<server name="ORBITAL_CONTACT_EMAIL" value="@ORBITAL_CONTACT_EMAIL@" />
-		<server name="ORBITAL_OPERATION_MODE" value="@ORBITAL_OPERATION_MODE@" />
+		<server name="ORBITAL_OPERATION_MODE" value="normal" />
 		<server name="ORBITAL_MONGO_SERVERS" value="@ORBITAL_MONGO_SERVERS@" />
 		<server name="ORBITAL_MONGO_DATABASE" value="@ORBITAL_MONGO_DATABASE@" />
 		<server name="ORBITAL_MONGO_USER" value="@ORBITAL_MONGO_USER@" />
