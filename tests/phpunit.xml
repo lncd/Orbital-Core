@@ -2,7 +2,7 @@
 <phpunit 
 	colors="true" 
 	stopOnFailure="false" 
-	bootstrap="../application/third_party/CIUnit/bootstrap_phpunit.php">
+	bootstrap="../src/application/third_party/CIUnit/bootstrap_phpunit.php">
 	
 	<php>
 		<server name="SERVER_NAME" value="http://example.com" />
