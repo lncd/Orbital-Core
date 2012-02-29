@@ -12,7 +12,7 @@ class Core extends Orbital_Controller
 	 * @access public
 	 */
 
-	public function ping_get()
+	public function ping()
 	{
 	
 		$ping->message = 'pong';
@@ -27,7 +27,7 @@ class Core extends Orbital_Controller
 	 * @access public
 	 */
 	
-	public function auth_types_get()
+	public function auth_types()
 	{
 	
 		$auth_types = $this->mongo_db->get('auth_types');
