@@ -56,13 +56,13 @@ class Orbital_Controller extends CI_Controller {
 		// Ensure code is present
 		if ($http_code === NULL)
 		{
-			$http_code = 200
+			$http_code = 200;
 		}
 		
 		// Wrangle for output
 		
 		$this->output
-			->set_status_header($http_code);
+			->set_status_header($http_code)
 			->set_content_type('application/json')
 			->set_output(json_encode($data));
 	}
