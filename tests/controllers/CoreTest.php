@@ -15,7 +15,7 @@ class CoreTest extends CIUnit_TestCase
 	public function testPing()
 	{
 		// Call the controllers method
-		$this->CI->ping_get();
+		$this->CI->ping();
 		
 		// Fetch the buffered output
 		$out = output();
