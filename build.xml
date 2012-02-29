@@ -140,7 +140,8 @@
 		</replace>
 	
 		<exec executable="phpunit" failonerror="true">
-			<arg line="-c ${basedir}/tests/phpunit.xml" />
+			<arg value="-c" />
+			<arg path="${basedir}/tests/phpunit.xml" />
 		</exec>
 	</target>
 	
