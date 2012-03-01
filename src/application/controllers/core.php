@@ -54,4 +54,17 @@ class Core extends Orbital_Controller
 		}
 		
 	}
+	
+	/**
+	 * Returns the current state of the Mongo replica set
+	 *
+	 * @access public
+	 *
+	 * @todo Should be restricted to those with appropriate permissions
+	 */
+	
+	public function mongo_rs_status()
+	{
+		print_r($this->mongo_db->command(array('replSetGetStatus' => true)));
+	}
 }
