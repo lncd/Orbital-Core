@@ -100,6 +100,7 @@
 		<exec executable="phpcs">
 			<arg value="--standard=${basedir}/build/phpcs.xml" />
 			<arg value="--extensions=php" />
+			<arg value="--ignore=third_party/CIUnit" />
 			<arg path="${basedir}/src/application" />
 		</exec>
 	</target>
@@ -111,6 +112,7 @@
 			<arg value="--report-file=${basedir}/build/logs/checkstyle.xml" />
 			<arg value="--standard=${basedir}/build/phpcs.xml" />
 			<arg value="--extensions=php" />
+			<arg value="--ignore=third_party/CIUnit" />
 			<arg path="${basedir}/src/application" />
 		</exec>
 	</target>
