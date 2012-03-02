@@ -3,7 +3,7 @@
 
 	<description>PHP_CodeSniffer configuration for Orbital Core.</description>
 	
-	<!-- Include the whole PEAR standard -->
+	<!-- Include the whole CodeIgniter standard -->
 	<rule ref="CodeIgniter"/>
 
 </ruleset>
