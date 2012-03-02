@@ -14,9 +14,11 @@ class SomeLibTest extends CIUnit_TestCase
 		//$this->CI->load->library('example_lib', '', mylib);
 	}
 	
+	/*
 	public function testMethod()
 	{
 		// Check if everything is ok
 		//$this->assertEquals(4, $this->CI->mylib->add(2, 2));
 	}
+	*/
 }

@@ -38,10 +38,12 @@ class SomeModelTest extends CIUnit_TestCase
 		*/
 	}
 
+	/*
 	public function testProductFetching()
 	{
 		/*
 		$this->assertEqual($this->products_fixt['first'], $this->pm->product(1));
 		*/
 	}
+	*/
 }

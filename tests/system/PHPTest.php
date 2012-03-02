@@ -11,9 +11,10 @@ class PHPTest extends CIUnit_TestCase
 		// Setup
 	}
 
-	public function testFunctionJsonEncode()
+	public function testFunctions()
 	{
 		$this->assertTrue(function_exists('json_encode'));
+		$this->assertTrue(function_exists('json_decode'));
 	}
 
 	public function testPhpVersion()
