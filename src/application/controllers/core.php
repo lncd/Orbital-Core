@@ -17,7 +17,7 @@ class Core extends Orbital_Controller
 	
 		$ping->message = 'pong';
 		
-		$this->response($ping, 200); // 200 being the HTTP response code
+		$this->response($ping);
 		
 	}
 	
@@ -41,7 +41,7 @@ class Core extends Orbital_Controller
 				$response->auth_types[] = $auth_type;
 			}
 			
-			$this->response($response, 200);
+			$this->response($response);
 			
 		}
 		else
@@ -56,15 +56,22 @@ class Core extends Orbital_Controller
 	}
 	
 	/**
-	 * Returns the current state of the Mongo replica set
+	 * Returns the current status of the Mongo system
 	 *
 	 * @access public
 	 *
 	 * @todo Should be restricted to those with appropriate permissions
 	 */
 	
-	public function mongo_rs_status()
+	public function mongo_server_status()
 	{
-		print_r($this->mongo_db->command(array('replSetGetStatus' => true)));
+		$response->server = $this->mongo_db->admin_server_status();
+		
+		if (isset($response->server['repl']['setName']))
+		{
+			$response->replica_set = $this->mongo_db->admin_replica_set_status();
+		}
+		
+		$this->response($response);
 	}
 }

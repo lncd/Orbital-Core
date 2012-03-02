@@ -25,3 +25,14 @@ $config['default']['replica_set']  = 'orbital';
 $config['default']['mongo_query_safety'] = 'safe';
 $config['default']['mongo_supress_connect_error'] = TRUE;
 $config['default']['mongo_host_db_flag']   = TRUE;
+
+$config['admin']['mongo_hostbase'] = $_SERVER['ORBITAL_MONGO_SERVERS'];
+$config['admin']['mongo_database'] = 'admin';
+$config['admin']['mongo_username'] = $_SERVER['ORBITAL_MONGO_ADMIN_USER'];
+$config['admin']['mongo_password'] = $_SERVER['ORBITAL_MONGO_ADMIN_PASSWORD'];
+$config['admin']['mongo_persist']  = TRUE;
+$config['admin']['mongo_persist_key']	 = 'orbital_core_admin_persist_key';
+$config['admin']['replica_set']  = 'orbital';
+$config['admin']['mongo_query_safety'] = 'safe';
+$config['admin']['mongo_supress_connect_error'] = TRUE;
+$config['admin']['mongo_host_db_flag']   = TRUE;

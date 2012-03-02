@@ -1657,6 +1657,20 @@ class Mongo_db {
 		return $this;
 	}
 	
+	public function admin_replica_set_status()
+	{
+		$this->load('admin');
+		return $this->command(array('replSetGetStatus' => true));
+		$this->load();
+	}
+	
+	public function admin_server_status()
+	{
+		$this->load('admin');
+		return $this->command(array('serverStatus' => true));
+		$this->load();
+	}
+	
 	/**
 	 * List indexes.
 	 *
