@@ -21,7 +21,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * installation.
 */
 
-$config['orbital_institution_name'] = $_SERVER['ORBITAL_INSTITUTION_NAME'];
+$config['orbital_institution_name'] = $this->input->server('ORBITAL_INSTITUTION_NAME');
 
 /**
  * Contact Name
@@ -29,7 +29,7 @@ $config['orbital_institution_name'] = $_SERVER['ORBITAL_INSTITUTION_NAME'];
  * The name of an administrative contact for this instance.
 */
 
-$config['orbital_contact_name'] = $_SERVER['ORBITAL_CONTACT_NAME'];
+$config['orbital_contact_name'] = $this->input->server('ORBITAL_CONTACT_NAME');
 
 /**
  * Contact Email Address
@@ -37,52 +37,43 @@ $config['orbital_contact_name'] = $_SERVER['ORBITAL_CONTACT_NAME'];
  * The email address of an administrative contact for this instance.
 */
 
-$config['orbital_contact_email'] = $_SERVER['ORBITAL_CONTACT_EMAIL'];
+$config['orbital_contact_email'] = $this->input->server('ORBITAL_CONTACT_EMAIL');
 
 /*
-|--------------------------------------------------------------------------
-| Operation Mode
-|--------------------------------------------------------------------------
-|
-| Orbital Core's behaviour mode.
-|
-| Accepted values:
-|   maintenance	- Respond to all requests with the maintenance status
-|                 message.
-|   readonly - Only accept read requests, respond to all write requests
-|              with the readonly status message.
-|   normal - Normal behaviour.
-|
+ * Operation Mode
+ *
+ * Orbital Core's behaviour mode.
+ *
+ * Accepted values:
+ *   maintenance	- Respond to all requests with the maintenance status
+ *                 message.
+ *   readonly - Only accept read requests, respond to all write requests
+ *              with the readonly status message.
+ *   normal - Normal behaviour.
 */
-$config['orbital_operation_mode'] = $_SERVER['ORBITAL_OPERATION_MODE'];
+$config['orbital_operation_mode'] = $this->input->server('ORBITAL_OPERATION_MODE');
 
 /*
-|--------------------------------------------------------------------------
-| Status Messages
-|--------------------------------------------------------------------------
-|
-| Messages to be returned during various operation modes.
-|
-| Message types:
-|   maintenance	- During maintenance all requests will be responded to with
-|                 this message.
-|   readonly - During read-only operation all requests will be responded to
-|              with this message.
-|
+ * Status Messages
+ *
+ * Messages to be returned during various operation modes.
+ *
+ * Message types:
+ *   maintenance	- During maintenance all requests will be responded to with
+ *                 this message.
+ *   readonly - During read-only operation all requests will be responded to
+ *              with this message.
 */
 
 $config['orbital_status_message_maintenance'] = 'Orbital is currently undergoing maintenance.';
 $config['orbital_status_message_readonly'] = 'Orbital is currently in read-only mode.';
 
 /*
-|--------------------------------------------------------------------------
-| Orbital Core Version
-|--------------------------------------------------------------------------
-|
-| The version of the Orbital Core.
-|
+ * Orbital Core Version
+ *
+ * The version of the Orbital Core.
 */
 $config['orbital_core_version'] = '0.0.2';
 
-/* End of file orbital.php */
-/* Location: ./config/orbital.php */
+// End of file orbital.php
+// Location: ./config/orbital.php
