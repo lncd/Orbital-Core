@@ -1660,15 +1660,33 @@ class Mongo_db {
 	public function admin_replica_set_status()
 	{
 		$this->load('admin');
-		return $this->command(array('replSetGetStatus' => true));
+		$response = $this->command(array('replSetGetStatus' => true));
 		$this->load();
+		
+		if ((int) $response['ok'] === 1)
+		{
+			return $response;
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 	
 	public function admin_server_status()
 	{
 		$this->load('admin');
-		return $this->command(array('serverStatus' => true));
+		$response = $this->command(array('serverStatus' => true));
 		$this->load();
+		
+		if ((int) $response['ok'] === 1)
+		{
+			return $response;
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 	
 	/**

@@ -65,13 +65,22 @@ class Core extends Orbital_Controller
 	
 	public function mongo_server_status()
 	{
-		$response->server = $this->mongo_db->admin_server_status();
-		
-		if (isset($response->server['repl']['setName']))
+		if ($response->server = $this->mongo_db->admin_server_status())
 		{
-			$response->replica_set = $this->mongo_db->admin_replica_set_status();
-		}
 		
-		$this->response($response);
+			if (isset($response->server['repl']['setName']))
+			{
+				$response->replica_set = $this->mongo_db->admin_replica_set_status();
+			}
+			
+			$this->response($response);
+			
+		}
+		else
+		{
+			$response->message = 'Error retrieving server status.';
+			
+			$this->response($response, 500);
+		}
 	}
 }
