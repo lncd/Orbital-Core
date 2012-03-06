@@ -103,7 +103,7 @@ class Auth extends CI_Controller {
 			{
 
 				// Unserialise the state
-				$state = unserialize($response->state);
+				$state = unserialize(urldecode($response->state));
 
 				// Fields present!
 
@@ -201,7 +201,8 @@ class Auth extends CI_Controller {
 							'expires_in' => $tokens['expires_in'],
 							'refresh_token' => $tokens['refresh_token'],
 							'scope' => implode(' ', $tokens['scope']),
-							'user' => $tokens['user']
+							'user' => $tokens['user'],
+							'system_admin' => $this->access->user_has_permission_aspect($tokens['user'], 'system_admin')
 						)));
 						
 				}
@@ -270,7 +271,8 @@ class Auth extends CI_Controller {
 							'expires_in' => $tokens['expires_in'],
 							'refresh_token' => $tokens['refresh_token'],
 							'scope' => implode(' ', $tokens['scope']),
-							'user' => $tokens['user']
+							'user' => $tokens['user'],
+							'system_admin' => $this->access->user_has_permission_aspect($tokens['user'], 'system_admin')
 						)));
 						
 				}

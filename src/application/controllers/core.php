@@ -16,6 +16,7 @@ class Core extends Orbital_Controller
 	{
 	
 		$ping->message = 'pong';
+		$ping->error = FALSE;
 		
 		$this->response($ping);
 		
@@ -41,12 +42,14 @@ class Core extends Orbital_Controller
 				$response->auth_types[] = $auth_type;
 			}
 			
+			$response->error = FALSE;
+			
 			$this->response($response);
 			
 		}
 		else
 		{
-		
+			$response->error = TRUE;
 			$response->message = 'No authentication types are configured.';
 			
 			$this->response($response, 500);
@@ -59,28 +62,38 @@ class Core extends Orbital_Controller
 	 * Returns the current status of the Mongo system
 	 *
 	 * @access public
-	 *
-	 * @todo Should be restricted to those with appropriate permissions
 	 */
 	
 	public function mongo_server_status()
 	{
-		if ($response->server = $this->mongo_db->admin_server_status())
+	
+		if ($user = $this->access->valid_user(array('administration')))
 		{
-		
-			if (isset($response->server['repl']['setName']))
+			if ($this->access->user_has_permission_aspect($user, 'system_admin'))
 			{
-				$response->replica_set = $this->mongo_db->admin_replica_set_status();
+				if ($status = $this->mongo_db->admin_server_status())
+				{
+				
+					$response->server = $status;
+				
+					if (isset($response->server['repl']['setName']))
+					{
+						$response->replica_set = $this->mongo_db->admin_replica_set_status();
+					}
+					
+					$response->error = FALSE;
+					
+					$this->response($response);
+					
+				}
+				else
+				{
+					$response->error = TRUE;
+					$response->message = 'Error retrieving server status.';
+					
+					$this->response($response, 500);
+				}
 			}
-			
-			$this->response($response);
-			
-		}
-		else
-		{
-			$response->message = 'Error retrieving server status.';
-			
-			$this->response($response, 500);
 		}
 	}
 }

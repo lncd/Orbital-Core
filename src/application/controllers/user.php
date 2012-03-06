@@ -18,9 +18,11 @@ class User extends Orbital_Controller
 		if ($user = $this->access->valid_user(array('access')))
 		{
 	
-			$ping->message = 'pong';
+			$user_details = $this->users->get_user($user);
+	
+			$response->user->name = $user_details['name'];
 			
-			$this->response($ping, 200); // 200 being the HTTP response code
+			$this->response($response, 200); // 200 being the HTTP response code
 			
 		}
 		

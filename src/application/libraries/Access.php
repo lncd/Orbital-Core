@@ -148,6 +148,37 @@ class Access {
 		}
 	
 	}
+	
+	/**
+	 * User Has Permission Aspect
+	 *
+	 * Does the specified user have the specified permission aspect?
+	 *
+	 * @access public
+	 *
+	 * @param string $user   Email address of the user to test against.
+	 * @param string $aspect Aspect to ensure the user has.
+	 *
+	 * @return bool TRUE if the user has the aspect, FALSE if not.
+	 */
+	 
+	function user_has_permission_aspect($user, $aspect)
+	{
+		if ($this->_ci->mongo_db->where(array('user' => $user, 'aspect' => $aspect))->get('permissions'))
+		{
+			return TRUE;
+		}
+		else
+		{
+			$this->_ci->output
+				->set_status_header('403')
+				->set_output(json_encode(array(
+					'error' => 'no_permission',
+					'error_description' => 'The current user does not have permission to perform this action.'
+				)));
+			return FALSE;
+		}
+	}
 
 }
 

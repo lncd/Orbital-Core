@@ -971,7 +971,7 @@ class Mongo_db {
 		
 		$options = array_merge(
 					array(
-						$this->query_safety => TRUE
+						$this->_query_safety => TRUE
 					),
 					$options
 				);
