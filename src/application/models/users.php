@@ -48,7 +48,7 @@ class Users extends CI_Model {
 	 * @return bool TRUE if creation has succeeded, FALSE if not.
 	 */
 	
-	function create_user($email, $name, $rdf = NULL)
+	function create_user($email, $name, $rdf = NULL, $institution = NULL)
 	{
 		if ($user = $this->mongo_db->where(array('email' => $email))->get('users'))
 		{
@@ -75,6 +75,11 @@ class Users extends CI_Model {
 			if ($rdf != NULL)
 			{
 				$insert['rdf'] = $rdf;
+			}
+			
+			if ($institution != NULL)
+			{
+				$insert['institution'] = $institution;
 			}
 			
 			// Attempt insert

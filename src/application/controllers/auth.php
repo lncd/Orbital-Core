@@ -111,7 +111,7 @@ class Auth extends CI_Controller {
 				if (!$this->users->get_user($response->user_email))
 				{
 					// User does not exist, try to create!
-					if (!$this->users->create_user($response->user_email, $response->user_name))
+					if (!$this->users->create_user($response->user_email, $response->user_name, $response->rdf, $response->institution))
 					{
 						$this->output->set_status_header('500');						
 						$redirect_uri =  $state->redirect_uri . '?error=server_error&error_description=Unable to create user object.';

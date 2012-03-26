@@ -21,6 +21,7 @@ class User extends Orbital_Controller
 			$user_details = $this->users->get_user($user);
 	
 			$response->user->name = $user_details['name'];
+			$response->user->institution = $user_details['institution'];
 			
 			$this->response($response, 200); // 200 being the HTTP response code
 			

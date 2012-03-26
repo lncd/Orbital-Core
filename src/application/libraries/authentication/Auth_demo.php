@@ -36,6 +36,8 @@ class Auth_demo {
 		$return->state = $this->_ci->input->get('state');
 		$return->user_email = 'orbital-demo@lncd.org';
 		$return->user_name = 'Orbital Demo User';
+		$return->rdf = NULL;
+		$return->institution = 'Orbital Demo';
 		
 		return $return;
 	}
