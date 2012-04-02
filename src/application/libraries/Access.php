@@ -150,21 +150,31 @@ class Access {
 	}
 	
 	/**
-	 * User Has Permission Aspect
+	 * User Has Permission
 	 *
-	 * Does the specified user have the specified permission aspect?
+	 * Does the specified user have the specified permission?
 	 *
 	 * @access public
 	 *
-	 * @param string $user   Email address of the user to test against.
-	 * @param string $aspect Aspect to ensure the user has.
+	 * @param string $user       Email address of the user to test against.
+	 * @param string $aspect     Aspect to test for permission.
+	 * @param mixed  $value      Value to see if present.
+	 * @param string $identifier Identifier to test for permission against.
 	 *
 	 * @return bool TRUE if the user has the aspect, FALSE if not.
 	 */
 	 
-	function user_has_permission_aspect($user, $aspect)
+	function user_has_permission($user, $aspect, $value = TRUE, $identifier = NULL)
 	{
-		if ($this->_ci->mongo_db->where(array('user' => $user, 'aspect' => $aspect))->get('permissions'))
+	
+		$permission_query = array('user' => $user, 'aspect' => $aspect, 'values' => $value);
+		
+		if ($identifier !== NULL)
+		{
+			$permission_query['identifier'] = $identifier;
+		}
+	
+		if ($this->_ci->mongo_db->where()->get('permissions'))
 		{
 			return TRUE;
 		}

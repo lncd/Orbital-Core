@@ -202,7 +202,7 @@ class Auth extends CI_Controller {
 							'refresh_token' => $tokens['refresh_token'],
 							'scope' => implode(' ', $tokens['scope']),
 							'user' => $tokens['user'],
-							'system_admin' => $this->access->user_has_permission_aspect($tokens['user'], 'system_admin')
+							'system_admin' => $this->access->user_has_permission($tokens['user'], 'system_admin')
 						)));
 						
 				}
