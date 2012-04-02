@@ -53,6 +53,14 @@ $config['orbital_contact_email'] = $_SERVER['ORBITAL_CONTACT_EMAIL'];
 */
 $config['orbital_operation_mode'] = $_SERVER['ORBITAL_OPERATION_MODE'];
 
+/**
+ * Cluster Series Number
+ *
+ * A unique ID for this Orbital Core instance if used in a cluster.
+*/
+
+$config['orbital_cluster_sn'] = $_SERVER['ORBITAL_CLUSTER_SN'];
+
 /*
  * Status Messages
  *
