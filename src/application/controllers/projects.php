@@ -31,6 +31,28 @@ class Projects extends Orbital_Controller {
 			$this->response($response, 200); // 200 being the HTTP response code
 		}
 	}
+	function view($identifier)
+	{
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+
+			$this->load->model('projects_model');
+
+			//Check project exists
+			if($project = $this->projects_model->get_project($identifier))
+			{
+				if ($this->access->user_has_permission($user, 'project', 'read', $identifier))
+				{
+					$response->project = $project;
+					$this->response($response, 200); // 200 being the HTTP response code
+				}
+			}
+			else
+			{
+				show_404();
+			}
+		}
+	}
 }
 
 // End of file projects.php
