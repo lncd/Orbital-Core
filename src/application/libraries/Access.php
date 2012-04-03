@@ -174,7 +174,7 @@ class Access {
 			$permission_query['identifier'] = $identifier;
 		}
 	
-		if ($this->_ci->mongo_db->where()->get('permissions'))
+		if ($this->_ci->mongo_db->where($permission_query)->get('permissions'))
 		{
 			return TRUE;
 		}

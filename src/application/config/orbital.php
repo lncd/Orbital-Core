@@ -37,6 +37,14 @@ $config['orbital_contact_name'] = $_SERVER['ORBITAL_CONTACT_NAME'];
  * The email address of an administrative contact for this instance.
 */
 
+$config['orbital_storage_directory'] = '../file_uploads';//$_SERVER['ORBITAL_STORAGE_DIRECTORY'];
+
+/**
+ * Orbital file storage directory
+ *
+ * The local accessible directory where orbital will store files.
+*/
+
 $config['orbital_contact_email'] = $_SERVER['ORBITAL_CONTACT_EMAIL'];
 
 /*

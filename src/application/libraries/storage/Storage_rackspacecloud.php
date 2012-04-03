@@ -25,8 +25,8 @@ class Storage_rackspacecloud {
 
 	function save($file_location, $identifier, $metadata, $container, $public = FALSE)
 	{
-		try{
-
+		try
+		{
 			//If public, container name = project_public:identifier else project:identifier
 
 			if ($public === TRUE)
