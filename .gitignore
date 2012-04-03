@@ -1,1 +1,3 @@
 src/application/libraries/authentication/Auth_dev.php
+src/application/cache
+src/application/logs
