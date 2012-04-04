@@ -19,7 +19,7 @@ class Projects_model extends CI_Model {
 
 	function get_project($identifier)
 	{
-		if ($project = $this->mongo_db->where(array('identifier' => $identifier))->get('projects'))
+		if ($project = $this->mongo_db->where(array('_id' => $identifier))->get('projects'))
 		{
 			if (count($project) === 1)
 			{
