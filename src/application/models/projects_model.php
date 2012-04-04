@@ -35,7 +35,29 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	function create_project($name, $user)
+	{
+		$identifier = uniqid($this->config->item('orbital_cluster_sn'));
 
+		$insert = array(
+			'_id' => $identifier,
+			'name' => $name,
+			'project_created' => time()
+		);
+
+		// Attempt create
+
+		if ($this->mongo_db->insert('projects', $insert))
+		{	$this->load->model('permissions');
+			$this->permissions->create_permission($user, 'project', array('read', 'write', 'delete', 'archivefiles_write', 'archivefiles_read', 'sharedworkspace_read', 'dataset_create'), $identifier);
+		
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file projects.php

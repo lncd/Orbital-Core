@@ -53,6 +53,18 @@ class Projects extends Orbital_Controller {
 			}
 		}
 	}
+	function create()
+	{
+		if ($user = $this->access->valid_user(array('create_projects')))
+		{
+			if ($this->access->user_has_permission($user, 'projects', 'create'))
+			{
+				$this->load->model('projects_model');
+
+				echo $this->projects_model->create_project($this->input->post('name'), $user);
+			}
+		}
+	}
 }
 
 // End of file projects.php

@@ -38,6 +38,34 @@ class Permissions extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	function create_permission($user, $aspect, $values = NULL, $identifier = NULL)
+	{
+		$insert = array(
+			'user' => $user,
+			'aspect' => $aspect,
+			'permission_created' => time()
+		);
+
+		if ($values !== NULL)
+		{
+			$insert['values'] = $values;
+		}
+		if ($identifier !== NULL)
+		{
+			$insert['identifier'] = $identifier;
+		}
+		// Attempt insert
+
+		if ($this->mongo_db->insert('permissions', $insert))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file permissions.php
