@@ -35,13 +35,14 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	function create_project($name, $user)
+	function create_project($name, $abstract, $user)
 	{
 		$identifier = uniqid($this->config->item('orbital_cluster_sn'));
 
 		$insert = array(
 			'_id' => $identifier,
 			'name' => $name,
+			'abstract' => $abstract,
 			'project_created' => time()
 		);
 

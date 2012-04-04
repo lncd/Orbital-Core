@@ -61,7 +61,12 @@ class Projects extends Orbital_Controller {
 			{
 				$this->load->model('projects_model');
 
-				echo $this->projects_model->create_project($this->input->post('name'), $user);
+				if ($project = $this->projects_model->create_project($this->input->post('name'), $this->input->post('abstract'), $user))
+				{
+					$response->project_id = $project;
+					$this->output->set_header('Location: ' . site_url('project/' . $project));
+					$this->response($response, 201); // 201 being the HTTP response code
+				}
 			}
 		}
 	}
