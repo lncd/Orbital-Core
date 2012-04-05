@@ -46,6 +46,8 @@ class Projects extends Orbital_Controller {
 					$this->load->model('permissions');
 					$response->project = $project;
 					$response->permissions = $this->permissions->get_permissions_for_identifier($user, 'project', $identifier);
+					$response->users = $this->permissions->get_users_for_identifier('project', $identifier);
+
 					$this->response($response, 200); // 200 being the HTTP response code
 				}
 			}

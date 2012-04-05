@@ -63,6 +63,35 @@ class Permissions extends CI_Model {
 		}
 	}
 
+
+	function get_users_for_identifier($aspect, $identifier)
+	{
+		if ($users = $this->mongo_db->where(array('aspect' => $aspect, 'identifier' => $identifier))->get('permissions'))
+		{
+			if (count($users) > 0)
+			{
+				$output = array();
+				foreach($users as $user)
+				{
+					if (!isset($output[$user['user']]))
+					{
+						$output[$user['user']] = array();
+					}
+					$output[$user['user']] = array_merge($output[$user['user']], $user['values']);
+				}
+				return array_unique($output);
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
 	function create_permission($user, $aspect, $values = NULL, $identifier = NULL)
 	{
 		$insert = array(
