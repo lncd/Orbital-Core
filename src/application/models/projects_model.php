@@ -23,6 +23,8 @@ class Projects_model extends CI_Model {
 		{
 			if (count($project) === 1)
 			{
+				$project[0]['identifier'] = $project[0]['_id'];
+				unset($project[0]['_id']);
 				return $project[0];
 			}
 			else

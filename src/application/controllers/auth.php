@@ -1,5 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+require APPPATH.'/libraries/Orbital_Controller.php';
+
 /**
  * Authentication
  *
@@ -12,7 +14,7 @@
  * @link       https://github.com/lncd/Orbital-Core
  */
 
-class Auth extends CI_Controller {
+class Auth extends Orbital_Controller {
 
 	/**
 	 * Constructor
@@ -32,7 +34,7 @@ class Auth extends CI_Controller {
 	 * @param string $endpoint  The designated sign-in endpoint.
 	 */
 
-	function signin($endpoint)
+	function signin_get($endpoint)
 	{
 
 		// Make sure client_id and redirect_uri exist
@@ -91,7 +93,7 @@ class Auth extends CI_Controller {
 	 * @todo Rewrite this to use exceptions.
 	 */
 
-	function callback($endpoint)
+	function callback_get($endpoint)
 	{
 		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
 		if ($response = $this->auth_endpoint->callback())
@@ -178,7 +180,7 @@ class Auth extends CI_Controller {
 	 * Swaps a code for an access token and refresh token.
 	 */
 
-	function access_token()
+	function access_token_post()
 	{
 	
 		if ($application = $this->access->valid_application())
@@ -250,7 +252,7 @@ class Auth extends CI_Controller {
 	 * Swaps a refresh token for a new access token and refresh token.
 	 */
 
-	function refresh_token()
+	function refresh_token_post()
 	{
 		if ($application = $this->access->valid_application())
 		{

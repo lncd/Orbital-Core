@@ -100,7 +100,9 @@ class Projects extends Orbital_Controller {
 			}
 			else
 			{
-				show_404();
+				$response->status = FALSE;
+				$response->error = 'The specified project does not exist.';
+				$this->response($response, 404);
 			}
 		}
 	}
