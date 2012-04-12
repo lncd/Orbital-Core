@@ -1,24 +1,35 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
 require APPPATH.'/libraries/Orbital_Controller.php';
 
+/**
+ * archive storage
+ *
+ * Stores files in archive.
+ *
+ * @package    Orbital
+ * @subpackage Core
+ * @author     Harry Newton <hnewton@lincoln.ac.uk>
+ * @copyright  2012 University of Lincoln
+ * @link       https://github.com/lncd/Orbital-Core
+ */
+
 class Archive extends Orbital_Controller
 {
-
-	/**
-	 * Upload archive file
-	 *
-	 * Uploads file to archive
-	 *
-	 * @access public
-	 */
-
 	public function form()
 	{
 		$this->load->helper('form');
 		$this->load->view('archive_upload');
 	}
+
+	/**
+	 * Upload file
+	 *
+	 * Uploads file to archive
+	 *
+	 * @access public
+	 */
 
 	public function upload()
 	{
@@ -32,7 +43,7 @@ class Archive extends Orbital_Controller
 				if($this->projects_model->get_project($this->input->post('project_id')))
 				{
 					//Check user has permissions
-					if ( $this->access->user_has_permission($user, 'project', 'archivefiles_write', $this->input->post("project_id")))
+					if ( $this->access->user_has_permission($user, 'project', 'archivefiles_write', $this->input->post('project_id')))
 					{
 						$response->user = $user;
 						$response->post = $this->input->post();
@@ -77,6 +88,15 @@ class Archive extends Orbital_Controller
 			}
 		}
 	}
+	
+	/**
+	 * Upload file via jquery
+	 *
+	 * Uploads file to archive via jquery
+	 *
+	 * @access public
+	 */
+	
 	function jqueryupload()
 	{
 		$this->load->library('Uploadhandler');
@@ -97,7 +117,7 @@ class Archive extends Orbital_Controller
 			$upload_handler->get();
 			break;
 		case 'POST':
-			if (isset($_REQUEST['_method']) && $_REQUEST['_method'] === 'DELETE') {
+			if (isset($_REQUEST['_method']) AND $_REQUEST['_method'] === 'DELETE') {
 				$upload_handler->delete();
 			} else {
 				$upload_handler->post();
@@ -110,4 +130,6 @@ class Archive extends Orbital_Controller
 			header('HTTP/1.1 405 Method Not Allowed');
 		}
 	}
-} 
+}
+
+// End of file archive.php

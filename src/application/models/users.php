@@ -1,6 +1,24 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
+
+
+/**
+ * Users
+ *
+ * Finds and creates users.
+ *
+ * @package    Orbital
+ * @subpackage Core
+ * @author     Harry Newton <hnewton@lincoln.ac.uk>
+ * @copyright  2012 University of Lincoln
+ * @link       https://github.com/lncd/Orbital-Core
+ */
 
 class Users extends CI_Model {
+
+
+	/**
+	 * construct
+	 */
 
 	function __construct()
 	{
@@ -21,7 +39,7 @@ class Users extends CI_Model {
 	{
 		if ($user = $this->mongo_db->where(array('email' => $email))->get('users'))
 		{
-			if (count($user) == 1)
+			if (count($user) === 1)
 			{
 				return $user[0];
 			}
@@ -42,7 +60,7 @@ class Users extends CI_Model {
 	 * Create a new user object with the given parameters.
 	 *
 	 * @param string $email Email address of user.
-	 * @param string $name Name of user.
+	 * @param string $name  Name of user.
 	 * @param string $rdf URI where an RDF description of the user may be found.
 	 *
 	 * @return bool TRUE if creation has succeeded, FALSE if not.
@@ -72,12 +90,12 @@ class Users extends CI_Model {
 			 * @todo URI validation.
 			 */
 			
-			if ($rdf != NULL)
+			if ($rdf !== NULL)
 			{
 				$insert['rdf'] = $rdf;
 			}
 			
-			if ($institution != NULL)
+			if ($institution !== NULL)
 			{
 				$insert['institution'] = $institution;
 			}
@@ -94,7 +112,6 @@ class Users extends CI_Model {
 			}
 		}
 	}
-
 }
 
 // End of file users.php

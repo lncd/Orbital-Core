@@ -1,6 +1,22 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * Permissions
+ *
+ * Finds and creates users permissions.
+ *
+ * @package    Orbital
+ * @subpackage Core
+ * @author     Harry Newton <hnewton@lincoln.ac.uk>
+ * @copyright  2012 University of Lincoln
+ * @link       https://github.com/lncd/Orbital-Core
+ */
+
 class Permissions extends CI_Model {
+
+	/**
+	 * construct
+	 */
 
 	function __construct()
 	{
@@ -8,10 +24,13 @@ class Permissions extends CI_Model {
 	}
 
 	/**
-	 * Get Permissions
+	 * Get Permissions with value
 	 *
 	 * Returns projects that user has access to.
 	 *
+	 * $aspect what the permission is for
+	 * $user   user whose permissions will be retrieved
+	 * $value  what the user can do
 	 * @return identifiers The list of projects that the user has access to.
 	 */
 
@@ -39,6 +58,18 @@ class Permissions extends CI_Model {
 		}
 	}
 
+	
+	/**
+	 * Get Permissions for identifier
+	 *
+	 * Returns permissions that user has access to a project.
+	 *
+	 * $user       user whose permissions will be retrieved
+	 * $aspect     what the permission is for
+	 * identifier  the project the the permissions are being retrieved for
+	 * @return identifiers The list of permissions that the user has for teh project.
+	 */
+
 	function get_permissions_for_identifier($user, $aspect, $identifier)
 	{
 		if ($permissions = $this->mongo_db->where(array('user' => $user, 'aspect' => $aspect, 'identifier' => $identifier))->get('permissions'))
@@ -64,6 +95,16 @@ class Permissions extends CI_Model {
 	}
 
 
+	/**
+	 * Get users for identifier
+	 *
+	 * Returns users with permissions of an item.
+	 *
+	 * $aspect     the type of item
+	 * $identifier the item that the users are found for
+	 * @return users The list of users that the item has.
+	 */
+
 	function get_users_for_identifier($aspect, $identifier)
 	{
 		if ($users = $this->mongo_db->where(array('aspect' => $aspect, 'identifier' => $identifier))->get('permissions'))
@@ -73,7 +114,7 @@ class Permissions extends CI_Model {
 				$output = array();
 				foreach($users as $user)
 				{
-					if (!isset($output[$user['user']]))
+					if ( ! isset($output[$user['user']]))
 					{
 						$output[$user['user']] = array();
 					}
@@ -91,6 +132,16 @@ class Permissions extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	/**
+	 * Create permission
+	 *
+	 * Returns identifier with permissions of an item.
+	 *
+	 * $aspect     the type of item
+	 * $identifier the item that the users are found for
+	 * @return users The list of users that the item has.
+	 */
 
 	function create_permission($user, $aspect, $values = NULL, $identifier = NULL)
 	{
@@ -122,3 +173,4 @@ class Permissions extends CI_Model {
 }
 
 // End of file permissions.php
+// Location: ./models/permissions.php
