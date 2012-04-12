@@ -1,5 +1,7 @@
 <?php
 
+include_once('cloud_files/cloudfiles.php');
+
 /**
  * rackspace cloud storage
  *
@@ -12,16 +14,32 @@
  * @link       https://github.com/lncd/Orbital-Core
  */
 
-include_once('cloud_files/cloudfiles.php');
-
 class Storage_rackspacecloud {
 
+	/**
+	 * CodeIgniter instance
+	 */
+
 	private $_ci;
+
+	/**
+	 * Constructor
+	 */
 
 	function __construct()
 	{
 		$this->_ci =& get_instance();
 	}
+
+	/**
+	 * Save file to rackspace server
+	 *
+	 * @param string $file_location The location of the file to be uploaded.
+	 * @param string $identifier    The project identifier.
+	 * @param array  $metadata      Additional information about the file.
+	 * @param string $container     Folder containing the project.
+	 * @param bool   $public    If the project is publicly accessible.
+	 */
 
 	function save($file_location, $identifier, $metadata, $container, $public = FALSE)
 	{
@@ -31,17 +49,17 @@ class Storage_rackspacecloud {
 
 			if ($public === TRUE)
 			{
-				$container = "project_public:" . $container;
+				$container = 'project_public:' . $container;
 			}
 			else
 			{
-				$container = "project:" . $container;
+				$container = 'project:' . $container;
 			}
 
 			//Create an perform authentication request
-			$auth = new CF_Authentication("lncd", "aabbd85ab833dc2ad3cf3f1e51a5e643", NULL, UK_AUTHURL);
+			$auth = new CF_Authentication('lncd', 'aabbd85ab833dc2ad3cf3f1e51a5e643', NULL, UK_AUTHURL);
 			$auth->authenticate();
-			$conn = new CF_Connection($auth, $servicenet=False);
+			$conn = new CF_Connection($auth, $servicenet = FALSE);
 
 			//Check if container exists, else make it
 			try
@@ -68,7 +86,7 @@ class Storage_rackspacecloud {
 
 				$doc = $cf_container->create_object($identifier);
 
-				# Upload local File's content
+				//Upload local File's content
 				$doc->load_from_filename($file_location);
 			}
 			if ($doc->public_uri() !== NULL)
@@ -82,11 +100,7 @@ class Storage_rackspacecloud {
 		}
 		catch (Exception $e)
 		{
-			return false;
+			return FALSE;
 		}
-	}
-
-	function retrieve($identifier, $container, $public = FALSE)
-	{
 	}
 }
