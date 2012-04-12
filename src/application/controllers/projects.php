@@ -31,11 +31,10 @@ class Projects extends Orbital_Controller {
 			$this->response($response, 200); // 200 being the HTTP response code
 		}
 	}
-	function view($identifier)
+	function view_get($identifier)
 	{
 		if ($user = $this->access->valid_user(array('projects')))
 		{
-
 			$this->load->model('projects_model');
 
 			//Check project exists
@@ -57,6 +56,35 @@ class Projects extends Orbital_Controller {
 			}
 		}
 	}
+
+	function view_put($identifier)
+	{
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('projects_model');
+
+			//Check project exists
+			if($project = $this->projects_model->get_project($identifier))
+			{
+				if ($this->access->user_has_permission($user, 'project', 'write', $identifier))
+				{
+					$this->load->model('permissions');
+					$response->project = $project;
+					$response->users = $this->permissions->get_users_for_identifier('project', $identifier);
+
+					$response->put = $this->put();
+
+					$this->response($response, 200); // 200 being the HTTP response code
+				}
+			}
+			else
+			{
+				show_404();
+			}
+		}
+	}
+
+
 	function create()
 	{
 		if ($user = $this->access->valid_user(array('create_projects')))

@@ -12,7 +12,10 @@
  * @link       https://github.com/lncd/Orbital-Core
 */
 
-class Orbital_Controller extends CI_Controller {
+// This can be removed if you use __autoload() in config.php OR use Modular Extensions
+require APPPATH.'/libraries/REST_Controller.php';
+
+class Orbital_Controller extends REST_Controller {
 
 	private $response_clock;
 
@@ -41,7 +44,7 @@ class Orbital_Controller extends CI_Controller {
 	 *
 	 * Takes pure data and optionally a status code, then creates the response
 	*/
-	public function response($response, $http_code = NULL)
+	/*public function response($response, $http_code = NULL)
 	{
 	
 		$data->response = $response;
@@ -65,5 +68,5 @@ class Orbital_Controller extends CI_Controller {
 			->set_status_header($http_code)
 			->set_content_type('application/json')
 			->set_output(json_encode($data));
-	}
+	}*/
 }
