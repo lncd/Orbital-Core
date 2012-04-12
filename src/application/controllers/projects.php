@@ -24,13 +24,19 @@ class Projects extends Orbital_Controller {
 			$this->load->model('permissions');
 			$this->load->model('projects_model');
 			
+			// Get projects the user can read from the database
+			
+			
 			// Projects defaults to an empty array.
 			$response->projects = array();
 			
 			// Iterate through projects, and append each one to the projects array.
-			foreach($this->permissions->get_permissions_with_value($user, 'project', 'read') as $project)
+			if ($projects = $this->permissions->get_permissions_with_value($user, 'project', 'read'))
 			{
-				$response->projects[] = $this->projects_model->get_project($project);
+				foreach($projects as $project)
+				{
+					$response->projects[] = $this->projects_model->get_project($project);
+				}
 			}
 
 			$response->status = TRUE;
