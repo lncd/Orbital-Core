@@ -23,12 +23,18 @@ class Projects extends Orbital_Controller {
 		{
 			$this->load->model('permissions');
 			$this->load->model('projects_model');
+			
+			// Projects defaults to an empty array.
+			$response->projects = array();
+			
+			// Iterate through projects, and append each one to the projects array.
 			foreach($this->permissions->get_permissions_with_value($user, 'project', 'read') as $project)
 			{
 				$response->projects[] = $this->projects_model->get_project($project);
 			}
 
-			$this->response($response, 200); // 200 being the HTTP response code
+			$response->status = TRUE;
+			$this->response($response, 200);
 		}
 	}
 
@@ -48,12 +54,15 @@ class Projects extends Orbital_Controller {
 					$response->permissions = $this->permissions->get_permissions_for_identifier($user, 'project', $identifier);
 					$response->users = $this->permissions->get_users_for_identifier('project', $identifier);
 
-					$this->response($response, 200); // 200 being the HTTP response code
+					$response->status = TRUE;
+					$this->response($response, 200);
 				}
 			}
 			else
 			{
-				show_404();
+				$response->status = FALSE;
+				$response->error = 'The specified project does not exist.';
+				$this->response($response, 404);
 			}
 		}
 	}
@@ -72,11 +81,14 @@ class Projects extends Orbital_Controller {
 					if ($project = $this->projects_model->update_project($identifier, $this->put('name'), $this->put('abstract')))
 					{
 						$response->project = $project;
+						$response->status = TRUE;
 						$this->response($response, 200); // 200 being the HTTP response code
 					}
 					else
 					{
-						$this->response(array('message' => 'NOT WORKED'), 400);
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occured in updating the project.';
+						$this->response($response, 400);
 					}
 				}
 			}
@@ -99,7 +111,10 @@ class Projects extends Orbital_Controller {
 				{
 					$response->project_id = $project;
 					$this->output->set_header('Location: ' . site_url('project/' . $project));
-					$this->response($response, 201); // 201 being the HTTP response code
+					
+					$response->status = TRUE;
+					$response->message = 'Project created.';
+					$this->response($response, 201);
 				}
 			}
 		}
