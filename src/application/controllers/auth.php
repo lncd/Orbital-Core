@@ -184,13 +184,13 @@ class Auth extends CI_Controller {
 		if ($application = $this->access->valid_application())
 		{
 	
-			if ($this->post('grant_type')
-				&& $this->post('grant_type') === 'authorization_code'
-				&& $this->post('code'))
+			if ($this->input->post('grant_type')
+				&& $this->input->post('grant_type') === 'authorization_code'
+				&& $this->input->post('code'))
 			{
 				
 				// Client credentials valid, try perform swap
-				if ($tokens = $this->oauth->swap_code($this->post('code'), $application))
+				if ($tokens = $this->oauth->swap_code($this->input->post('code'), $application))
 				{
 			
 					$this->output
@@ -254,13 +254,13 @@ class Auth extends CI_Controller {
 	{
 		if ($application = $this->access->valid_application())
 		{
-			if ($this->post('grant_type')
-				&& $this->post('grant_type') === 'refresh_token'
-				&& $this->post('refresh_token'))
+			if ($this->input->post('grant_type')
+				&& $this->input->post('grant_type') === 'refresh_token'
+				&& $this->input->post('refresh_token'))
 			{
 				
 				// Client credentials valid, try perform swap
-				if ($tokens = $this->oauth->swap_refresh_token($this->post('refresh_token'), $application))
+				if ($tokens = $this->oauth->swap_refresh_token($this->input->post('refresh_token'), $application))
 				{
 			
 					$this->output
