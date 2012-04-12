@@ -256,16 +256,11 @@ class Auth extends Orbital_Controller {
 	{
 		if ($application = $this->access->valid_application())
 		{
-<<<<<<< HEAD
-			if ($this->input->post('grant_type')
-				&& $this->input->post('grant_type') === 'refresh_token'
-				&& $this->input->post('refresh_token'))
-=======
+
 			if ($this->post('grant_type')
 				AND $this->post('grant_type') === 'refresh_token'
 				AND $this->post('refresh_token'))
->>>>>>> More check style updates
-			{
+							{
 				
 				// Client credentials valid, try perform swap
 				if ($tokens = $this->oauth->swap_refresh_token($this->input->post('refresh_token'), $application))
