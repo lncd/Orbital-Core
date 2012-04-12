@@ -31,7 +31,7 @@ class Projects extends Orbital_Controller {
 			$this->response($response, 200); // 200 being the HTTP response code
 		}
 	}
-	
+
 	public function view_get($identifier)
 	{
 		if ($user = $this->access->valid_user(array('projects')))
@@ -69,13 +69,15 @@ class Projects extends Orbital_Controller {
 			{
 				if ($this->access->user_has_permission($user, 'project', 'write', $identifier))
 				{
-					$this->load->model('permissions');
-					$response->project = $project;
-					$response->users = $this->permissions->get_users_for_identifier('project', $identifier);
-
-					$response->put = $this->put();
-
-					$this->response($response, 200); // 200 being the HTTP response code
+					if ($project = $this->projects_model->update_project($identifier, $this->put('name'), $this->put('abstract')))
+					{
+						$response->project = $project;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$this->response(array('message' => 'NOT WORKED'), 400);
+					}
 				}
 			}
 			else
@@ -84,7 +86,6 @@ class Projects extends Orbital_Controller {
 			}
 		}
 	}
-
 
 	public function create_post()
 	{

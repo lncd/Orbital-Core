@@ -49,9 +49,34 @@ class Projects_model extends CI_Model {
 		// Attempt create
 
 		if ($this->mongo_db->insert('projects', $insert))
-		{	$this->load->model('permissions');
+			{ $this->load->model('permissions');
 			$this->permissions->create_permission($user, 'project', array('read', 'write', 'delete', 'archivefiles_write', 'archivefiles_read', 'sharedworkspace_read', 'dataset_create'), $identifier);
-		
+
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	function update_project($identifier, $name, $abstract, $other = array())
+	{
+		$insert = array(
+			'name' => $name,
+			'abstract' => $abstract,
+			'project_updated' => time()
+		);
+
+		foreach($other as $name => $value)
+		{
+			$this->mongo_db->set($name, $value);
+		}
+
+		// Attempt create
+
+		if ($this->mongo_db->where(array('_id' => $identifier)) -> set($insert) -> update('projects'))
+		{
 			return $identifier;
 		}
 		else
