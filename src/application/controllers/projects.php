@@ -17,7 +17,7 @@ require APPPATH.'/libraries/Orbital_Controller.php';
 
 class Projects extends Orbital_Controller {
 
-	function index()
+	public function index_get()
 	{
 		if ($user = $this->access->valid_user(array('projects')))
 		{
@@ -31,7 +31,8 @@ class Projects extends Orbital_Controller {
 			$this->response($response, 200); // 200 being the HTTP response code
 		}
 	}
-	function view_get($identifier)
+	
+	public function view_get($identifier)
 	{
 		if ($user = $this->access->valid_user(array('projects')))
 		{
@@ -57,7 +58,7 @@ class Projects extends Orbital_Controller {
 		}
 	}
 
-	function view_put($identifier)
+	public function view_put($identifier)
 	{
 		if ($user = $this->access->valid_user(array('projects')))
 		{
@@ -85,7 +86,7 @@ class Projects extends Orbital_Controller {
 	}
 
 
-	function create()
+	public function create_post()
 	{
 		if ($user = $this->access->valid_user(array('create_projects')))
 		{

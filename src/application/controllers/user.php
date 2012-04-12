@@ -12,7 +12,7 @@ class User extends Orbital_Controller
 	 * @access public
 	 */
 
-	public function details()
+	public function details_get()
 	{
 
 		if ($user = $this->access->valid_user(array('access')))

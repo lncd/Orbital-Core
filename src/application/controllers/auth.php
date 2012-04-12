@@ -32,7 +32,7 @@ class Auth extends CI_Controller {
 	 * @param string $endpoint  The designated sign-in endpoint.
 	 */
 
-	function signin($endpoint)
+	function signin_get($endpoint)
 	{
 
 		// Make sure client_id and redirect_uri exist
@@ -91,7 +91,7 @@ class Auth extends CI_Controller {
 	 * @todo Rewrite this to use exceptions.
 	 */
 
-	function callback($endpoint)
+	function callback_get($endpoint)
 	{
 		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
 		if ($response = $this->auth_endpoint->callback())
@@ -178,19 +178,19 @@ class Auth extends CI_Controller {
 	 * Swaps a code for an access token and refresh token.
 	 */
 
-	function access_token()
+	function access_token_post()
 	{
 	
 		if ($application = $this->access->valid_application())
 		{
 	
-			if ($this->input->post('grant_type')
-				&& $this->input->post('grant_type') === 'authorization_code'
-				&& $this->input->post('code'))
+			if ($this->post('grant_type')
+				&& $this->post('grant_type') === 'authorization_code'
+				&& $this->post('code'))
 			{
 				
 				// Client credentials valid, try perform swap
-				if ($tokens = $this->oauth->swap_code($this->input->post('code'), $application))
+				if ($tokens = $this->oauth->swap_code($this->post('code'), $application))
 				{
 			
 					$this->output
@@ -250,17 +250,17 @@ class Auth extends CI_Controller {
 	 * Swaps a refresh token for a new access token and refresh token.
 	 */
 
-	function refresh_token()
+	function refresh_token_post()
 	{
 		if ($application = $this->access->valid_application())
 		{
-			if ($this->input->post('grant_type')
-				&& $this->input->post('grant_type') === 'refresh_token'
-				&& $this->input->post('refresh_token'))
+			if ($this->post('grant_type')
+				&& $this->post('grant_type') === 'refresh_token'
+				&& $this->post('refresh_token'))
 			{
 				
 				// Client credentials valid, try perform swap
-				if ($tokens = $this->oauth->swap_refresh_token($this->input->post('refresh_token'), $application))
+				if ($tokens = $this->oauth->swap_refresh_token($this->post('refresh_token'), $application))
 				{
 			
 					$this->output
