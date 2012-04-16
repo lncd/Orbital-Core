@@ -17,7 +17,7 @@ require APPPATH.'/libraries/REST_Controller.php';
 
 class Orbital_Controller extends REST_Controller {
 
-	private $response_clock;
+	private $_response_clock;
 
 	/**
 	 * Constructor
@@ -27,12 +27,12 @@ class Orbital_Controller extends REST_Controller {
 	{
 
 		// Start the clock
-		$this->response_clock = microtime();
+		$this->_response_clock = microtime();
 
 		parent::__construct();
 
 		// Test for maintenance mode - if we are in maintenance then go no further!
-		if ($this->config->item('orbital_operation_mode') == 'maintenance')
+		if ($this->config->item('orbital_operation_mode') === 'maintenance')
 		{
 			$this->response(array('message' => $this->config->item('orbital_status_message_maintenance')), 503);
 		}
@@ -50,7 +50,7 @@ class Orbital_Controller extends REST_Controller {
 		$data->response = $response;
 
 		// Stop the clock!
-		$data->response_time = round(microtime() - $this->response_clock, 5);
+		$data->response_time = round(microtime() - $this->_response_clock, 5);
 
 		$data->orbital->institution_name = $this->config->item('orbital_institution_name');
 		$data->orbital->core_version = $this->config->item('orbital_core_version');
@@ -74,7 +74,7 @@ class Orbital_Controller extends REST_Controller {
 		$data->response = $input;
 
 		// Stop the clock!
-		$data->response_time = round(microtime() - $this->response_clock, 5);
+		$data->response_time = round(microtime() - $this->_response_clock, 5);
 
 		$data->orbital->institution_name = $this->config->item('orbital_institution_name');
 		$data->orbital->core_version = $this->config->item('orbital_core_version');
@@ -83,7 +83,7 @@ class Orbital_Controller extends REST_Controller {
 		global $CFG;
 
 		// If data is empty and not code provide, error and bail
-		if (empty($data) && $http_code === null)
+		if (empty($data) AND $http_code === NULL)
 		{
 			$http_code = 404;
 
@@ -95,18 +95,18 @@ class Orbital_Controller extends REST_Controller {
 		else
 		{
 			// Is compression requested?
-			if ($CFG->item('compress_output') === TRUE && $this->_zlib_oc == FALSE)
+			if ($CFG->item('compress_output') === TRUE AND $this->_zlib_oc === FALSE)
 			{
 				if (extension_loaded('zlib'))
 				{
-					if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) and strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE)
+					if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) AND strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE)
 					{
 						ob_start('ob_gzhandler');
 					}
 				}
 			}
 
-			is_numeric($http_code) or $http_code = 200;
+			is_numeric($http_code) OR $http_code = 200;
 
 			// If the format method exists, call and return the output in that format
 			if (method_exists($this, '_format_'.$this->response->format))
@@ -140,11 +140,13 @@ class Orbital_Controller extends REST_Controller {
 		// but it will not modify the content-length header to compensate for
 		// the reduction, causing the browser to hang waiting for more data.
 		// We'll just skip content-length in those cases.
-		if ( ! $this->_zlib_oc && ! $CFG->item('compress_output'))
+		if ( ! $this->_zlib_oc AND ! $CFG->item('compress_output'))
 		{
 			header('Content-Length: ' . strlen($output));
 		}
-
+		
 		exit($output);
 	}
 }
+//End of file Orbital_Controller.php
+//ocation: ./libraries/Orbital_Controller.php

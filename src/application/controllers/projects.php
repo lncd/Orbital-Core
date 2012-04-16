@@ -23,13 +23,13 @@ class Projects extends Orbital_Controller {
 		{
 			$this->load->model('permissions');
 			$this->load->model('projects_model');
-			
+
 			// Get projects the user can read from the database
-			
-			
+
+
 			// Projects defaults to an empty array.
 			$response->projects = array();
-			
+
 			// Iterate through projects, and append each one to the projects array.
 			if ($projects = $this->permissions->get_permissions_with_value($user, 'project', 'read'))
 			{
@@ -107,6 +107,40 @@ class Projects extends Orbital_Controller {
 		}
 	}
 
+	public function view_delete($identifier)
+	{
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('projects_model');
+
+			//Check project exists
+			if($project = $this->projects_model->get_project($identifier))
+			{
+				if ($this->access->user_has_permission($user, 'project', 'delete', $identifier))
+				{
+					if ($project = $this->projects_model->delete_project($identifier))
+					{
+						$response->project = $project;
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occured in deleting the project.';
+						$this->response($response, 400);
+					}
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified project does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+
 	public function create_post()
 	{
 		if ($user = $this->access->valid_user(array('create_projects')))
@@ -119,7 +153,7 @@ class Projects extends Orbital_Controller {
 				{
 					$response->project_id = $project;
 					$this->output->set_header('Location: ' . site_url('project/' . $project));
-					
+
 					$response->status = TRUE;
 					$response->message = 'Project created.';
 					$this->response($response, 201);

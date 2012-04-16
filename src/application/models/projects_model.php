@@ -37,6 +37,7 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
 	function create_project($name, $abstract, $user)
 	{
 		$identifier = uniqid($this->config->item('orbital_cluster_sn'));
@@ -80,6 +81,21 @@ class Projects_model extends CI_Model {
 		if ($this->mongo_db->where(array('_id' => $identifier)) -> set($insert) -> update('projects'))
 		{
 			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	function delete_project($identifier)
+	{
+		// Attempt delete
+		if ($this->mongo_db->where(array('_id' => $identifier))->delete('projects'))
+		{
+			$this->mongo_db->where(array('identifier' => $identifier, 'aspect' => 'project'))->delete('permissions');
+			$this->mongo_db->where(array('project' => $identifier))->delete('archivefiles');
+			return TRUE;
 		}
 		else
 		{
