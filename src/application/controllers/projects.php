@@ -44,6 +44,30 @@ class Projects extends Orbital_Controller {
 		}
 	}
 
+	public function public_get()
+	{
+		$this->load->model('projects_model');
+
+		// Get public projects
+
+
+		// Projects defaults to an empty array.
+		$response->projects = array();
+
+		// Iterate through projects, and append each one to the projects array.
+		if ($projects = $this->projects_model->list_public())
+		{
+			foreach($projects as $project)
+			{
+				$response->projects[] = $this->projects_model->get_project($project);
+			}
+		}
+
+		$response->status = TRUE;
+		$this->response($response, 200);
+	}
+
+
 	public function view_get($identifier)
 	{
 		if ($user = $this->access->valid_user(array('projects')))

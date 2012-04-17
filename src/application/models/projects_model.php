@@ -37,6 +37,22 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function list_public()
+	{
+		if ($projects = $this->mongo_db->where(array('public' => TRUE))->get('projects'))
+		{
+			foreach ($projects as $project)
+			{
+				$output[] = $project['_id'];
+			}
+			return $output;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 
 	function create_project($name, $abstract, $user)
 	{
