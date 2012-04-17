@@ -55,7 +55,7 @@ class Projects extends Orbital_Controller {
 		$response->projects = array();
 
 		// Iterate through projects, and append each one to the projects array.
-		if ($projects = $this->projects_model->list_public())
+		if ($projects = $this->projects_model->list_public($this->get('limit')))
 		{
 			foreach($projects as $project)
 			{

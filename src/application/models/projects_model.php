@@ -38,9 +38,9 @@ class Projects_model extends CI_Model {
 		}
 	}
 	
-	function list_public()
+	function list_public($limit = 20)
 	{
-		if ($projects = $this->mongo_db->where(array('public' => TRUE))->get('projects'))
+		if ($projects = $this->mongo_db->where(array('public' => TRUE))->limit($limit)->get('projects'))
 		{
 			foreach ($projects as $project)
 			{
