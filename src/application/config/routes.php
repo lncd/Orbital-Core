@@ -40,6 +40,7 @@
 
 $route['default_controller'] = "splash";
 $route['404_override'] = '';
+$route['project/(:any)/datasets'] = "projects/datasets/$1";
 $route['project/(:any)'] = "projects/view/$1";
 
 // End of file routes.php

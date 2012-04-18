@@ -96,6 +96,35 @@ class Projects extends Orbital_Controller {
 			}
 		}
 	}
+	
+	public function datasets_get($identifier)
+	{
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('projects_model');
+
+			//Check project exists
+			if($project = $this->projects_model->get_project($identifier))
+			{
+				if ($this->access->user_has_permission($user, 'project', 'read', $identifier))
+				{
+					$this->load->model('permissions');
+					$response->project = $project;
+					$response->permissions = $this->permissions->get_permissions_for_identifier($user, 'project', $identifier);
+					$response->users = $this->permissions->get_users_for_identifier('project', $identifier);
+
+					$response->status = TRUE;
+					$this->response($response, 200);
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified project does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
 
 	public function view_put($identifier)
 	{
