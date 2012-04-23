@@ -69,7 +69,7 @@ class Core extends Orbital_Controller
 	
 		if ($user = $this->access->valid_user(array('administration')))
 		{
-			if ($this->access->user_has_permission($user, 'system_admin'))
+			if ($this->access->user_is_admin($user))
 			{
 				if ($status = $this->mongo_db->admin_server_status())
 				{

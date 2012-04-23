@@ -45,7 +45,8 @@ class Users_model extends CI_Model {
 				
 				return array(
 					'email' => $user->user_email,
-					'name' => $user->user_name
+					'name' => $user->user_name,
+					'institution' => $user->user_institution
 				);
 			}
 			else

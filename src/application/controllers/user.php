@@ -18,7 +18,7 @@ class User extends Orbital_Controller
 		if ($user = $this->access->valid_user(array('access')))
 		{
 
-			$user_details = $this->users->get_user($user);
+			$user_details = $this->users_model->get_user($user);
 
 			$response->user->name = $user_details['name'];
 			$response->user->institution = $user_details['institution'];

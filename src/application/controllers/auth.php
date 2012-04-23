@@ -112,7 +112,7 @@ class Auth extends Orbital_Controller {
 				if ( ! $this->users_model->get_user($response->user_email))
 				{
 					// User does not exist, try to create!
-					if ( ! $this->users->create_user($response->user_email, $response->user_name, $response->rdf, $response->institution))
+					if ( ! $this->users_model->create_user($response->user_email, $response->user_name, $response->institution, $response->uri))
 					{
 						$this->output->set_status_header('500');						
 						$redirect_uri =  $state->redirect_uri . '?error=server_error&error_description=Unable to create user object.';
@@ -203,7 +203,7 @@ class Auth extends Orbital_Controller {
 							'refresh_token' => $tokens['refresh_token'],
 							'scope' => implode(' ', $tokens['scope']),
 							'user' => $tokens['user'],
-							'system_admin' => $this->access->user_has_permission($tokens['user'], 'system_admin')
+							'system_admin' => $this->access->user_is_admin($tokens['user'], TRUE)
 						)));
 						
 				}
@@ -274,7 +274,7 @@ class Auth extends Orbital_Controller {
 							'refresh_token' => $tokens['refresh_token'],
 							'scope' => implode(' ', $tokens['scope']),
 							'user' => $tokens['user'],
-							'system_admin' => $this->access->user_has_permission($tokens['user'], 'system_admin')
+							'system_admin' => $this->access->user_is_admin($tokens['user'], TRUE)
 						)));
 						
 				}

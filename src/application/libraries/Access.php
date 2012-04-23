@@ -150,6 +150,46 @@ class Access {
 	}
 	
 	/**
+	 * User Is Administrator
+	 *
+	 * Is the specified user a system administrator?
+	 *
+	 * @access public
+	 *
+	 * @param string $user       Email address of the user to test against.
+	 *
+	 * @return bool TRUE if the user is an administrator, FALSE if not.
+	 */
+	 
+	function user_is_admin($user, $softfail = FALSE)
+	{
+	
+		$user = $this->_ci->db
+			->where('user_email', $user)
+			->where('user_permission_admin', 1)
+			->get('users');
+	
+		if ($user->num_rows() === 1)
+		{
+			return TRUE;
+		}
+		else
+		{
+		
+			if ($softfail !== TRUE)
+			{
+				$this->_ci->output
+					->set_status_header('403')
+					->set_output(json_encode(array(
+						'error' => 'no_permission',
+						'error_description' => 'The current user does not have permission to perform this action.'
+					)));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
 	 * User Has Permission
 	 *
 	 * Does the specified user have the specified permission?
