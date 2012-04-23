@@ -32,7 +32,6 @@ class Projects extends Orbital_Controller {
 	{
 		if ($user = $this->access->valid_user(array('projects')))
 		{
-			$this->load->model('permissions');
 			$this->load->model('projects_model');
 
 			// Get projects the user can read from the database
@@ -42,7 +41,7 @@ class Projects extends Orbital_Controller {
 			$response->projects = array();
 
 			// Iterate through projects, and append each one to the projects array.
-			if ($projects = $this->permissions->get_permissions_with_value($user, 'project', 'read'))
+			if ($projects = $this->projects_model->list_user($user))
 			{
 				foreach($projects as $project)
 				{
@@ -64,9 +63,17 @@ class Projects extends Orbital_Controller {
 
 		// Projects defaults to an empty array.
 		$response->projects = array();
+		if ($this->get('limit'))
+		{
+			$limit = $this->get('limit');
+		}
+		else
+		{
+			$limit = 20;
+		}
 
 		// Iterate through projects, and append each one to the projects array.
-		if ($projects = $this->projects_model->list_public($this->get('limit')))
+		if ($projects = $this->projects_model->list_public($limit))
 		{
 			foreach($projects as $project)
 			{

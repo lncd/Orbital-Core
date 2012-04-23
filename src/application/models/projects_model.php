@@ -37,13 +37,19 @@ class Projects_model extends CI_Model {
 
 	function get_project($identifier)
 	{
-		if ($project = $this->mongo_db->where(array('_id' => $identifier))->get('projects'))
-		{
-			if (count($project) === 1)
+		if ($project = $this->db->where('project_id', $identifier)->get('projects'))
+		{ 
+			if ($project->num_rows() === 1)
 			{
-				$project[0]['identifier'] = $project[0]['_id'];
-				unset($project[0]['_id']);
-				return $project[0];
+				$project = $project->row();
+					return array(
+					'identifier' => $project->project_id,
+					'name' => $project->project_name,
+					'abstract' => $project->project_abstract,
+					'start_date' => $project->project_start,
+					'end_date' => $project->project_end,
+					'research_group' => $project->project_research_group				
+					); 
 			}
 			else
 			{
@@ -58,11 +64,31 @@ class Projects_model extends CI_Model {
 	
 	function list_public($limit = 20)
 	{
-		if ($projects = $this->mongo_db->where(array('public' => TRUE))->limit($limit)->get('projects'))
+		if ($projects = $this->db->where('project_public_view', 'visible')->limit($limit)->get('projects'))
 		{
-			foreach ($projects as $project)
+			$output = array();
+			
+			foreach ($projects->result() as $project)
 			{
-				$output[] = $project['_id'];
+				$output[] = $project->project_id;
+			}
+			return $output;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function list_user($user, $limit = 20)
+	{
+		if ($projects = $this->db->join('permissions_projects', 'p_proj_project = project_id')->where('p_proj_user', $user)->where('p_proj_read', TRUE)->limit($limit)->get('projects'))
+		{
+			$output = array();
+			
+			foreach ($projects->result() as $project)
+			{
+				$output[] = $project->project_id;
 			}
 			return $output;
 		}
@@ -77,17 +103,16 @@ class Projects_model extends CI_Model {
 		$identifier = uniqid($this->config->item('orbital_cluster_sn'));
 
 		$insert = array(
-			'_id' => $identifier,
-			'name' => $name,
-			'abstract' => $abstract,
-			'project_created' => time()
+			'project_id' => $identifier,
+			'project_name' => $name,
+			'project_abstract' => $abstract
 		);
 
 		// Attempt create
 
-		if ($this->mongo_db->insert('projects', $insert))
+		if ($this->db->insert('projects', $insert))
 			{ $this->load->model('permissions');
-			$this->permissions->create_permission($user, 'project', array('read', 'write', 'delete', 'archivefiles_write', 'archivefiles_read', 'sharedworkspace_read', 'dataset_create'), $identifier);
+			$this->add_permission($identifier, $user, TRUE, TRUE, TRUE, TRUE, TRUE);
 
 			return $identifier;
 		}
@@ -96,23 +121,93 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function add_permission($project_id, $user, $read = TRUE, $write = FALSE, $delete = FALSE, $archive_read = TRUE, $archive_write = FALSE)
+	{
+		$insert = array(
+		'p_proj_project' => $project_id,
+		'p_proj_user' => $user,
+		'p_proj_read' => $read,
+		'p_proj_write' => $write,
+		'p_proj_delete' => $delete,
+		'p_proj_archive_read' => $archive_read,
+		'p_proj_archive_write' => $archive_write
+		);
+		$this->db->insert('permissions_projects', $insert);
+	}
+	
+	function get_permissions_project_user($user, $project)
+	{
+		if ($permissions = $this->db->where('p_proj_user', $user) -> where('p_proj_project', $project))
+		{
+			if ($permissions->num_rows() === 1)
+			{
+				$permissions = $permissions->row();
+				return array(
+				'read' => (bool)$permissions->p_proj_read,
+				'write' => (bool)$permissions->p_proj_write,
+				'delete' => (bool)$permissions->p_proj_delete,
+				'archive_read' => (bool)$permissions->p_proj_archive_read,
+				'archive_write' => (bool)$permissions->p_proj_archive_write,
+				);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	
+	function get_project_users($project)
+	{
+		if ($permissions = $this->db->where('p_proj_project', $project))
+		{
+			if ($permissions->num_rows() > 0)
+			{
+				$output = array();
+				foreach($permissions -> result() as $permission)
+				{
+					$output[] = array(
+					'read' => (bool)$permission->p_proj_read,
+					'write' => (bool)$permission->p_proj_write,
+					'delete' => (bool)$permission->p_proj_delete,
+					'archive_read' => (bool)$permission->p_proj_archive_read,
+					'archive_write' => (bool)$permission->p_proj_archive_write,
+					);
+				}
+				return $output;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 	function update_project($identifier, $name, $abstract, $other = array())
 	{
-		$insert = array(
-			'name' => $name,
-			'abstract' => $abstract,
-			'project_updated' => time()
+		$update = array(
+			'project_name' => $name,
+			'project_abstract' => $abstract
 		);
 
 		foreach($other as $name => $value)
 		{
-			$this->mongo_db->set($name, $value);
+			$this->db->set($name, $value);
 		}
 
 		// Attempt create
 
-		if ($this->mongo_db->where(array('_id' => $identifier)) -> set($insert) -> update('projects'))
+		if ($this->db->where('project_id', $identifier) -> update('projects', $update))
 		{
 			return $identifier;
 		}
@@ -125,10 +220,8 @@ class Projects_model extends CI_Model {
 	function delete_project($identifier)
 	{
 		// Attempt delete
-		if ($this->mongo_db->where(array('_id' => $identifier))->delete('projects'))
+		if ($this->db->where('project_id', $identifier)->delete('projects'))
 		{
-			$this->mongo_db->where(array('identifier' => $identifier, 'aspect' => 'project'))->delete('permissions');
-			$this->mongo_db->where(array('project' => $identifier))->delete('archivefiles');
 			return TRUE;
 		}
 		else

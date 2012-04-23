@@ -74,7 +74,7 @@ class Permissions extends CI_Model {
 
 	function get_permissions_for_identifier($user, $aspect, $identifier)
 	{
-		if ($permissions = $this->mongo_db->where(array('user' => $user, 'aspect' => $aspect, 'identifier' => $identifier))->get('permissions'))
+		if ($permissions = $this->db->where('user', $user)-> where('aspect', $aspect)->where('identifier', $identifier)->get('permissions'))
 		{
 			if (count($permissions) > 0)
 			{
