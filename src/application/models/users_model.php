@@ -13,7 +13,7 @@
  * @link       https://github.com/lncd/Orbital-Core
  */
 
-class Users extends CI_Model {
+class Users_model extends CI_Model {
 
 
 	/**
@@ -37,11 +37,16 @@ class Users extends CI_Model {
 
 	function get_user($email)
 	{
-		if ($user = $this->mongo_db->where(array('email' => $email))->get('users'))
+		if ($user = $this->db->where('user_email', $email)->get('users'))
 		{
-			if (count($user) === 1)
+			if ($user->num_rows() === 1)
 			{
-				return $user[0];
+				$user = $user->row();
+				
+				return array(
+					'email' => $user->user_email,
+					'name' => $user->user_name
+				);
 			}
 			else
 			{
@@ -66,9 +71,9 @@ class Users extends CI_Model {
 	 * @return bool TRUE if creation has succeeded, FALSE if not.
 	 */
 	
-	function create_user($email, $name, $rdf = NULL, $institution = NULL)
+	function create_user($email, $name, $uri = NULL, $institution = NULL)
 	{
-		if ($user = $this->mongo_db->where(array('email' => $email))->get('users'))
+		if ($this->get_user($email))
 		{
 			// User exists, throw a FALSE.
 			return FALSE;
@@ -79,30 +84,19 @@ class Users extends CI_Model {
 			
 			/**
 			 * @todo Email address validation.
-			 */
-			
-			$insert = array(
-				'email' => $email,
-				'name' => $name
-			);
-			
-			/**
 			 * @todo URI validation.
 			 */
 			
-			if ($rdf !== NULL)
-			{
-				$insert['rdf'] = $rdf;
-			}
-			
-			if ($institution !== NULL)
-			{
-				$insert['institution'] = $institution;
-			}
+			$insert = array(
+				'user_email' => $email,
+				'user_name' => $name,
+				'user_uri' => $uri,
+				'user_institution' => $institution
+			);
 			
 			// Attempt insert
 			
-			if ($this->mongo_db->insert('users', $insert))
+			if ($this->db->insert('users', $insert))
 			{
 				return TRUE;
 			}

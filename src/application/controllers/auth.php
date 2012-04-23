@@ -44,7 +44,7 @@ class Auth extends Orbital_Controller {
 			AND $this->input->get('redirect_uri'))
 		{
 
-			if ($this->oauth->validate_app_credentials($this->input->get('client_id'), $this->input->get('redirect_uri')))
+			if ($this->oauth_model->validate_app_credentials($this->input->get('client_id'), $this->input->get('redirect_uri')))
 			{
 
 				$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
@@ -98,7 +98,6 @@ class Auth extends Orbital_Controller {
 		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
 		if ($response = $this->auth_endpoint->callback())
 		{
-			$this->load->model('users');
 
 			// Ensure that all expected fields are present
 			if (isset($response->state) AND isset($response->user_email) AND isset($response->user_name))
@@ -110,7 +109,7 @@ class Auth extends Orbital_Controller {
 				// Fields present!
 
 				// Test to see if user exists
-				if ( ! $this->users->get_user($response->user_email))
+				if ( ! $this->users_model->get_user($response->user_email))
 				{
 					// User does not exist, try to create!
 					if ( ! $this->users->create_user($response->user_email, $response->user_name, $response->rdf, $response->institution))
@@ -131,7 +130,7 @@ class Auth extends Orbital_Controller {
 				// Begin OAuth
 
 				// Generate code and perform redirect
-				if ($code = $this->oauth->generate_code($state->client_id, $response->user_email, $state->scope))
+				if ($code = $this->oauth_model->generate_code($state->client_id, $response->user_email, $state->scope))
 				{
 
 					$redirect_uri = $state->redirect_uri . '?code=' . $code;
@@ -192,7 +191,7 @@ class Auth extends Orbital_Controller {
 				AND $this->post('code'))			{
 				
 				// Client credentials valid, try perform swap
-				if ($tokens = $this->oauth->swap_code($this->input->post('code'), $application))
+				if ($tokens = $this->oauth_model->swap_code($this->input->post('code'), $application))
 				{
 			
 					$this->output
@@ -263,7 +262,7 @@ class Auth extends Orbital_Controller {
 							{
 				
 				// Client credentials valid, try perform swap
-				if ($tokens = $this->oauth->swap_refresh_token($this->input->post('refresh_token'), $application))
+				if ($tokens = $this->oauth_model->swap_refresh_token($this->input->post('refresh_token'), $application))
 				{
 			
 					$this->output
@@ -275,7 +274,7 @@ class Auth extends Orbital_Controller {
 							'refresh_token' => $tokens['refresh_token'],
 							'scope' => implode(' ', $tokens['scope']),
 							'user' => $tokens['user'],
-							'system_admin' => $this->access->user_has_permission_aspect($tokens['user'], 'system_admin')
+							'system_admin' => $this->access->user_has_permission($tokens['user'], 'system_admin')
 						)));
 						
 				}

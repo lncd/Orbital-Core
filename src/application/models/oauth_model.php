@@ -12,7 +12,7 @@
  * @link       https://github.com/lncd/Orbital-Core
  */
 
-class Oauth extends CI_Model {
+class Oauth_model extends CI_Model {
 
 	/**
 	 * Constructor
@@ -21,6 +21,37 @@ class Oauth extends CI_Model {
 	function __construct()
 	{
 		parent::__construct();
+	}
+
+	function get_handlers()
+	{
+	
+		if ($handlers = $this->db->order_by('handler_name')->get('oauth_handlers'))
+		{
+		
+			if ($handlers->num_rows() > 0)
+			{
+				$output = array();
+				foreach ($handlers->result() as $handler)
+				{
+					$output[] = array(
+						'name' => $handler->handler_name,
+						'tag' => $handler->handler_tag
+					);
+				}
+				return $output;
+			}
+			else
+			{
+				return FALSE;
+			}
+		
+		}
+		else
+		{
+			return FALSE;
+		}
+	
 	}
 
 	/**
@@ -37,20 +68,17 @@ class Oauth extends CI_Model {
 	function validate_token($access_token)
 	{
 	
-		$this->mongo_db->where(array(
-			'access_token' => $access_token
-		))->where_gt('expires', time());
+		$token_db = $this->db
+			->where('at_token', $access_token)
+			->where('at_expires >', date('Y-m-d H:i:s'), time())
+			->get('oauth_access_tokens');
 	
-		if ($token = $this->mongo_db->get('oauth_access_tokens'))
+		if ($token_db->num_rows() === 1)
 		{
-			if (count($token) === 1)
-			{
-				return $token[0]['user'];
-			}
-			else
-			{
-				return FALSE;
-			}
+		
+			$token = $token_db->row();
+		
+			return $token->at_user;
 		}
 		else
 		{
@@ -71,32 +99,21 @@ class Oauth extends CI_Model {
 
 	function validate_scopes($access_token, $scopes)
 	{
-	
-		$this->mongo_db->where(array(
-			'access_token' => $access_token
-		));
-	
-		// Add the tokens to the evaluation
+		
 		foreach ($scopes as $scope)
 		{
-			$this->mongo_db->where(array('scopes' => $scope));
-		}
-	
-		if ($token = $this->mongo_db->get('oauth_access_tokens'))
-		{
-			if (count($token) === 1)
-			{
-				return TRUE;
-			}
-			else
+			$scope = $this->db
+				->where('sa_at', $access_token)
+				->where('sa_scope', $scope)
+				->get('oauth_at_scopes');
+				
+			if ($scope->num_rows() !== 1)
 			{
 				return FALSE;
 			}
 		}
-		else
-		{
-			return FALSE;
-		}
+	
+		return TRUE;
 	}
 
 
@@ -129,7 +146,7 @@ class Oauth extends CI_Model {
 		// Only check URI if it's provided
 		if ($redirect_uri !== NULL)
 		{
-			$credentials['endpoint'] = $redirect_uri;
+			$credentials['app_redirect'] = $redirect_uri;
 		}
 
 		// Only check secret if it's provided
@@ -138,9 +155,9 @@ class Oauth extends CI_Model {
 			$credentials['app_secret'] = $client_secret;
 		}
 
-		if ($application = $this->mongo_db->where($credentials)->get('applications'))
+		if ($application = $this->db->where($credentials)->get('applications'))
 		{
-			if (count($application) === 1)
+			if ($application->num_rows() === 1)
 			{
 				return TRUE;
 			}
@@ -173,25 +190,36 @@ class Oauth extends CI_Model {
 
 	function generate_code($client_id, $user, $scopes = 'access')
 	{
-		if ($codes = $this->mongo_db->where(array('client_id' => $client_id, 'user' => $user))->get('oauth_codes'))
+	
+		$code = $this->db->where('code_client', $client_id)->where('code_user', $user)->get('oauth_codes');
+	
+		if ($code->num_rows() === 1)
 		{
 			// An existing code exists for this client/user combination. Destroy it with fire.
-			$this->mongo_db->where(array('client_id' => $client_id, 'user' => $user))->delete('oauth_codes');
+			$this->db->where('code_client', $client_id)->where('code_user', $user)->delete('oauth_codes');
 		}
 
 		// Generate a new code
 		$insert = array(
-			'code' => random_string('alnum', 32),
-			'client_id' => $client_id,
-			'user' => $user,
-			'expires' => time() + 60, // Codes are only valid for 60 seconds.
-			'scopes' => explode(' ', $scopes)
+			'code_code' => random_string('alnum', 32),
+			'code_client' => $client_id,
+			'code_user' => $user,
+			'code_expires' => date('Y-m-d H:i:s', time() + 60), // Codes are only valid for 60 seconds.
 		);
 
-		// If code is OK, return it. If not, return false.
-		if ($this->mongo_db->insert('oauth_codes', $insert))
+		// If code is OK, load up some scopes and return it. If not, return false.
+		if ($this->db->insert('oauth_codes', $insert))
 		{
-			return $insert['code'];
+		
+			foreach (explode(' ', urldecode($scopes)) as $scope)
+			{
+				if ( ! $this->db->insert('oauth_code_scopes', array('sc_scope' => $scope, 'sc_code' => $insert['code_code'])))
+				{
+					return FALSE;
+				}
+			}
+		
+			return $insert['code_code'];
 		}
 		else
 		{
@@ -214,44 +242,75 @@ class Oauth extends CI_Model {
 	function swap_code($code, $client_id)
 	{
 
+		$code_db = $this->db
+			->where('code_code', $code)
+			->where('code_client', $client_id)
+			->where('code_expires >', date('Y-m-d H:i:s', time()))
+			->get('oauth_codes');
+
 		// Ensure this code exists and is valid.
-		if ($codes = $this->mongo_db->where(array(
-				'code' => $code,
-				'client_id' => $client_id
-			))->where_gt('expires', time())->get('oauth_codes'))
+		if ($code_db->num_rows() === 1)
 		{
 			// Grab the code for scopes and user
-			$code_data = $codes[0];
+			$code_data = $code_db->row();
+
+			// Grab scopes
+			$scopes_db = $this->db
+				->where('sc_code', $code)
+				->get('oauth_code_scopes');
+				
+			$scopes = array();
+			
+			foreach ($scopes_db->result() as $scope)
+			{
+				$scopes[] = $scope->sc_scope;
+			}
 
 			// Remove the code.
-			$this->mongo_db->where(array('client_id' => $client_id, 'code' => $code))->delete('oauth_codes');
+			$this->db
+				->where('code_client', $client_id)
+				->where('code_code', $code)
+				->delete('oauth_codes');
 
 			// Remove existing AT/RT pair for this client and user.
-			$this->mongo_db->where(array('client_id' => $client_id, 'user' => $code_data['user']))->delete('oauth_access_tokens');
+			$this->db
+				->where('at_client', $client_id)
+				->where('at_user', $code_data->code_user)
+				->delete('oauth_access_tokens');
 
 			// Generate new AT and RT
 
 			$access_token = random_string('alnum', 64);
 			$refresh_token = random_string('alnum', 64);
-			$expires_in = 43200;
+			$expires_in = 21600;
 
 			$insert = array(
-				'access_token' => $access_token,
-				'refresh_token' => $refresh_token,
-				'user' => $code_data['user'],
-				'client_id' => $client_id,
-				'scopes' => $code_data['scopes'],
-				'expires' => time() + $expires_in
+				'at_token' => $access_token,
+				'at_refresh' => $refresh_token,
+				'at_user' => $code_data->code_user,
+				'at_client' => $client_id,
+				'at_expires' => date('Y-m-d H:i:s', time() + $expires_in)
 			);
 
-			if ($this->mongo_db->insert('oauth_access_tokens', $insert))
+			if ($this->db->insert('oauth_access_tokens', $insert))
 			{
+			
+				// Access token created, spin scopes
+				
+				foreach ($scopes as $scope)
+				{
+					if ( ! $this->db->insert('oauth_at_scopes', array('sa_scope' => $scope, 'sa_at' => $access_token)))
+					{
+						return FALSE;
+					}
+				}
+			
 				return array(
 					'access_token' => $access_token,
 					'refresh_token' => $refresh_token,
-					'scope' => $code_data['scopes'],
+					'scope' => $scopes,
 					'expires_in' => $expires_in,
-					'user' => $code_data['user']
+					'user' => $code_data->code_user
 				);
 			}
 			else
@@ -284,41 +343,53 @@ class Oauth extends CI_Model {
 	function swap_refresh_token($refresh_token, $client_id)
 	{
 
-		// Ensure this token exists.
-		if ($tokens = $this->mongo_db->where(array(
-				'refresh_token' => $refresh_token,
-				'client_id' => $client_id
-			))->get('oauth_access_tokens'))
-		{
-			// Grab the code for scopes and user
-			$token_data = $tokens[0];
+		$token = $this->db
+			->where('at_refresh', $refresh_token)
+			->where('at_client', $client_id)
+			->get('oauth_access_tokens');
 
-			// Remove the existing AT/RT pari.
-			$this->mongo_db->where(array('client_id' => $client_id, 'refresh_token' => $refresh_token))->delete('oauth_access_tokens');
+		// Ensure this token exists.
+		if ($token->num_rows() === 1)
+		{
+		
+			$token_data = $token->row();
+			
+			// Grab scopes
+			// Grab scopes
+			$scopes_db = $this->db
+				->where('sa_at', $token_data->at_token)
+				->get('oauth_at_scopes');
+				
+			$scopes = array();
+			
+			foreach ($scopes_db->result() as $scope)
+			{
+				$scopes[] = $scope->sa_scope;
+			}
 
 			// Generate new AT and RT
 
-			$access_token = random_string('alnum', 64);
-			$refresh_token = random_string('alnum', 64);
-			$expires_in = 43200;
+			$new_access_token = random_string('alnum', 64);
+			$new_refresh_token = random_string('alnum', 64);
+			$expires_in = 21600;
 
-			$insert = array(
-				'access_token' => $access_token,
-				'refresh_token' => $refresh_token,
-				'user' => $token_data['user'],
-				'client_id' => $client_id,
-				'scopes' => $token_data['scopes'],
-				'expires' => time() + $expires_in
+			$update = array(
+				'at_token' => $new_access_token,
+				'at_refresh' => $new_refresh_token,
+				'at_expires' => date('Y-m-d H:i:s', time() + $expires_in)
 			);
 
-			if ($this->mongo_db->insert('oauth_access_tokens', $insert))
+			if ($this->db
+				->where('at_refresh', $refresh_token)
+				->where('at_client', $client_id)
+				->update('oauth_access_tokens', $update))
 			{
 				return array(
-					'access_token' => $access_token,
-					'refresh_token' => $refresh_token,
-					'scope' => $token_data['scopes'],
+					'access_token' => $new_access_token,
+					'refresh_token' => $new_refresh_token,
+					'scope' => $scopes,
 					'expires_in' => $expires_in,
-					'user' => $token_data['user']
+					'user' => $token_data->at_user
 				);
 			}
 			else
@@ -329,7 +400,7 @@ class Oauth extends CI_Model {
 		}
 		else
 		{
-			// This code doesn't exist or is invalid.
+			// This token doesn't exist or is invalid.
 			return FALSE;
 		}
 

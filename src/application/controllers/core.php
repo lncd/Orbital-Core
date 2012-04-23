@@ -31,14 +31,14 @@ class Core extends Orbital_Controller
 	public function auth_types_get()
 	{
 	
-		$auth_types = $this->mongo_db->get('auth_types');
+		$auth_types = $this->oauth_model->get_handlers();
 	
 		if (count($auth_types) > 0)
 		{
 		
 			foreach ($auth_types as $auth_type)
 			{
-				$auth_type['uri'] = site_url('auth/signin/' . $auth_type['shortname']);
+				$auth_type['uri'] = site_url('auth/signin/' . $auth_type['tag']);
 				$response->auth_types[] = $auth_type;
 			}
 			

@@ -50,7 +50,7 @@ class Access {
 		{
 			// Check to see if credentials are valid.
 			
-			if ($this->_ci->oauth->validate_app_credentials($this->_ci->input->server('PHP_AUTH_USER'), NULL, $this->_ci->input->server('PHP_AUTH_PW')))
+			if ($this->_ci->oauth_model->validate_app_credentials($this->_ci->input->server('PHP_AUTH_USER'), NULL, $this->_ci->input->server('PHP_AUTH_PW')))
 			{
 				return $this->_ci->input->server('PHP_AUTH_USER');
 			}
@@ -105,11 +105,11 @@ class Access {
 			if (count($authorisation_header) === 2 && $authorisation_header[0] === 'Bearer')
 			{
 				// Looks the right length, has the right auth type - see if the token is valid.
-				if ($user = $this->_ci->oauth->validate_token(base64_decode($authorisation_header[1])))
+				if ($user = $this->_ci->oauth_model->validate_token(base64_decode($authorisation_header[1])))
 				{
 				
 					// Token is valid, hooray! But does it have the scopes?
-					if ($this->_ci->oauth->validate_scopes(base64_decode($authorisation_header[1]), $scopes))
+					if ($this->_ci->oauth_model->validate_scopes(base64_decode($authorisation_header[1]), $scopes))
 					{
 						return $user;
 					}
