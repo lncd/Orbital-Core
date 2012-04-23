@@ -10,6 +10,17 @@ http://orbital.blogs.lincoln.ac.uk
 
 ## License
 
-Orbital Core is licenced under the [GNU Affero General Public License][agpl]
+Orbital Core is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-[agpl]: https://www.gnu.org/licenses/agpl-3.0.html (GNU Affero General Public License)
+Foobar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with Orbital Core. If not, see <http://www.gnu.org/licenses/>.
+
+## Acknowledgements
+
+Orbital Core makes use of the following software:
+
+* The [CodeIgniter](http://codeigniter.com/) Framework
+* [Alex Bilbie](http://httpster.org/)'s [CodeIgniter MongoDB Library](https://github.com/alexbilbie/codeigniter-mongodb-library)
+* [Phil Sturgeon](http://philsturgeon.co.uk/)'s [CodeIgniter REST Server](https://github.com/philsturgeon/codeigniter-restserver)
+* [Sebastian Tschan](http://blueimp.net)'s [jQuery File Upload Plugin PHP Class](https://github.com/blueimp/jQuery-File-Upload)

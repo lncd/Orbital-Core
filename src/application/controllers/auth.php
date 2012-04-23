@@ -11,6 +11,7 @@ require APPPATH.'/libraries/Orbital_Controller.php';
  * @subpackage Core
  * @author     Nick Jackson <nijackson@lincoln.ac.uk>
  * @copyright  2012 University of Lincoln
+ * @licence    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
  * @link       https://github.com/lncd/Orbital-Core
  */
 

@@ -3,6 +3,19 @@
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
 require APPPATH.'/libraries/Orbital_Controller.php';
 
+/**
+ * Core Functions
+ *
+ * Support functions relating to the operation of the core.
+ *
+ * @package    Orbital
+ * @subpackage Core
+ * @author     Nick Jackson <nijackson@lincoln.ac.uk>
+ * @copyright  2012 University of Lincoln
+ * @licence    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
+ * @link       https://github.com/lncd/Orbital-Core
+ */
+
 class Core extends Orbital_Controller
 {
 

@@ -1,6 +1,24 @@
 <?php defined('BASEPATH') or exit('No direct script access allowed');
 
+/**
+ * Projects Model
+ *
+ * Allows interaction with projects data.
+ *
+ * @package    Orbital
+ * @subpackage Core
+ * @author     Nick Jackson <nijackson@lincoln.ac.uk>
+ * @author     Harry Newton <hnewton@lincoln.ac.uk>
+ * @copyright  2012 University of Lincoln
+ * @licence    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
+ * @link       https://github.com/lncd/Orbital-Core
+*/
+
 class Projects_model extends CI_Model {
+
+	/**
+	 * Constructor
+	/*
 
 	function __construct()
 	{
