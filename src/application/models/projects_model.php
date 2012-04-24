@@ -18,7 +18,7 @@ class Projects_model extends CI_Model {
 
 	/**
 	 * Constructor
-	/*
+	*/
 
 	function __construct()
 	{

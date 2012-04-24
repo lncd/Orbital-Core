@@ -1,6 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-
 /**
  * Users
  *
@@ -19,8 +18,8 @@ class Users_model extends CI_Model {
 
 
 	/**
-	 * construct
-	 */
+	 * Constructor
+	*/
 
 	function __construct()
 	{
