@@ -95,12 +95,11 @@ class Projects extends Orbital_Controller {
 			//Check project exists
 			if($project = $this->projects_model->get_project($identifier))
 			{
-				if ($this->access->user_has_permission($user, 'project', 'read', $identifier))
+				if ($this->access->user_has_project_permission($user, $identifier, 'read'))
 				{
-					$this->load->model('permissions');
 					$response->project = $project;
-					$response->permissions = $this->permissions->get_permissions_for_identifier($user, 'project', $identifier);
-					$response->users = $this->permissions->get_users_for_identifier('project', $identifier);
+					$response->permissions = $this->projects_model->get_permissions_project_user($user, $identifier);
+					$response->users = $this->projects_model->get_project_users($identifier);
 
 					$response->status = TRUE;
 					$this->response($response, 200);
@@ -115,6 +114,30 @@ class Projects extends Orbital_Controller {
 		}
 	}
 	
+	public function view_public_get($identifier)
+	{
+			$this->load->model('projects_model');
+
+			//Check project exists
+			if($project = $this->projects_model->get_project($identifier))
+			{
+				if ($project['public_view'] === 'visible')
+				{
+					$response->project = $project;
+
+					$response->status = TRUE;
+					$this->response($response, 200);
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified project does not exist.';
+				$this->response($response, 404);
+			}
+		
+	}
+	
 	public function datasets_get($identifier)
 	{
 		if ($user = $this->access->valid_user(array('projects')))
@@ -124,7 +147,7 @@ class Projects extends Orbital_Controller {
 			//Check project exists
 			if($project = $this->projects_model->get_project($identifier))
 			{
-				if ($this->access->user_has_permission($user, 'project', 'read', $identifier))
+				if ($this->access->user_has_project_permission($user, $identifier, 'read'))
 				{
 					$this->load->model('permissions');
 					$response->project = $project;
@@ -153,7 +176,7 @@ class Projects extends Orbital_Controller {
 			//Check project exists
 			if($project = $this->projects_model->get_project($identifier))
 			{
-				if ($this->access->user_has_permission($user, 'project', 'write', $identifier))
+				if ($this->access->user_has_project_permission($user, $identifier, 'write'))
 				{
 					if ($project = $this->projects_model->update_project($identifier, $this->put('name'), $this->put('abstract')))
 					{
@@ -187,7 +210,7 @@ class Projects extends Orbital_Controller {
 			//Check project exists
 			if($project = $this->projects_model->get_project($identifier))
 			{
-				if ($this->access->user_has_permission($user, 'project', 'delete', $identifier))
+				if ($this->access->user_has_project_permission($user, $identifier, 'delete'))
 				{
 					if ($project = $this->projects_model->delete_project($identifier))
 					{
@@ -216,7 +239,7 @@ class Projects extends Orbital_Controller {
 	{
 		if ($user = $this->access->valid_user(array('create_projects')))
 		{
-			if ($this->access->user_has_permission($user, 'projects', 'create'))
+			if ($this->access->user_has_project_permission($user, $identifier, 'create'))
 			{
 				$this->load->model('projects_model');
 

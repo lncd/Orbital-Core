@@ -48,7 +48,8 @@ class Projects_model extends CI_Model {
 					'abstract' => $project->project_abstract,
 					'start_date' => $project->project_start,
 					'end_date' => $project->project_end,
-					'research_group' => $project->project_research_group				
+					'research_group' => $project->project_research_group,
+					'public_view' => $project->project_public_view			
 					); 
 			}
 			else
@@ -138,7 +139,7 @@ class Projects_model extends CI_Model {
 	
 	function get_permissions_project_user($user, $project)
 	{
-		if ($permissions = $this->db->where('p_proj_user', $user) -> where('p_proj_project', $project))
+		if ($permissions = $this->db->where('p_proj_user', $user) -> where('p_proj_project', $project) -> get('permissions_projects'))
 		{
 			if ($permissions->num_rows() === 1)
 			{
@@ -149,6 +150,8 @@ class Projects_model extends CI_Model {
 				'delete' => (bool)$permissions->p_proj_delete,
 				'archive_read' => (bool)$permissions->p_proj_archive_read,
 				'archive_write' => (bool)$permissions->p_proj_archive_write,
+				'sharedworkspace_read' => (bool)$permissions->p_proj_sharedworkspace_read,
+				'dataset_create' => (bool)$permissions->p_proj_dataset_create
 				);
 			}
 			else
@@ -165,7 +168,7 @@ class Projects_model extends CI_Model {
 	
 	function get_project_users($project)
 	{
-		if ($permissions = $this->db->where('p_proj_project', $project))
+		if ($permissions = $this->db->where('p_proj_project', $project) -> get('permissions_projects'))
 		{
 			if ($permissions->num_rows() > 0)
 			{
@@ -178,6 +181,8 @@ class Projects_model extends CI_Model {
 					'delete' => (bool)$permission->p_proj_delete,
 					'archive_read' => (bool)$permission->p_proj_archive_read,
 					'archive_write' => (bool)$permission->p_proj_archive_write,
+					'sharedworkspace_read' => (bool)$permission->p_proj_sharedworkspace_read,
+					'dataset_create' => (bool)$permission->p_proj_dataset_create
 					);
 				}
 				return $output;

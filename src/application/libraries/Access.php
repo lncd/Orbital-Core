@@ -205,32 +205,34 @@ class Access {
 	 * @return bool TRUE if the user has the aspect, FALSE if not.
 	 */
 	 
-	function user_has_permission($user, $aspect, $value = TRUE, $identifier = NULL)
+	function user_has_project_permission($user, $project, $permission, $softfail = FALSE)
 	{
-	
-		$permission_query = array('user' => $user, 'aspect' => $aspect, 'values' => $value);
 		
-		if ($identifier !== NULL)
-		{
-			$permission_query['identifier'] = $identifier;
-		}
 	
-		if ($this->_ci->mongo_db->where($permission_query)->get('permissions'))
+		$user = $this->_ci->db
+			->where('p_proj_user', $user)
+			->where('p_proj_project', $project)
+			->where('p_proj_' . $permission, 1)
+			->get('permissions_projects');
+	
+		if ($user->num_rows() === 1)
 		{
 			return TRUE;
 		}
 		else
 		{
-			$this->_ci->output
-				->set_status_header('403')
-				->set_output(json_encode(array(
-					'error' => 'no_permission',
-					'error_description' => 'The current user does not have permission to perform this action.'
-				)));
+		if ($softfail !== TRUE)
+			{
+				$this->_ci->output
+					->set_status_header('403')
+					->set_output(json_encode(array(
+						'error' => 'no_permission',
+						'error_description' => 'The current user does not have permission to perform this action.'
+					)));
+			}
 			return FALSE;
 		}
 	}
-
 }
 
 // End of file Access.php
