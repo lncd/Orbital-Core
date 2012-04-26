@@ -189,6 +189,34 @@ class Access {
 			return FALSE;
 		}
 	}
+		 
+	function user_has_permission($user, $permission, $softfail = FALSE)
+	{
+	
+		$user = $this->_ci->db
+			->where('user_email', $user)
+			->where('user_permission_' . $permission, 1)
+			->get('users');
+	
+		if ($user->num_rows() === 1)
+		{
+			return TRUE;
+		}
+		else
+		{
+		
+			if ($softfail !== TRUE)
+			{
+				$this->_ci->output
+					->set_status_header('403')
+					->set_output(json_encode(array(
+						'error' => 'no_permission',
+						'error_description' => 'The current user does not have permission to perform this action.'
+					)));
+			}
+			return FALSE;
+		}
+	}
 	
 	/**
 	 * User Has Permission

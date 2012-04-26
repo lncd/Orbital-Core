@@ -58,6 +58,28 @@ class Licences_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function list_all_available()
+	{
+		if ($licences = $this->db->order_by('licence_name_full')->where('licence_enabled', TRUE)->get('licences'))
+		{
+			$output = array();
+			foreach ($licences->result() as $licence)
+			{			
+				$output[] = array(
+					'id' => $licence->licence_id,
+					'short_name' => $licence->licence_name_short,
+					'name' => $licence->licence_name_full,
+					'uri' => $licence->licence_summary_uri
+				);
+			}
+			return $output;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file licences.php

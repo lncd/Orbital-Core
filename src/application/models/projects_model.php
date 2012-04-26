@@ -49,7 +49,8 @@ class Projects_model extends CI_Model {
 					'start_date' => $project->project_start,
 					'end_date' => $project->project_end,
 					'research_group' => $project->project_research_group,
-					'public_view' => $project->project_public_view			
+					'public_view' => $project->project_public_view,
+					'default_licence' => $project->project_default_licence
 					); 
 			}
 			else
@@ -123,7 +124,7 @@ class Projects_model extends CI_Model {
 		}
 	}
 	
-	function add_permission($project_id, $user, $read = TRUE, $write = FALSE, $delete = FALSE, $archive_read = TRUE, $archive_write = FALSE)
+	function add_permission($project_id, $user, $read = TRUE, $write = FALSE, $delete = FALSE, $archive_read = TRUE, $archive_write = FALSE, $workspace = TRUE, $manage_users = FALSE)
 	{
 		$insert = array(
 		'p_proj_project' => $project_id,
@@ -132,7 +133,9 @@ class Projects_model extends CI_Model {
 		'p_proj_write' => $write,
 		'p_proj_delete' => $delete,
 		'p_proj_archive_read' => $archive_read,
-		'p_proj_archive_write' => $archive_write
+		'p_proj_archive_write' => $archive_write,
+		'p_proj_workspace' => $workspace,
+		'p_proj_manage_users' => $manage_users
 		);
 		$this->db->insert('permissions_projects', $insert);
 	}
@@ -150,7 +153,8 @@ class Projects_model extends CI_Model {
 				'delete' => (bool)$permissions->p_proj_delete,
 				'archive_read' => (bool)$permissions->p_proj_archive_read,
 				'archive_write' => (bool)$permissions->p_proj_archive_write,
-				'sharedworkspace_read' => (bool)$permissions->p_proj_sharedworkspace_read,
+				'sharedworkspace_read' => (bool)$permissions->p_proj_workspace,
+				'manage_users' => (bool) $permissions->p_proj_manage_users,
 				'dataset_create' => (bool)$permissions->p_proj_dataset_create
 				);
 			}
@@ -165,7 +169,6 @@ class Projects_model extends CI_Model {
 		}
 	}
 	
-	
 	function get_project_users($project)
 	{
 		if ($permissions = $this->db->where('p_proj_project', $project) -> get('permissions_projects'))
@@ -175,14 +178,15 @@ class Projects_model extends CI_Model {
 				$output = array();
 				foreach($permissions -> result() as $permission)
 				{
-					$output[] = array(
-					'read' => (bool)$permission->p_proj_read,
-					'write' => (bool)$permission->p_proj_write,
-					'delete' => (bool)$permission->p_proj_delete,
-					'archive_read' => (bool)$permission->p_proj_archive_read,
-					'archive_write' => (bool)$permission->p_proj_archive_write,
-					'sharedworkspace_read' => (bool)$permission->p_proj_sharedworkspace_read,
-					'dataset_create' => (bool)$permission->p_proj_dataset_create
+					$output[$permission->p_proj_user] = array(
+					'read' => (bool) $permission->p_proj_read,
+					'write' => (bool) $permission->p_proj_write,
+					'delete' => (bool) $permission->p_proj_delete,
+					'archive_read' => (bool) $permission->p_proj_archive_read,
+					'archive_write' => (bool) $permission->p_proj_archive_write,
+					'sharedworkspace_read' => (bool) $permission->p_proj_workspace,
+					'manage_users' => (bool) $permission->p_proj_manage_users,
+					'dataset_create' => (bool) $permission->p_proj_dataset_create
 					);
 				}
 				return $output;
@@ -198,11 +202,15 @@ class Projects_model extends CI_Model {
 		}
 	}
 
-	function update_project($identifier, $name, $abstract, $other = array())
+	function update_project($identifier, $name, $abstract, $research_group, $start_date, $end_date, $default_licence, $other = array())
 	{
 		$update = array(
 			'project_name' => $name,
-			'project_abstract' => $abstract
+			'project_abstract' => $abstract,
+			'project_research_group' => $research_group,
+			'project_start' => $start_date,
+			'project_end' => $end_date,
+			'project_default_licence' => $default_licence
 		);
 
 		foreach($other as $name => $value)

@@ -43,6 +43,7 @@ $route['404_override'] = '';
 $route['project/(:any)/datasets'] = "projects/datasets/$1";
 $route['project/(:any)/public'] = "projects/view_public/$1";
 $route['project/(:any)'] = "projects/view/$1";
+$route['licences/enabled'] = "licences/list_enabled";
 
 // End of file routes.php
 // Location: ./config/routes.php

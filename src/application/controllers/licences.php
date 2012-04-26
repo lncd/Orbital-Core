@@ -50,6 +50,20 @@ class Licences extends Orbital_Controller {
 			}
 		}
 	}
+	
+	public function list_enabled_get()
+	{
+			$this->load->model('licences_model');
+
+			// Iterate through projects, and append each one to the projects array.
+			$response->licences = $this->licences_model->list_all_available();
+
+			$response->status = TRUE;
+			$this->response($response, 200);
+			
+		
+	}
+
 }
 
 // End of file projects.php

@@ -178,7 +178,7 @@ class Projects extends Orbital_Controller {
 			{
 				if ($this->access->user_has_project_permission($user, $identifier, 'write'))
 				{
-					if ($project = $this->projects_model->update_project($identifier, $this->put('name'), $this->put('abstract')))
+					if ($project = $this->projects_model->update_project($identifier, $this->put('name'), $this->put('abstract'), $this->put('research_group'), $this->put('start_date'), $this->put('end_date'), $this->put('default_licence')))
 					{
 						$response->project = $project;
 						$response->status = TRUE;
@@ -239,7 +239,7 @@ class Projects extends Orbital_Controller {
 	{
 		if ($user = $this->access->valid_user(array('create_projects')))
 		{
-			if ($this->access->user_has_project_permission($user, $identifier, 'create'))
+			if ($this->access->user_has_permission($user, 'project_create'))
 			{
 				$this->load->model('projects_model');
 
