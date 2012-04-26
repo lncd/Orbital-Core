@@ -80,6 +80,64 @@ class Licences_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function get_licence($id)
+	{
+		if ($licence = $this->db->where('licence_id', $id)->get('licences'))
+		{
+			if ($licence->num_rows() === 1)
+			{
+				$licence = $licence->row();
+				
+				if ($this->db->where('file_licence', $licence->licence_id)->count_all_results('archive_files') > 0 OR $this->db->where('dset_licence', $licence->licence_id)->count_all_results('datasets') > 0 OR $this->db->where('project_default_licence', $licence->licence_id)->count_all_results('projects') > 0)
+				{
+					$in_use = TRUE;
+				}
+				else
+				{
+					$in_use = FALSE;
+				}
+				
+				return array(
+					'id' => $licence->licence_id,
+					'short_name' => $licence->licence_name_short,
+					'name' => $licence->licence_name_full,
+					'uri' => $licence->licence_summary_uri,
+					'enabled' => (bool) $licence->licence_enabled,
+					'in_use' => $in_use
+				);
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function create_licence($name, $name_short, $licence_summary_uri)
+	{
+			
+		$insert = array(
+			'licence_name_short' => $name_short,
+			'licence_name' => $name,
+			'licence_summary_uri' => $licence_summary_uri
+		);
+		
+		// Attempt insert
+		
+		if ($this->db->insert('licences', $insert))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file licences.php

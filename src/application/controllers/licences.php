@@ -37,7 +37,30 @@ class Licences extends Orbital_Controller {
 	
 		if ($user = $this->access->valid_user(array('administration')))
 		{
-			if ($this->access->user_is_admin($user))
+			if ($this->access->user_has_permission($user, 'licences'))
+			{
+				$this->load->model('licences_model');
+	
+				// Iterate through projects, and append each one to the projects array.
+				$response->licences = $this->licences_model->list_all();
+	
+				$response->status = TRUE;
+				$this->response($response, 200);
+				
+			}
+		}
+	}
+	
+	/*
+	 * Create licence
+	*/
+
+	public function create_post()
+	{
+	
+		if ($user = $this->access->valid_user(array('administration')))
+		{
+			if ($this->access->user_has_permission($user, 'licences'))
 			{
 				$this->load->model('licences_model');
 	
