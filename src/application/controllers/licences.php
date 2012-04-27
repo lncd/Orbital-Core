@@ -62,13 +62,26 @@ class Licences extends Orbital_Controller {
 		{
 			if ($this->access->user_has_permission($user, 'licences'))
 			{
-				$this->load->model('licences_model');
+			
+				// Ensure all expected fields have arrived and are valid
+				
+				if ($this->post('name') && $this->post('shortname') && $this->post('uri'))
+				{
+					$this->load->model('licences_model');
 	
-				// Iterate through projects, and append each one to the projects array.
-				$response->licences = $this->licences_model->list_all();
-	
-				$response->status = TRUE;
-				$this->response($response, 200);
+					if ($this->licences_model->create_licence($this->post('name'), $this->post('shortname'), $this->post('uri'));
+		
+					$response->status = TRUE;
+					$this->response($response, 200);
+				}
+				else
+				{
+					$response->message = 'Missing parameters in request.';
+					$response->status = FALSE;
+					$this->response($response, 400);
+				}
+			
+				
 				
 			}
 		}

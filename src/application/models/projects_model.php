@@ -82,59 +82,6 @@ class Projects_model extends CI_Model {
 		}
 	}
 	
-	function list_public_archive_files($identifier)
-	{
-		if ($archive_files = $this->db->where('file_project', $identifier)->where('file_visibility', 'public')->get('archive_files'))
-		{
-			$output = array();
-			
-			foreach ($archive_files->result() as $archive_file)
-			{
-				$output[] = $archive_file->file_original_name;
-			}
-			return $output;
-		}
-		else
-		{
-			return FALSE;
-		}		
-	}
-	
-	function list_archive_files($identifier)
-	{
-		if ($archive_files = $this->db->where('file_project', $identifier)->get('archive_files'))
-		{
-			$output = array();
-			
-			foreach ($archive_files->result() as $archive_file)
-			{
-				$output[] = $archive_file->file_original_name;
-			}
-			return $output;
-		}
-		else
-		{
-			return FALSE;
-		}		
-	}
-	
-	function list_public_files($identifier)
-	{
-		if ($handle = opendir($this->config->item('orbital_storage_directory')/* . '/' . $identifier)*/))
-		{
-			$output = array();
-			while (false !== ($entry = readdir($handle)))
-			{
-				if ($entry != "." && $entry != "..")
-				{
-					$output[] = $entry;
-				}
-			}
-			closedir($handle);
-			return $output;
-		}
-	}
-	
 	function list_user($user, $limit = 20)
 	{
 		if ($projects = $this->db->join('permissions_projects', 'p_proj_project = project_id')->where('p_proj_user', $user)->where('p_proj_read', TRUE)->limit($limit)->get('projects'))

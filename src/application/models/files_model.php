@@ -55,6 +55,30 @@ class Files_model extends CI_Model {
 	 {
 	 
 	 }
+	 
+	 
+	
+	function list_public_for_project($identifier)
+	{
+		if ($archive_files = $this->db->where('file_project', $identifier)->get('archive_files'))
+		{
+			$output = array();
+			
+			foreach ($archive_files->result() as $archive_file)
+			{
+				$output[] = array
+				(
+					'id' => $archive_file->file_id,
+					'original_name' => $archive_file->file_original_name
+				);
+			}
+			return $output;
+		}
+		else
+		{
+			return FALSE;
+		}		
+	}
 	
 }
 
