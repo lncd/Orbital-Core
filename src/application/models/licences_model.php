@@ -123,7 +123,7 @@ class Licences_model extends CI_Model {
 			
 		$insert = array(
 			'licence_name_short' => $name_short,
-			'licence_name' => $name,
+			'licence_name_full' => $name,
 			'licence_summary_uri' => $licence_summary_uri
 		);
 		

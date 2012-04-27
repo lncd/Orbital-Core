@@ -55,7 +55,7 @@ class Licences extends Orbital_Controller {
 	 * Create licence
 	*/
 
-	public function create_post()
+	public function index_post()
 	{
 	
 		if ($user = $this->access->valid_user(array('administration')))
@@ -69,10 +69,17 @@ class Licences extends Orbital_Controller {
 				{
 					$this->load->model('licences_model');
 	
-					if ($this->licences_model->create_licence($this->post('name'), $this->post('shortname'), $this->post('uri'));
-		
-					$response->status = TRUE;
-					$this->response($response, 200);
+					if ($this->licences_model->create_licence($this->post('name'), $this->post('shortname'), $this->post('uri')))
+					{
+						$response->status = TRUE;
+						$this->response($response, 201);
+					}
+					else
+					{
+						$response->status = FALSE;
+						$this->response($response, 500);
+					}
+					
 				}
 				else
 				{

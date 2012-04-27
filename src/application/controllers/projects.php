@@ -97,10 +97,13 @@ class Projects extends Orbital_Controller {
 			{
 				if ($this->access->user_has_project_permission($user, $identifier, 'read'))
 				{
+				
+					$this->load->model('files_model');
+				
 					$response->project = $project;
 					$response->permissions = $this->projects_model->get_permissions_project_user($user, $identifier);
 					$response->users = $this->projects_model->get_project_users($identifier);
-					$response->archive_files = $this->projects_model->list_archive_files($identifier);
+					$response->archive_files = $this->files_model->list_for_project($identifier);
 
 
 					$response->status = TRUE;
