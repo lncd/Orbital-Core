@@ -33,14 +33,14 @@ class Files_model extends CI_Model {
 	 * @param string $identifier Identifier of file.
 	 *
 	 * @return string|false The key, or FALSE if the file does not exist.
-	 */
+	*/
 	 
-	 function get_otk($identifier)
-	 {
+	function get_otk($identifier)
+	{
+	
+	}
 	 
-	 }
-	 
-	 /**
+	/**
 	 * Validate OTK
 	 *
 	 * Validates an OTK against a file, and marks it as used.
@@ -49,18 +49,46 @@ class Files_model extends CI_Model {
 	 * @param string $identifier Identifier of file.
 	 *
 	 * @return bool TRUE if key is valid, FALSE if not.
-	 */
+	*/
 	 
-	 function validate_otk($key, $identifier)
-	 {
-	 
-	 }
-	 
-	 
+	function validate_otk($key, $identifier)
+	{
+	
+	}
+	
+	function list_for_project($identifier)
+	{
+		if ($archive_files = $this->db
+			->where('file_project', $identifier)
+			->get('archive_files'))
+		{
+			$output = array();
+			
+			foreach ($archive_files->result() as $archive_file)
+			{
+				$output[] = array
+				(
+					'id' => $archive_file->file_id,
+					'original_name' => $archive_file->file_original_name,
+					'visibility' => $archive_file->file_visibility,
+					'status' => $archive_file->file_upload_status
+				);
+			}
+			return $output;
+		}
+		else
+		{
+			return FALSE;
+		}		
+	}
 	
 	function list_public_for_project($identifier)
 	{
-		if ($archive_files = $this->db->where('file_project', $identifier)->get('archive_files'))
+		if ($archive_files = $this->db
+			->where('file_project', $identifier)
+			->where('file_visibility', 'public')
+			->where('file_upload_status', 'uploaded')
+			->get('archive_files'))
 		{
 			$output = array();
 			
