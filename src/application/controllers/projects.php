@@ -125,10 +125,9 @@ class Projects extends Orbital_Controller {
 		{
 			if ($project['public_view'] === 'visible')
 			{
-				$this->load->model('files_model');
 				$response->project = $project;
 				$response->status = TRUE;
-				$response->archive_files = $this->files_model->list_public_for_project($identifier);
+				$response->archive_files = $this->projects_model->list_public_archive_files($identifier);
 				$this->response($response, 200);
 			}
 		}
