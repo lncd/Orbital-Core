@@ -100,6 +100,8 @@ class Projects extends Orbital_Controller {
 					$response->project = $project;
 					$response->permissions = $this->projects_model->get_permissions_project_user($user, $identifier);
 					$response->users = $this->projects_model->get_project_users($identifier);
+					$response->archive_files = $this->projects_model->list_archive_files($identifier);
+
 
 					$response->status = TRUE;
 					$this->response($response, 200);
