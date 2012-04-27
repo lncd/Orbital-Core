@@ -91,6 +91,7 @@ class Projects extends Orbital_Controller {
 		if ($user = $this->access->valid_user(array('projects')))
 		{
 			$this->load->model('projects_model');
+			$this->load->model('files_model');
 
 			//Check project exists
 			if($project = $this->projects_model->get_project($identifier))
@@ -122,6 +123,8 @@ class Projects extends Orbital_Controller {
 	public function view_public_get($identifier)
 	{
 		$this->load->model('projects_model');
+		$this->load->model('files_model');
+
 
 		//Check project exists
 		if($project = $this->projects_model->get_project($identifier))
@@ -130,7 +133,7 @@ class Projects extends Orbital_Controller {
 			{
 				$response->project = $project;
 				$response->status = TRUE;
-				$response->archive_files = $this->projects_model->list_public_archive_files($identifier);
+				$response->archive_files = $this->files_model->list_public_for_project($identifier);
 				$this->response($response, 200);
 			}
 		}
