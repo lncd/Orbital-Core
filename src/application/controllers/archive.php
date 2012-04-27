@@ -131,6 +131,8 @@ class Archive extends Orbital_Controller
 			header('HTTP/1.1 405 Method Not Allowed');
 		}
 	}
+	
+
 }
 
 // End of file archive.php

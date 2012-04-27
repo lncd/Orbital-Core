@@ -116,26 +116,25 @@ class Projects extends Orbital_Controller {
 	
 	public function view_public_get($identifier)
 	{
-			$this->load->model('projects_model');
+		$this->load->model('projects_model');
 
-			//Check project exists
-			if($project = $this->projects_model->get_project($identifier))
+		//Check project exists
+		if($project = $this->projects_model->get_project($identifier))
+		{
+			if ($project['public_view'] === 'visible')
 			{
-				if ($project['public_view'] === 'visible')
-				{
-					$response->project = $project;
-
-					$response->status = TRUE;
-					$this->response($response, 200);
-				}
+				$response->project = $project;
+				$response->status = TRUE;
+				$response->archive_files = $this->projects_model->list_public_archive_files($identifier);
+				$this->response($response, 200);
 			}
-			else
-			{
-				$response->status = FALSE;
-				$response->error = 'The specified project does not exist.';
-				$this->response($response, 404);
-			}
-		
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'The specified project does not exist.';
+			$this->response($response, 404);
+		}	
 	}
 	
 	public function datasets_get($identifier)
