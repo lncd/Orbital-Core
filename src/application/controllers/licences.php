@@ -94,6 +94,10 @@ class Licences extends Orbital_Controller {
 		}
 	}
 	
+	/**
+	 * List Enabled Licences
+	*/
+	
 	public function list_enabled_get()
 	{
 			$this->load->model('licences_model');
@@ -103,10 +107,90 @@ class Licences extends Orbital_Controller {
 
 			$response->status = TRUE;
 			$this->response($response, 200);
-			
-		
-	}
 
+	}
+	
+	/**
+	 * Get Licence
+	*/
+	
+	public function specific_get($identifier)
+	{
+	
+		$this->load->model('licences_model');
+	
+		if ($user = $this->access->valid_user(array('administration')))
+		{
+			if ($this->access->user_has_permission($user, 'licences'))
+			{
+				if ($licence = $this->licences_model->get_licence($identifier))
+				{
+					$response->status = TRUE;
+					$response->licence = $licence;
+					$this->response($response, 200);
+				}
+				else
+				{
+					$response->status = FALSE;
+					$this->response($response, 404);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Update Licence
+	*/
+	
+	public function specific_post($identifier)
+	{
+	
+		if ($user = $this->access->valid_user(array('administration')))
+		{
+			if ($this->access->user_has_permission($user, 'licences'))
+			{
+				if ($this->post('name') && $this->post('shortname') && $this->post('uri'))
+				{
+				
+					$this->load->model('licences_model');
+				
+					if ($this->post('enable'))
+					{
+						if ($this->licences_model->update_licence($identifier, $this->post('name'), $this->post('shortname'), $this->post('uri'), $this->post('enable')))
+						{
+							$response->status = TRUE;
+							$this->response($response, 200);
+						}
+						else
+						{
+							$response->status = FALSE;
+							$this->response($response, 500);
+						}
+					}
+					else
+					{
+						if ($this->licences_model->update_licence($identifier, $this->post('name'), $this->post('shortname'), $this->post('uri')))
+						{
+							$response->status = TRUE;
+							$this->response($response, 200);
+						}
+						else
+						{
+							$response->status = FALSE;
+							$this->response($response, 500);
+						}
+					}
+				
+				}
+				else
+				{
+					$response->message = 'Missing parameters in request.';
+					$response->status = FALSE;
+					$this->response($response, 400);
+				}
+			}
+		}
+	}
 }
 
 // End of file projects.php

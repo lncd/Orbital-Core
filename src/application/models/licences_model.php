@@ -138,6 +138,36 @@ class Licences_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function update_licence($id, $name, $shortname, $uri, $enable = FALSE)
+	{
+		
+		if ($this->get_licence($id))
+		{
+		
+			$update = array(
+				'licence_name_full' => $name,
+				'licence_name_short' => $shortname,
+				'licence_summary_uri' => $uri,
+				'licence_enabled' => (bool) $enable
+			);
+		
+			if ($this->db
+				->where('licence_id', $id)
+				->update('licences', $update))
+			{
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file licences.php
