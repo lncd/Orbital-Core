@@ -67,7 +67,7 @@ class Files_model extends CI_Model {
 
 	function validate_otk($key, $identifier)
 	{
-		if ($this->db->where('otk_token', $key)->where('otk_file', $identifier)->where('otk_expires >', date('Y-m-d H:i:s', time())))
+		if ($this->db->where('otk_token', $key)->where('otk_file', $identifier)->where('otk_expires >', date('Y-m-d H:i:s', time())->get('archive_otks')))
 		{
 			$this->db->where('otk_token', $key)->delete('archive_otks');
 			return TRUE;
@@ -212,7 +212,8 @@ class Files_model extends CI_Model {
 				'status' => $archive_file->file_upload_status,
 				'uploaded_by' => $archive_file->file_uploaded_by,
 				'timestamp' => $archive_file->file_uploaded_timestamp,
-				'project' => $archive_file->project_id
+				'project' => $archive_file->project_id,
+				'project_name' => $archive_file->project_name
 			);
 		}
 		else
@@ -226,6 +227,7 @@ class Files_model extends CI_Model {
 	{
 		if ($archive_file = $this->db
 			->where('file_id', $identifier)
+			->join('projects', 'project_id = file_project')
 			->get('archive_files'))
 		{
 			$archive_file = $archive_file->row();
@@ -237,7 +239,8 @@ class Files_model extends CI_Model {
 				'extension' => $archive_file->file_extension,
 				'mimetype' => $archive_file->file_mimetype,
 				'project' => $archive_file->file_project,
-				'licence' => $archive_file->file_licence
+				'licence' => $archive_file->file_licence,
+				'project_name' => $archive_file->project_name
 			);
 		}
 		else

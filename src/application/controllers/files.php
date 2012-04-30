@@ -54,6 +54,7 @@ class Files extends Orbital_Controller {
 	public function get_otk_get($identifier)
 	{
 		$this->load->model('files_model');
+		$this->load->model('projects_model');
 		
 		$file = $this->files_model->file_get_details($identifier);
 
@@ -67,7 +68,7 @@ class Files extends Orbital_Controller {
 		{
 			if ($user = $this->access->valid_user(array('archivefiles_read')))
 			{
-				if ($user_has_project_permission($user, $file->project, 'p_proj_archive_read', $softfail = FALSE))
+				if ($this->projects_model->get_permissions_project_user($user, $file['project']))
 				{
 					$response->status = TRUE;
 					$response->otk = $this->files_model->get_otk($identifier);
