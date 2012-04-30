@@ -95,7 +95,7 @@ class Files extends Orbital_Controller {
 	function upload_post()
 	{
 	
-		if ($this->post('upload_token') === 'foobarbaz' AND $this->post('return_uri'))
+		if ($this->post('upload_token') === 'cqlksLM7HmLDktcOo51qSnzqLlRMzIYPwax7lrM0OY6gR04r6232HBdVu49kSBOC' AND $this->post('return_uri'))
 		{
 	
 			$allowed_types = array(
@@ -104,6 +104,7 @@ class Files extends Orbital_Controller {
 				'docx',
 				'gif',
 				'jpg',
+				'md',
 				'pdf',
 				'png',
 				'rar',
@@ -118,7 +119,7 @@ class Files extends Orbital_Controller {
 			$config['upload_path'] = $this->config->item('orbital_storage_directory') . '/';
 			$config['allowed_types'] = implode('|', $allowed_types);
 			$config['max_size']	= '204800';
-			$config['encrypt_name']  = 'true';
+			$config['file_name'] = 'foospot';
 	
 			$this->load->library('upload', $config);
 	
