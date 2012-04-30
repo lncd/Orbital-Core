@@ -105,6 +105,7 @@ class Projects extends Orbital_Controller {
 					$response->permissions = $this->projects_model->get_permissions_project_user($user, $identifier);
 					$response->users = $this->projects_model->get_project_users($identifier);
 					$response->archive_files = $this->files_model->list_for_project($identifier);
+					$response->upload_token = $this->files_model->get_upload_token($identifier, $user);
 
 
 					$response->status = TRUE;

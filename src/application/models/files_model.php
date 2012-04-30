@@ -102,7 +102,7 @@ class Files_model extends CI_Model {
 			'aut_expires' => date('Y-m-d H:i:s', time() + 300)
 		);
 	
-		$this->db->where('aut_user', $user)->where('aut_project', $project)->delete('archive_otks');
+		$this->db->where('aut_user', $user)->where('aut_project', $project)->delete('archive_upload_tokens');
 	
 		if ($this->db->insert('archive_upload_tokens', $insert))
 		{
@@ -126,18 +126,18 @@ class Files_model extends CI_Model {
 
 	function validate_upload_token($token)
 	{
-		$token = $this->db
+		$token_data = $this->db
 			->where('aut_token', $token)
 			->where('aut_expires >', date('Y-m-d H:i:s', time()))
 			->get('archive_upload_tokens');
 		
-		if ($token->num_rows() === 1)
+		if ($token_data->num_rows() === 1)
 		{
-			$token = $token->row();
-			//$this->db->where('aut_token', $token)->delete('archive_upload_tokens');
+			$token_data = $token_data->row();
+			$this->db->where('aut_token', $token)->delete('archive_upload_tokens');
 			return array(
-				'project' => $token->aut_project,
-				'user' => $token->aut_user
+				'project' => $token_data->aut_project,
+				'user' => $token_data->aut_user
 			);
 		}
 		else
@@ -150,6 +150,7 @@ class Files_model extends CI_Model {
 	{
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
+			->order_by('file_original_name')
 			->get('archive_files'))
 		{
 			$output = array();
@@ -178,6 +179,7 @@ class Files_model extends CI_Model {
 			->where('file_project', $identifier)
 			->where('file_visibility', 'public')
 			->where('file_upload_status', 'uploaded')
+			->order_by('file_original_name')
 			->get('archive_files'))
 		{
 			$output = array();
