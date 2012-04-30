@@ -110,6 +110,12 @@ class Projects extends Orbital_Controller {
 					$response->status = TRUE;
 					$this->response($response, 200);
 				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'You do not have permission to access this project.';
+					$this->response($response, 401);
+				}
 			}
 			else
 			{
