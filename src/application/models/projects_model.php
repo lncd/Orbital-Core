@@ -168,7 +168,7 @@ class Projects_model extends CI_Model {
 
 		if ($this->db->insert('projects', $insert))
 			{ $this->load->model('permissions');
-			$this->add_permission($identifier, $user, TRUE, TRUE, TRUE, TRUE, TRUE);
+			$this->add_permission($identifier, $user, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);
 
 			return $identifier;
 		}
