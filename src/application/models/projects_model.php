@@ -50,7 +50,8 @@ class Projects_model extends CI_Model {
 					'end_date' => $project->project_end,
 					'research_group' => $project->project_research_group,
 					'public_view' => $project->project_public_view,
-					'default_licence' => $project->project_default_licence
+					'default_licence' => $project->project_default_licence,
+					'google_analytics' => $project->project_google_analytics
 					); 
 			}
 			else
