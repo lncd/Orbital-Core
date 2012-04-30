@@ -52,9 +52,6 @@ class Files_model extends CI_Model {
 		{
 			return FALSE;
 		}
-
-
-
 	}
 
 	/**
@@ -73,6 +70,67 @@ class Files_model extends CI_Model {
 		if ($this->db->where('otk_token', $key)->where('otk_file', $identifier)->where('otk_expires >', date('Y-m-d H:i:s', time())))
 		{
 			$this->db->where('otk_token', $key)->delete('archive_otks');
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Get Upload Token
+	 *
+	 * Generates a one-time token to upload to a project.
+	 *
+	 * @param string $project Identifier of project.
+	 * @param string $user    Identifier of user.
+	 *
+	 * @return string|false The token, or FALSE if the file does not exist.
+	 */
+
+	function get_upload_token($project, $user)
+	{
+		$token = random_string('alnum', 64);
+		$insert = array(
+			'aut_token' => $token,
+			'aut_user' => $user,
+			'aut_project' => $project,
+			'aut_expires' => date('Y-m-d H:i:s', time() + 300)
+		);
+	
+		$this->db->where('aut_user', $user)->where('aut_project', $project)->delete('archive_otks');
+	
+		if ($this->db->insert('archive_upload_tokens', $insert))
+		{
+			return $token;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Validate Upload Token
+	 *
+	 * Validates an upload token and marks it as used.
+	 *
+	 * @param string $token Token to validate.
+	 *
+	 * @return bool TRUE if key is valid, FALSE if not.
+	 */
+
+	function validate_upload_token($token)
+	{
+		$token = $this->db
+			->where('aut_token', $token)
+			->where('otk_expires >', date('Y-m-d H:i:s', time()))
+			->get('archive_upload_tokens');
+			
+		if ($token->num_rows() === 1)
+		{
+			$this->db->where('aut_token', $token)->delete('archive_upload_tokens');
 			return TRUE;
 		}
 		else
