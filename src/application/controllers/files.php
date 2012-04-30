@@ -91,6 +91,51 @@ class Files extends Orbital_Controller {
 
 		}
 	}
+	
+	function upload_post()
+	{
+	
+		if ($this->post('upload_token') === 'foobarbaz' AND $this->post('return_uri'))
+		{
+	
+			$allowed_types = array(
+				'csv',
+				'doc',
+				'docx',
+				'gif',
+				'jpg',
+				'pdf',
+				'png',
+				'rar',
+				'sql',
+				'txt',
+				'xls',
+				'xlsx',
+				'xml',
+				'zip',
+			);
+		
+			$config['upload_path'] = $this->config->item('orbital_storage_directory') . '/';
+			$config['allowed_types'] = implode('|', $allowed_types);
+			$config['max_size']	= '204800';
+			$config['encrypt_name']  = 'true';
+	
+			$this->load->library('upload', $config);
+	
+			if ($this->upload->do_upload('file'))
+			{
+				$this->output->set_header('Location: ' . $this->post('return_uri') . '?message=Upload%20successful.');
+			}
+			else
+			{
+				$this->output->set_header('Location: ' . $this->post('return_uri') . '?error=' . urlencode($this->upload->display_errors()));
+			}
+		}
+		else
+		{
+			echo 'Oh no!';
+		}
+	}
 }
 
 // End of file projects.php
