@@ -96,46 +96,92 @@ class Files extends Orbital_Controller {
 	function upload_post()
 	{
 	
-		if ($this->post('upload_token') === 'cqlksLM7HmLDktcOo51qSnzqLlRMzIYPwax7lrM0OY6gR04r6232HBdVu49kSBOC' AND $this->post('return_uri'))
+		if ($this->post('upload_token') AND $this->post('return_uri') AND $this->post('licence'))
 		{
-	
-			$allowed_types = array(
-				'csv',
-				'doc',
-				'docx',
-				'gif',
-				'jpg',
-				'md',
-				'pdf',
-				'png',
-				'rar',
-				'sql',
-				'txt',
-				'xls',
-				'xlsx',
-				'xml',
-				'zip',
-			);
 		
-			$config['upload_path'] = $this->config->item('orbital_storage_directory') . '/';
-			$config['allowed_types'] = implode('|', $allowed_types);
-			$config['max_size']	= '204800';
-			$config['file_name'] = 'foospot';
-	
-			$this->load->library('upload', $config);
-	
-			if ($this->upload->do_upload('file'))
+			$this->load->model('files_model');
+		
+			if ($token = $this->files_model->validate_upload_token($this->post('upload_token')))
 			{
-				$this->output->set_header('Location: ' . $this->post('return_uri') . '?message=Upload%20successful.');
+	
+				$allowed_types = array(
+					'csv',
+					'doc',
+					'docx',
+					'gif',
+					'jpg',
+					'md',
+					'pdf',
+					'png',
+					'rar',
+					'sql',
+					'txt',
+					'xls',
+					'xlsx',
+					'xml',
+					'zip',
+				);
+				
+				$file_id = $this->files_model->get_file_id();
+			
+				$config['upload_path'] = $this->config->item('orbital_storage_directory') . '/';
+				$config['allowed_types'] = implode('|', $allowed_types);
+				$config['max_size']	= '204800';
+				$config['file_name'] = $file_id;
+		
+				$this->load->library('upload', $config);
+		
+				if ($this->upload->do_upload('file'))
+				{
+					
+					$file_data = $this->upload->data();
+					
+					if ($this->post('public') === 'public')
+					{
+						$file_visibility = 'public';
+					}
+					else
+					{
+						$file_visibility = 'private';
+					}
+					
+					if ($this->files_model->add_file(
+						$file_id,
+						$file_data['client_name'],
+						substr($file_data['file_ext'], 1),
+						$file_data['file_type'],
+						$token['project'],
+						(int) $this->post('licence'),
+						$file_visibility,
+						'staged',
+						$token['user']
+						
+					))
+					{
+						$this->output->set_header('Location: ' . $this->post('return_uri') . '?message=Upload%20successful.');
+					}
+					else
+					{
+						$this->output->set_header('Location: ' . $this->post('return_uri') . '?error=Something%20went%20wrong.');
+					}
+				}
+				else
+				{
+					$this->output->set_header('Location: ' . $this->post('return_uri') . '?error=' . urlencode($this->upload->display_errors()));
+				}
 			}
 			else
 			{
-				$this->output->set_header('Location: ' . $this->post('return_uri') . '?error=' . urlencode($this->upload->display_errors()));
+				$response->status = FALSE;
+				$response->message = 'An invalid upload token was presented.';
+				$this->response($response, 401);
 			}
 		}
 		else
 		{
-			echo 'Oh no!';
+			$response->status = FALSE;
+			$response->message = 'No upload token was presented.';
+			$this->response($response, 401);
 		}
 	}
 }

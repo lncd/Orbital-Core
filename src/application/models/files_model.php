@@ -125,13 +125,17 @@ class Files_model extends CI_Model {
 	{
 		$token = $this->db
 			->where('aut_token', $token)
-			->where('otk_expires >', date('Y-m-d H:i:s', time()))
+			->where('aut_expires >', date('Y-m-d H:i:s', time()))
 			->get('archive_upload_tokens');
-			
+		
 		if ($token->num_rows() === 1)
 		{
-			$this->db->where('aut_token', $token)->delete('archive_upload_tokens');
-			return TRUE;
+			$token = $token->row();
+			//$this->db->where('aut_token', $token)->delete('archive_upload_tokens');
+			return array(
+				'project' => $token->aut_project,
+				'user' => $token->aut_user
+			);
 		}
 		else
 		{
@@ -242,6 +246,35 @@ class Files_model extends CI_Model {
 				'licence' => $archive_file->file_licence,
 				'project_name' => $archive_file->project_name
 			);
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function get_file_id()
+	{
+		return random_string('alnum', 16);
+	}
+	
+	function add_file($id, $originalname, $extension, $mimetype, $project, $licence, $visibility, $status, $uploader)
+	{
+		$insert = array(
+			'file_id' => $id,
+			'file_original_name' => $originalname,
+			'file_extension' => $extension,
+			'file_mimetype' => $mimetype,
+			'file_project' => $project,
+			'file_licence' => $licence,
+			'file_visibility' => $visibility,
+			'file_upload_status' => $status,
+			'file_uploaded_by' => $uploader
+		);
+		
+		if ($this->db->insert('archive_files', $insert))
+		{
+			return TRUE;
 		}
 		else
 		{
