@@ -43,6 +43,10 @@ $route['404_override'] = '';
 $route['project/(:any)/datasets'] = "projects/datasets/$1";
 $route['project/(:any)/public'] = "projects/view_public/$1";
 $route['project/(:any)'] = "projects/view/$1";
+$route['file/(:any)/download'] = "files/download/$1";
+$route['file/(:any)/get_otk'] = "files/get_otk/$1";
+$route['file/(:any)'] = "files/file_view/$1";
+
 
 $route['licences/enabled'] = "licences/list_enabled";
 $route['licence/(:num)'] = "licences/specific/$1";
