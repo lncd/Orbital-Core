@@ -67,7 +67,10 @@ class Files_model extends CI_Model {
 
 	function validate_otk($key, $identifier)
 	{
-		if ($this->db->where('otk_token', $key)->where('otk_file', $identifier)->where('otk_expires >', date('Y-m-d H:i:s', time())->get('archive_otks')))
+		if ($this->db->where('otk_token', $key)
+				->where('otk_file', $identifier)
+				->where('otk_expires >', date('Y-m-d H:i:s', time()))
+				->get('archive_otks'))
 		{
 			$this->db->where('otk_token', $key)->delete('archive_otks');
 			return TRUE;
