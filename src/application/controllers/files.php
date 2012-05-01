@@ -184,6 +184,16 @@ class Files extends Orbital_Controller {
 			$this->response($response, 401);
 		}
 	}
+	
+	function process_queue()
+	{
+		// Connect
+		$auth = new CF_Authentication($USERNAME, $KEY);
+		$auth->authenticate();
+		$conn = new CF_Connection($auth);
+		
+		
+	}
 }
 
 // End of file projects.php

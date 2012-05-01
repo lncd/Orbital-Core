@@ -119,22 +119,16 @@ class Licences extends Orbital_Controller {
 	
 		$this->load->model('licences_model');
 	
-		if ($user = $this->access->valid_user(array('administration')))
+		if ($licence = $this->licences_model->get_licence($identifier))
+		{	
+			$response->status = TRUE;
+			$response->licence = $licence;
+			$this->response($response, 200);
+		}
+		else
 		{
-			if ($this->access->user_has_permission($user, 'licences'))
-			{
-				if ($licence = $this->licences_model->get_licence($identifier))
-				{
-					$response->status = TRUE;
-					$response->licence = $licence;
-					$this->response($response, 200);
-				}
-				else
-				{
-					$response->status = FALSE;
-					$this->response($response, 404);
-				}
-			}
+			$response->status = FALSE;
+			$this->response($response, 404);
 		}
 	}
 	
