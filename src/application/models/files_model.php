@@ -240,6 +240,7 @@ class Files_model extends CI_Model {
 		if ($archive_file = $this->db
 			->where('file_id', $identifier)
 			->join('projects', 'project_id = file_project')
+			->join('licences', 'licence_id = file_licence')
 			->get('archive_files'))
 		{
 			$archive_file = $archive_file->row();
@@ -252,7 +253,9 @@ class Files_model extends CI_Model {
 				'mimetype' => $archive_file->file_mimetype,
 				'project' => $archive_file->file_project,
 				'licence' => $archive_file->file_licence,
-				'project_name' => $archive_file->project_name
+				'project_name' => $archive_file->project_name,
+				'licence_name' => $archive_file->licence_name_full,
+				'licence_uri' => $archive_file->licence_summary_uri
 			);
 		}
 		else

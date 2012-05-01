@@ -104,6 +104,9 @@ class Licences_model extends CI_Model {
 					'name' => $licence->licence_name_full,
 					'uri' => $licence->licence_summary_uri,
 					'enabled' => (bool) $licence->licence_enabled,
+					'summary' => (bool) $licence->licence_summary,
+					'allow_list' => (bool) $licence->licence_allow_list,
+					'forbid_list' => (bool) $licence->licence_forbid_list,
 					'in_use' => $in_use
 				);
 			}
