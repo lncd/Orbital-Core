@@ -252,6 +252,7 @@ class Files_model extends CI_Model {
 				'extension' => $archive_file->file_extension,
 				'mimetype' => $archive_file->file_mimetype,
 				'project' => $archive_file->file_project,
+				'status' => $archive_file->file_upload_status,
 				'licence' => $archive_file->file_licence,
 				'project_name' => $archive_file->project_name,
 				'licence_name' => $archive_file->licence_name_full,
