@@ -200,7 +200,7 @@ class Files extends Orbital_Controller {
 					if ($this->storage_rackspacecloud->save($this->config->item('orbital_storage_directory') . $queued_file['file_id'] . '.' . $queued_files['file_extension'], $queued_files['file_project'], '', $queued_file['file_project']))
 					{
 						//Delete local copy
-						unlink(this->config->item('orbital_storage_directory') . $queued_file['file_id'] . '.' . $queued_files['file_extension']);
+						unlink($this->config->item('orbital_storage_directory') . $queued_file['file_id'] . '.' . $queued_files['file_extension']);
 						return TRUE;						
 					}
 				
