@@ -192,7 +192,35 @@ class Projects extends Orbital_Controller {
 			{
 				if ($this->access->user_has_project_permission($user, $identifier, 'write'))
 				{
-					if ($project = $this->projects_model->update_project($identifier, $this->put('name'), $this->put('abstract'), $this->put('research_group'), $this->put('start_date'), $this->put('end_date'), $this->put('default_licence')))
+				
+					if ($this->put('start_date') !== '')
+					{
+						$startdate = $this->put('start_date');
+					}
+					else
+					{
+						$startdate = NULL;
+					}
+					
+					if ($this->put('end_date') !== '')
+					{
+						$enddate = $this->put('end_date');
+					}
+					else
+					{
+						$enddate = NULL;
+					}
+					
+					if ($this->put('google_analytics') !== '')
+					{
+						$ga = $this->put('google_analytics');
+					}
+					else
+					{
+						$ga = NULL;
+					}
+				
+					if ($project = $this->projects_model->update_project($identifier, $this->put('name'), $this->put('abstract'), $this->put('research_group'), $startdate, $enddate, $this->put('default_licence'), array('project_public_view' =>$this->put('public_view'), 'project_google_analytics' => $ga)))
 					{
 						$response->project = $project;
 						$response->status = TRUE;
