@@ -172,6 +172,21 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function set_file_status($identifier, $status)
+	{
+		if ($this->db->where('file_id', $identifier)
+			->update('archive_files', array('file_upload_status' => $status)))
+			
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
 
 	function list_public_for_project($identifier)
 	{

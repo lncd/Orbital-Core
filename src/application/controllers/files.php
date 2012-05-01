@@ -185,34 +185,48 @@ class Files extends Orbital_Controller {
 		}
 	}
 	
-	function process_queue()
+	function process_queue_get()
 	{
 		if ($queued_files = $this->db
 			->where('file_upload_status', 'staged')
-			->order_by('staged')
+			->order_by('file_uploaded_timestamp')
 			->get('archive_files'))
 			{
-				foreach($queued_files as $queued_file)
-				{
+			if ($queued_files->num_rows() > 0)
+			{
+				$queued_file = $queued_files->row();
 					$this->load->library('storage/storage_rackspacecloud');
+					$this->load->model('files_model');
+					$this->files_model->set_file_status($queued_file->file_id, 'uploading');
 					
 					//Upload
-					if ($this->storage_rackspacecloud->save($this->config->item('orbital_storage_directory') . $queued_file['file_id'] . '.' . $queued_files['file_extension'], $queued_files['file_project'], '', $queued_file['file_project']))
+					if ($this->storage_rackspacecloud->save($this->config->item('orbital_storage_directory') . '/' . $queued_file->file_id . '.' . $queued_file->file_extension, $queued_file->file_id . '.' . $queued_file->file_extension, array(), $queued_file->file_project))
 					{
+					
 						//Delete local copy
-						unlink($this->config->item('orbital_storage_directory') . $queued_file['file_id'] . '.' . $queued_files['file_extension']);
-						return TRUE;						
+						
+						//unlink($this->config->item('orbital_storage_directory') . '/' . $queued_file->file_id . '.' . $queued_file->file_extension);
+						echo 'OK';			
+						
+						$this->files_model->set_file_status($queued_file->file_id, 'uploaded');			
 					}
-				
+					else
+					{
+						$this->files_model->set_file_status($queued_file->file_id, 'upload_error_hard');
+						echo 'Upload file ' . $queued_file->file_id . '.' . $queued_file->file_extension . ' Failed';
+					}
 				}
+				else
+				{
+					echo 'No files to process';
+				}			
 			}
-	
-		// Connect
-		$auth = new CF_Authentication($USERNAME, $KEY);
-		$auth->authenticate();
-		$conn = new CF_Connection($auth);
-		
-		
+			else
+			{
+				$this->files_model->set_file_status($queued_file->file_id, 'upload_error_soft');
+				echo 'Database query failed';
+			}
+				
 	}
 }
 
