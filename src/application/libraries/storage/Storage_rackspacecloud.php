@@ -41,21 +41,12 @@ class Storage_rackspacecloud {
 	 * @param bool   $public    If the project is publicly accessible.
 	 */
 
-	function save($file_location, $identifier, $metadata, $container, $public = FALSE)
+	function save($file_location, $identifier, $metadata, $container)
 	{
 		try
 		{
-			//If public, container name = project_public:identifier else project:identifier
-
-			if ($public === TRUE)
-			{
-				$container = 'project_public:' . $container;
-			}
-			else
-			{
-				$container = 'project:' . $container;
-			}
-
+			$container = 'project:' . $container;
+			
 			//Create an perform authentication request
 			$auth = new CF_Authentication('lncd', 'aabbd85ab833dc2ad3cf3f1e51a5e643', NULL, UK_AUTHURL);
 			$auth->authenticate();
@@ -69,10 +60,6 @@ class Storage_rackspacecloud {
 			catch(Exception $e)
 			{
 				$cf_container = $conn->create_container($container);
-				if ($public === TRUE)
-				{
-					$cf_container->make_public();
-				}
 			}
 
 			//Check if file exists, else upload it
@@ -89,14 +76,8 @@ class Storage_rackspacecloud {
 				//Upload local File's content
 				$doc->load_from_filename($file_location);
 			}
-			if ($doc->public_uri() !== NULL)
-			{
-				return $doc->public_uri();
-			}
-			else
-			{
 				return TRUE;
-			}
+			
 		}
 		catch (Exception $e)
 		{

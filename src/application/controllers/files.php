@@ -187,6 +187,26 @@ class Files extends Orbital_Controller {
 	
 	function process_queue()
 	{
+		if ($queued_files = $this->db
+			->where('file_upload_status', 'staged')
+			->order_by('staged')
+			->get('archive_files'))
+			{
+				foreach($queued_files as $queued_file)
+				{
+					$this->load->library('storage/storage_rackspacecloud');
+					
+					//Upload
+					if ($this->storage_rackspacecloud->save($this->config->item('orbital_storage_directory') . $queued_file['file_id'] . '.' . $queued_files['file_extension'], $queued_files['file_project'], '', $queued_file['file_project']))
+					{
+						//Delete local copy
+						unlink(this->config->item('orbital_storage_directory') . $queued_file['file_id'] . '.' . $queued_files['file_extension']);
+						return TRUE;						
+					}
+				
+				}
+			}
+	
 		// Connect
 		$auth = new CF_Authentication($USERNAME, $KEY);
 		$auth->authenticate();
