@@ -107,6 +107,7 @@ class Licences_model extends CI_Model {
 					'summary' => $licence->licence_summary,
 					'allow_list' => $licence->licence_allow_list,
 					'forbid_list' => $licence->licence_forbid_list,
+					'condition_list' => $licence->licence_condition_list,
 					'in_use' => $in_use
 				);
 			}
