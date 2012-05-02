@@ -81,6 +81,12 @@ class Auth extends Orbital_Controller {
 			$this->load->view('error', array('message' => 'Client ID, redirect URI or response type not present in sign-in request.'));
 		}
 	}
+	
+	function signout_get($endpoint)
+	{
+		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
+		$this->auth_endpoint->signout();
+	}
 
 	/**
 	 * Callback marshalling

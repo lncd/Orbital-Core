@@ -41,6 +41,11 @@ class Auth_demo {
 		
 		return $return;
 	}
+	
+	function signout()
+	{
+		header('Location: https://orbital-manager');
+	}
 
 }
 
