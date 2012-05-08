@@ -245,12 +245,11 @@ class Projects extends Orbital_Controller {
 
 	public function view_delete($identifier)
 	{
+		$this->load->model('projects_model');
 		if ($this->projects_model->is_deletable($identifier))
 		{
 			if ($user = $this->access->valid_user(array('projects')))
 			{
-				$this->load->model('projects_model');
-	
 				//Check project exists
 				if($project = $this->projects_model->get_project($identifier))
 				{
