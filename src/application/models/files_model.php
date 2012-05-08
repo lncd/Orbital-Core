@@ -239,6 +239,7 @@ class Files_model extends CI_Model {
 				'timestamp' => $archive_file->file_uploaded_timestamp,
 				'project' => $archive_file->project_id,
 				'project_name' => $archive_file->project_name,
+				'project_public_view' => $archive_file->project_public_view,
 				'licence_name' => $archive_file->licence_name_full,
 				'licence_uri' => $archive_file->licence_summary_uri
 			);
