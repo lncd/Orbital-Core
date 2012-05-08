@@ -289,11 +289,11 @@ class Projects_model extends CI_Model {
 	{
 		if ($this->get_project($identifier))
 		{
-			if (count($this->list_archive_files($identifier) > 0))
+			if (count($this->list_public_archive_files($identifier)) > 0)
 			{
 				return FALSE;
 			}
-			if (count($this->list_public_datasets($identifier) > 0))
+			if (count($this->list_public_datasets($identifier)) > 0)
 			{
 				return FALSE;
 			}

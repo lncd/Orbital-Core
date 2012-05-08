@@ -258,6 +258,7 @@ class Projects extends Orbital_Controller {
 						if ($project = $this->projects_model->delete_project($identifier))
 						{
 							$response->project = $project;
+							$response->error = 'An unspecified error occured in deleting the project.';
 							$response->status = TRUE;
 							$this->response($response, 200); // 200 being the HTTP response code
 						}
