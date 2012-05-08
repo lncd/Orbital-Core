@@ -245,35 +245,44 @@ class Projects extends Orbital_Controller {
 
 	public function view_delete($identifier)
 	{
-		if ($user = $this->access->valid_user(array('projects')))
+		if ($this->projects_model->is_deletable($identifier))
 		{
-			$this->load->model('projects_model');
-
-			//Check project exists
-			if($project = $this->projects_model->get_project($identifier))
+			if ($user = $this->access->valid_user(array('projects')))
 			{
-				if ($this->access->user_has_project_permission($user, $identifier, 'delete'))
+				$this->load->model('projects_model');
+	
+				//Check project exists
+				if($project = $this->projects_model->get_project($identifier))
 				{
-					if ($project = $this->projects_model->delete_project($identifier))
+					if ($this->access->user_has_project_permission($user, $identifier, 'delete'))
 					{
-						$response->project = $project;
-						$response->status = TRUE;
-						$this->response($response, 200); // 200 being the HTTP response code
-					}
-					else
-					{
-						$response->status = FALSE;
-						$response->error = 'An unspecified error occured in deleting the project.';
-						$this->response($response, 400);
+						if ($project = $this->projects_model->delete_project($identifier))
+						{
+							$response->project = $project;
+							$response->status = TRUE;
+							$this->response($response, 200); // 200 being the HTTP response code
+						}
+						else
+						{
+							$response->status = FALSE;
+							$response->error = 'An unspecified error occured in deleting the project.';
+							$this->response($response, 400);
+						}
 					}
 				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'The specified project does not exist.';
+					$this->response($response, 404);
+				}
 			}
-			else
-			{
-				$response->status = FALSE;
-				$response->error = 'The specified project does not exist.';
-				$this->response($response, 404);
-			}
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'The specified project cannot be deleted.';
+			$this->response($response, 409);
 		}
 	}
 
