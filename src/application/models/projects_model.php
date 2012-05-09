@@ -101,7 +101,7 @@ class Projects_model extends CI_Model {
 		}		
 	}
 	
-	function list_public_datasets($identifier)
+	function list_datasets($identifier)
 	{
 		if ($datasets = $this->db->where('dset_project', $identifier)->where('dset_visibility', 'public')->get('datasets'))
 		{
@@ -289,11 +289,11 @@ class Projects_model extends CI_Model {
 	{
 		if ($this->get_project($identifier))
 		{
-			if (count($this->list_public_archive_files($identifier)) > 0)
+			if (count($this->list_archive_files($identifier)) > 0)
 			{
 				return FALSE;
 			}
-			if (count($this->list_public_datasets($identifier)) > 0)
+			if (count($this->list_datasets($identifier)) > 0)
 			{
 				return FALSE;
 			}

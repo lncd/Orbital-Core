@@ -269,6 +269,12 @@ class Projects extends Orbital_Controller {
 							$this->response($response, 400);
 						}
 					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'You do not have permission to delete this project.';
+						$this->response($response, 403);
+					}
 				}
 				else
 				{
@@ -277,11 +283,17 @@ class Projects extends Orbital_Controller {
 					$this->response($response, 404);
 				}
 			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'Not a valid user.';
+				$this->response($response, 403);
+			}
 		}
 		else
 		{
 			$response->status = FALSE;
-			$response->error = 'The specified project cannot be deleted.';
+			$response->error = ' cannot be deleted as it contains files and/or datasets.';
 			$this->response($response, 409);
 		}
 	}
