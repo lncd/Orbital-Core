@@ -1,6 +1,6 @@
 # Orbital Core
 
-This repository is the Orbital Core, responsible for the deposit, storage, retrieval and modification of research data as part of the Orbital project.
+This repository is the Orbital Core, responsible for the deposit, storage, retrieval and modification of research data as part of the Orbital project. See also [Orbital Manager](https://github.com/lncd/Orbital-Manager)
 
 ## The Orbital Project
 
