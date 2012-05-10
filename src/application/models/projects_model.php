@@ -101,6 +101,24 @@ class Projects_model extends CI_Model {
 		}		
 	}
 	
+	function list_datasets($identifier)
+	{
+		if ($datasets = $this->db->where('dset_project', $identifier)->where('dset_visibility', 'public')->get('datasets'))
+		{
+			$output = array();
+			
+			foreach ($datasets->result() as $dataset)
+			{
+				$output[] = $dataset->file_original_name;
+			}
+			return $output;
+		}
+		else
+		{
+			return FALSE;
+		}		
+	}
+	
 	function list_archive_files($identifier)
 	{
 		if ($archive_files = $this->db->where('file_project', $identifier)->get('archive_files'))
@@ -117,23 +135,6 @@ class Projects_model extends CI_Model {
 		{
 			return FALSE;
 		}		
-	}
-	
-	function list_public_files($identifier)
-	{
-		if ($handle = opendir($this->config->item('orbital_storage_directory')/* . '/' . $identifier)*/))
-		{
-			$output = array();
-			while (false !== ($entry = readdir($handle)))
-			{
-				if ($entry != "." && $entry != "..")
-				{
-					$output[] = $entry;
-				}
-			}
-			closedir($handle);
-			return $output;
-		}
 	}
 	
 	function list_user($user, $limit = 20)
@@ -284,6 +285,26 @@ class Projects_model extends CI_Model {
 		}
 	}
 
+	function is_deletable($identifier)
+	{
+		if ($this->get_project($identifier))
+		{
+			if (count($this->list_archive_files($identifier)) > 0)
+			{
+				return FALSE;
+			}
+			if (count($this->list_datasets($identifier)) > 0)
+			{
+				return FALSE;
+			}
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
 	function delete_project($identifier)
 	{
 		// Attempt delete
