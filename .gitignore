@@ -1,3 +1,4 @@
 src/application/libraries/authentication
 src/application/cache
 src/application/logs
+.DS_Store
