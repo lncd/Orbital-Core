@@ -23,4 +23,4 @@ Orbital Core makes use of the following software:
 * The [CodeIgniter](http://codeigniter.com/) Framework
 * [Alex Bilbie](http://httpster.org/)'s [CodeIgniter MongoDB Library](https://github.com/alexbilbie/codeigniter-mongodb-library)
 * [Phil Sturgeon](http://philsturgeon.co.uk/)'s [CodeIgniter REST Server](https://github.com/philsturgeon/codeigniter-restserver)
-* [Sebastian Tschan](http://blueimp.net)'s [jQuery File Upload Plugin PHP Class](https://github.com/blueimp/jQuery-File-Upload)
+* [Andrew Valums's](http://valums.com/)'s [AJAX Uploader](http://valums.com/ajax-upload/)
