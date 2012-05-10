@@ -134,6 +134,7 @@ class Files_model extends CI_Model {
 		if ($token_data->num_rows() === 1)
 		{
 			$token_data = $token_data->row();
+			$this->db->where('aut_token', $token)->delete('archive_upload_tokens');
 			return array(
 				'project' => $token_data->aut_project,
 				'user' => $token_data->aut_user
