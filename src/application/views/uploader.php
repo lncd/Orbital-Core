@@ -24,7 +24,8 @@
 		        token: '<?php echo $token; ?>',
 		        licence: '<?php echo $licence; ?>',
 		        public: 'public'
-		    }
+		    },
+		    maxConnections: 1
         });           
     }
     
