@@ -20,7 +20,7 @@
             sizeLimit: 524288000,
             debug: true,
             params: {
-		        upload_token: '<?php echo $token; ?>',
+		        token: '<?php echo $token; ?>',
 		        licence: '1',
 		        public: 'public'
 		    }
