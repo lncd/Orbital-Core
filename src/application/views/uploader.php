@@ -1,6 +1,12 @@
+<html>
+<head>
+	<title>Orbital File Uploader</title>
+	<link href="/css/fileuploader.css" rel="stylesheet">
+</head>
+
 <div id="file-uploader">		
 	<noscript>			
-		<p>Please enable JavaScript to use file uploader.</p>
+		<p>Your browser does not have JavaScript enabled. Please enable JavaScript to use the Archive Files uploader.</p>
 		<!-- or put a simple form for upload here -->
 	</noscript>         
 </div>
@@ -10,13 +16,13 @@
     function createUploader(){            
         var uploader = new qq.FileUploader({
             element: document.getElementById('file-uploader'),
-            action: 'https://orbital-core/fileuploader',
+            action: 'https://orbital-core/fileupload',
             sizeLimit: 524288000,
             debug: true,
             params: {
-		        upload_token: 'ASdwYffMx1vWrLGuy6zRxL1jbR2ls8dkGW89kAi57TfAcWRTWE7JyscW3uDTKx2K',
-		        return_uri: 'http://example.com',
-		        licence: '1'
+		        upload_token: '<?php echo $token; ?>',
+		        licence: '1',
+		        public: 'public'
 		    }
         });           
     }
@@ -25,3 +31,5 @@
     // don't wait for the window to load  
     window.onload = createUploader;     
 </script>
+
+</html>
