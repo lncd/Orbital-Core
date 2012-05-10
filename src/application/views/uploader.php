@@ -1,6 +1,7 @@
 <html>
 <head>
 	<title>Orbital File Uploader</title>
+	<link href="<?php echo base_url(); ?>css/bootstrap.min.css" rel="stylesheet">
 	<link href="<?php echo base_url(); ?>css/fileuploader.css" rel="stylesheet">
 </head>
 
