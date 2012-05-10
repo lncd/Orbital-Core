@@ -1,7 +1,7 @@
 <html>
 <head>
 	<title>Orbital File Uploader</title>
-	<link href="/css/fileuploader.css" rel="stylesheet">
+	<link href="<?php echo base_url(); ?>css/fileuploader.css" rel="stylesheet">
 </head>
 
 <div id="file-uploader">		
@@ -11,17 +11,17 @@
 	</noscript>         
 </div>
 
-<script src="https://orbital-core/js/fileuploader.js" type="text/javascript"></script>
+<script src="<?php echo base_url(); ?>js/fileuploader.js" type="text/javascript"></script>
 <script>        
     function createUploader(){            
         var uploader = new qq.FileUploader({
             element: document.getElementById('file-uploader'),
-            action: 'https://orbital-core/fileupload',
+            action: '<?php echo site_url('fileupload'); ?>',
             sizeLimit: 524288000,
             debug: true,
             params: {
 		        token: '<?php echo $token; ?>',
-		        licence: '1',
+		        licence: '<?php echo $licence; ?>',
 		        public: 'public'
 		    }
         });           
