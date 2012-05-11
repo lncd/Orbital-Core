@@ -104,16 +104,18 @@ class Fileupload extends CI_Controller {
 			{
 			
 				$this->load->library('session');
+				$this->load->helper('form');
+				$this->load->model('licences_model');
 				$formtoken = random_string('alnum', 16);
 				$this->session->set_userdata('form_' . $formtoken, $tokendata);
 			
 				$data['token'] = $formtoken;
-				$data['licence'] = (int) $this->input->get('licence');
+				$data['default_licence'] = (int) $this->input->get('licence');
 				$this->load->view('uploader', $data);
 			}
 			else
 			{
-				show_404();
+				echo 'Invalid upload token.';
 			}
 		}
 		else

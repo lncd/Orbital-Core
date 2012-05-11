@@ -185,7 +185,29 @@ class Licences extends Orbital_Controller {
 			}
 		}
 	}
+	
+	function licence_json_get($identifier)
+	{
+		$this->load->model('licences_model');
+		$this->load->helper('typography');
+		if ($response = $this->licences_model->get_licence($identifier))
+		{
+			$data['name'] = $response['short_name'];
+			$data['original_name'] = $response['name'];
+			$data['summary_uri'] = $response['uri'];
+			$data['summary'] = htmlspecialchars(auto_typography($response['summary']));
+			$data['allow'] = $response['allow_list'];
+			$data['forbid'] = $response['forbid_list'];
+			$data['conditions'] = $response['condition_list'];
+
+			$this->output->set_output(json_encode($data));
+		}
+		else
+		{
+			show_404();
+		}
+	}
 }
 
-// End of file projects.php
-// Location: ./controllers/projects.php
+// End of file licences.php
+// Location: ./controllers/licences.php
