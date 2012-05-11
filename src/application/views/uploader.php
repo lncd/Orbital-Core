@@ -74,7 +74,7 @@ echo form_dropdown('licence', $file_licences, $default_licence, 'id="licence"');
 					public: $('#public').val()
 				});
 		    },
-		    maxConnections: 1
+		    maxConnections: 2
         });           
     }
     
