@@ -152,7 +152,7 @@ class Files extends Orbital_Controller {
 				}
 				else
 				{
-					echo '<p>Next file in queue is already being uploaded.</p>'';
+					echo '<p>Next file in queue is already being uploaded.</p>';
 				}
 			}
 			else
