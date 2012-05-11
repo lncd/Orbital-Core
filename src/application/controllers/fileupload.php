@@ -20,10 +20,10 @@ require APPPATH.'/libraries/Orbital_Controller.php';
 class Fileupload extends CI_Controller {
 	
 	private $allowedExtensions = array();
-    private $sizeLimit = 524288000;
+    private $sizeLimit = 314572800;
     private $file;
 
-    function __construct(array $allowedExtensions = array(), $sizeLimit = 524288000){
+    function __construct(array $allowedExtensions = array(), $sizeLimit = 314572800){
     
     	parent::__construct();   
        
@@ -49,7 +49,7 @@ class Fileupload extends CI_Controller {
 				// list of valid extensions, ex. array("jpeg", "xml", "bmp")
 				$allowedExtensions = array();
 				// max file size in bytes
-				$sizeLimit = 524288000;
+				$sizeLimit = 314572800;
 				
 				$file_id = $this->files_model->get_file_id();
 				

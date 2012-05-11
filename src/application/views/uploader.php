@@ -65,7 +65,7 @@ echo form_dropdown('licence', $file_licences, $default_licence, 'id="licence"');
         var uploader = new qq.FileUploader({
             element: document.getElementById('file-uploader'),
             action: '<?php echo site_url('fileupload'); ?>',
-            sizeLimit: 524288000,
+            sizeLimit: 314572800,
             debug: true,
 			onSubmit: function(id, fileName){
 		    	uploader.setParams({
