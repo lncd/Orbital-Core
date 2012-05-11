@@ -113,37 +113,48 @@ class Files extends Orbital_Controller {
 	{
 		if ($queued_files = $this->db
 			->where('file_upload_status', 'staged')
+			->or_where('file_upload_status', 'uploading')
 			->order_by('file_uploaded_timestamp')
 			->get('archive_files'))
 			{
 			if ($queued_files->num_rows() > 0)
 			{
 				$queued_file = $queued_files->row();
-					$this->load->library('storage/storage_rackspacecloud');
-					$this->load->model('files_model');
-					$this->files_model->set_file_status($queued_file->file_id, 'uploading');
-					
-					//Upload
-					if ($this->storage_rackspacecloud->save($this->config->item('orbital_storage_directory') . '/' . $queued_file->file_id . '.' . $queued_file->file_extension, $queued_file->file_id . '.' . $queued_file->file_extension, array(), $queued_file->file_project))
-					{
-					
-						//Delete local copy
+				
+				if ($queued_file->file_upload_status === 'staged')
+				{
+			
+					$queued_file = $queued_files->row();
+						$this->load->library('storage/storage_rackspacecloud');
+						$this->load->model('files_model');
+						$this->files_model->set_file_status($queued_file->file_id, 'uploading');
 						
-						//unlink($this->config->item('orbital_storage_directory') . '/' . $queued_file->file_id . '.' . $queued_file->file_extension);
-						echo 'OK';			
+						//Upload
+						if ($this->storage_rackspacecloud->save($this->config->item('orbital_storage_directory') . '/' . $queued_file->file_id . '.' . $queued_file->file_extension, $queued_file->file_id . '.' . $queued_file->file_extension, array(), $queued_file->file_project))
+						{
 						
-						$this->files_model->set_file_status($queued_file->file_id, 'uploaded');			
+							//Delete local copy
+							
+							//unlink($this->config->item('orbital_storage_directory') . '/' . $queued_file->file_id . '.' . $queued_file->file_extension);
+							echo 'OK';			
+							
+							$this->files_model->set_file_status($queued_file->file_id, 'uploaded');			
+						}
+						else
+						{
+							$this->files_model->set_file_status($queued_file->file_id, 'upload_error_hard');
+							echo 'Upload file ' . $queued_file->file_id . '.' . $queued_file->file_extension . ' Failed';
+						}
 					}
 					else
 					{
-						$this->files_model->set_file_status($queued_file->file_id, 'upload_error_hard');
-						echo 'Upload file ' . $queued_file->file_id . '.' . $queued_file->file_extension . ' Failed';
+						echo 'No files to process';
 					}
 				}
 				else
 				{
-					echo 'No files to process';
-				}			
+					echo 'Next file in queue is already being uploaded.';
+				}		
 			}
 			else
 			{
