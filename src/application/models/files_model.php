@@ -309,6 +309,11 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function delete_file($identifier, $project_id)
+	{
+		
+	}
 
 }
 

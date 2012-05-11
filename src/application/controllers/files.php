@@ -139,9 +139,9 @@ class Files extends Orbital_Controller {
 					
 						//Delete local copy
 						
-						//unlink($this->config->item('orbital_storage_directory') . '/' . $queued_file->file_id . '.' . $queued_file->file_extension);
-						echo '<p>File uploaded successfully.</p>';			
-						
+						unlink($this->config->item('orbital_storage_directory') . '/' . $queued_file->file_id . '.' . $queued_file->file_extension);
+						echo '<p>File uploaded successfully.</p>';				
+												
 						$this->files_model->set_file_status($queued_file->file_id, 'uploaded');			
 					}
 					else
