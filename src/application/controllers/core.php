@@ -3,6 +3,19 @@
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
 require APPPATH.'/libraries/Orbital_Controller.php';
 
+/**
+ * Core Functions
+ *
+ * Support functions relating to the operation of the core.
+ *
+ * @package    Orbital
+ * @subpackage Core
+ * @author     Nick Jackson <nijackson@lincoln.ac.uk>
+ * @copyright  2012 University of Lincoln
+ * @licence    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
+ * @link       https://github.com/lncd/Orbital-Core
+ */
+
 class Core extends Orbital_Controller
 {
 
@@ -12,7 +25,7 @@ class Core extends Orbital_Controller
 	 * @access public
 	 */
 
-	public function ping()
+	public function ping_get()
 	{
 	
 		$ping->message = 'pong';
@@ -28,17 +41,17 @@ class Core extends Orbital_Controller
 	 * @access public
 	 */
 	
-	public function auth_types()
+	public function auth_types_get()
 	{
 	
-		$auth_types = $this->mongo_db->get('auth_types');
+		$auth_types = $this->oauth_model->get_handlers();
 	
 		if (count($auth_types) > 0)
 		{
 		
 			foreach ($auth_types as $auth_type)
 			{
-				$auth_type['uri'] = site_url('auth/signin/' . $auth_type['shortname']);
+				$auth_type['uri'] = site_url('auth/signin/' . $auth_type['tag']);
 				$response->auth_types[] = $auth_type;
 			}
 			
@@ -64,12 +77,12 @@ class Core extends Orbital_Controller
 	 * @access public
 	 */
 	
-	public function mongo_server_status()
+	public function mongo_server_status_get()
 	{
 	
 		if ($user = $this->access->valid_user(array('administration')))
 		{
-			if ($this->access->user_has_permission_aspect($user, 'system_admin'))
+			if ($this->access->user_is_admin($user))
 			{
 				if ($status = $this->mongo_db->admin_server_status())
 				{

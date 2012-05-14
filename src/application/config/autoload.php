@@ -52,7 +52,7 @@ $autoload['packages'] = array(APPPATH.'third_party');
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('mongo_db', 'access');
+$autoload['libraries'] = array('mongo_db', 'access', 'database');
 
 
 /*
@@ -109,7 +109,7 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('oauth', 'users');
+$autoload['model'] = array('oauth_model', 'users_model');
 
 
 /* End of file autoload.php */

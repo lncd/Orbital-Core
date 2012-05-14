@@ -5,10 +5,11 @@
  *
  * Access control for Orbital Core.
  *
- * @category   Library
  * @package    Orbital
  * @subpackage Core
- * @autho      Nick Jackson <nijackson@lincoln.ac.uk>
+ * @author     Nick Jackson <nijackson@lincoln.ac.uk>
+ * @copyright  2012 University of Lincoln
+ * @licence    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
  * @link       https://github.com/lncd/Orbital-Core
  *
  * @todo Rewrite to use exceptions.
@@ -50,7 +51,7 @@ class Access {
 		{
 			// Check to see if credentials are valid.
 			
-			if ($this->_ci->oauth->validate_app_credentials($this->_ci->input->server('PHP_AUTH_USER'), NULL, $this->_ci->input->server('PHP_AUTH_PW')))
+			if ($this->_ci->oauth_model->validate_app_credentials($this->_ci->input->server('PHP_AUTH_USER'), NULL, $this->_ci->input->server('PHP_AUTH_PW')))
 			{
 				return $this->_ci->input->server('PHP_AUTH_USER');
 			}
@@ -105,11 +106,11 @@ class Access {
 			if (count($authorisation_header) === 2 && $authorisation_header[0] === 'Bearer')
 			{
 				// Looks the right length, has the right auth type - see if the token is valid.
-				if ($user = $this->_ci->oauth->validate_token(base64_decode($authorisation_header[1])))
+				if ($user = $this->_ci->oauth_model->validate_token(base64_decode($authorisation_header[1])))
 				{
 				
 					// Token is valid, hooray! But does it have the scopes?
-					if ($this->_ci->oauth->validate_scopes(base64_decode($authorisation_header[1]), $scopes))
+					if ($this->_ci->oauth_model->validate_scopes(base64_decode($authorisation_header[1]), $scopes))
 					{
 						return $user;
 					}
@@ -150,36 +151,116 @@ class Access {
 	}
 	
 	/**
-	 * User Has Permission Aspect
+	 * User Is Administrator
 	 *
-	 * Does the specified user have the specified permission aspect?
+	 * Is the specified user a system administrator?
 	 *
 	 * @access public
 	 *
-	 * @param string $user   Email address of the user to test against.
-	 * @param string $aspect Aspect to ensure the user has.
+	 * @param string $user       Email address of the user to test against.
 	 *
-	 * @return bool TRUE if the user has the aspect, FALSE if not.
+	 * @return bool TRUE if the user is an administrator, FALSE if not.
 	 */
 	 
-	function user_has_permission_aspect($user, $aspect)
+	function user_is_admin($user, $softfail = FALSE)
 	{
-		if ($this->_ci->mongo_db->where(array('user' => $user, 'aspect' => $aspect))->get('permissions'))
+	
+		$user = $this->_ci->db
+			->where('user_email', $user)
+			->where('user_permission_admin', 1)
+			->get('users');
+	
+		if ($user->num_rows() === 1)
 		{
 			return TRUE;
 		}
 		else
 		{
-			$this->_ci->output
-				->set_status_header('403')
-				->set_output(json_encode(array(
-					'error' => 'no_permission',
-					'error_description' => 'The current user does not have permission to perform this action.'
-				)));
+		
+			if ($softfail !== TRUE)
+			{
+				$this->_ci->output
+					->set_status_header('403')
+					->set_output(json_encode(array(
+						'error' => 'no_permission',
+						'error_description' => 'The current user does not have permission to perform this action.'
+					)));
+			}
 			return FALSE;
 		}
 	}
-
+		 
+	function user_has_permission($user, $permission, $softfail = FALSE)
+	{
+	
+		$user = $this->_ci->db
+			->where('user_email', $user)
+			->where('user_permission_' . $permission, 1)
+			->get('users');
+	
+		if ($user->num_rows() === 1)
+		{
+			return TRUE;
+		}
+		else
+		{
+		
+			if ($softfail !== TRUE)
+			{
+				$this->_ci->output
+					->set_status_header('403')
+					->set_output(json_encode(array(
+						'error' => 'no_permission',
+						'error_description' => 'The current user does not have permission to perform this action.'
+					)));
+			}
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * User Has Permission
+	 *
+	 * Does the specified user have the specified permission?
+	 *
+	 * @access public
+	 *
+	 * @param string $user       Email address of the user to test against.
+	 * @param string $aspect     Aspect to test for permission.
+	 * @param mixed  $value      Value to see if present.
+	 * @param string $identifier Identifier to test for permission against.
+	 *
+	 * @return bool TRUE if the user has the aspect, FALSE if not.
+	 */
+	 
+	function user_has_project_permission($user, $project, $permission, $softfail = FALSE)
+	{
+		
+	
+		$user = $this->_ci->db
+			->where('p_proj_user', $user)
+			->where('p_proj_project', $project)
+			->where('p_proj_' . $permission, 1)
+			->get('permissions_projects');
+	
+		if ($user->num_rows() === 1)
+		{
+			return TRUE;
+		}
+		else
+		{
+		if ($softfail !== TRUE)
+			{
+				$this->_ci->output
+					->set_status_header('403')
+					->set_output(json_encode(array(
+						'error' => 'no_permission',
+						'error_description' => 'The current user does not have permission to perform this action.'
+					)));
+			}
+			return FALSE;
+		}
+	}
 }
 
 // End of file Access.php

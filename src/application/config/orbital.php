@@ -39,6 +39,14 @@ $config['orbital_contact_name'] = $_SERVER['ORBITAL_CONTACT_NAME'];
 
 $config['orbital_contact_email'] = $_SERVER['ORBITAL_CONTACT_EMAIL'];
 
+/**
+ * Orbital file storage directory
+ *
+ * The local accessible directory where orbital will store files.
+*/
+
+$config['orbital_storage_directory'] = $_SERVER['ORBITAL_STORAGE_DIRECTORY'];
+
 /*
  * Operation Mode
  *
@@ -52,6 +60,14 @@ $config['orbital_contact_email'] = $_SERVER['ORBITAL_CONTACT_EMAIL'];
  *   normal - Normal behaviour.
 */
 $config['orbital_operation_mode'] = $_SERVER['ORBITAL_OPERATION_MODE'];
+
+/**
+ * Cluster Series Number
+ *
+ * A unique ID for this Orbital Core instance if used in a cluster.
+*/
+
+$config['orbital_cluster_sn'] = $_SERVER['ORBITAL_CLUSTER_SN'];
 
 /*
  * Status Messages
@@ -73,7 +89,7 @@ $config['orbital_status_message_readonly'] = 'Orbital is currently in read-only 
  *
  * The version of the Orbital Core.
 */
-$config['orbital_core_version'] = '0.0.2';
+$config['orbital_core_version'] = '0.1';
 
 // End of file orbital.php
 // Location: ./config/orbital.php
