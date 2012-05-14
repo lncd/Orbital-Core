@@ -1,5 +1,6 @@
 <?php
-/**
+ 
+ /**
  * Format class
  *
  * Help convert between various formats such as XML, JSON, CSV, etc.
@@ -7,24 +8,26 @@
  * @author		Phil Sturgeon
  * @license		http://philsturgeon.co.uk/code/dbad-license
  */
+ 
 class Format {
 
 	// Array to convert
 	protected $_data = array();
 
 	// View filename
-	protected $_from_type = null;
+	protected $_from_type = NULL;
 
 	/**
 	 * Returns an instance of the Format object.
 	 *
-	 *     echo $this->format->factory(array('foo' => 'bar'))->to_xml();
+	 * echo $this->format->factory(array('foo' => 'bar'))->to_xml();
 	 *
-	 * @param   mixed  general date to be converted
-	 * @param   string  data format the file was provided in
-	 * @return  Factory
+	 * @param	mixed	general date to be converted
+	 * @param	string	data format the file was provided in
+	 * @return	Factory
 	 */
-	public function factory($data, $from_type = null)
+	 
+	public function factory($data, $from_type = NULL)
 	{
 		// Stupid stuff to emulate the "new static()" stuff in this libraries PHP 5.3 equivilent
 		$class = __CLASS__;
@@ -34,12 +37,13 @@ class Format {
 	/**
 	 * Do not use this directly, call factory()
 	 */
-	public function __construct($data = null, $from_type = null)
+	 
+	public function __construct($data = NULL, $from_type = NULL)
 	{
 		get_instance()->load->helper('inflector');
 		
 		// If the provided data is already formatted we should probably convert it to an array
-		if ($from_type !== null)
+		if ($from_type !== NULL)
 		{
 			if (method_exists($this, '_from_' . $from_type))
 			{
@@ -57,10 +61,14 @@ class Format {
 
 	// FORMATING OUTPUT ---------------------------------------------------------
 
-	public function to_array($data = null)
+	/**
+	 * to_array
+	 */
+	 
+	public function to_array($data = NULL)
 	{
 		// If not just null, but nopthing is provided
-		if ($data === null and ! func_num_args())
+		if ($data === NULL AND ! func_num_args())
 		{
 			$data = $this->_data;
 		}
@@ -69,7 +77,7 @@ class Format {
 
 		foreach ((array) $data as $key => $value)
 		{
-			if (is_object($value) or is_array($value))
+			if (is_object($value) OR is_array($value))
 			{
 				$array[$key] = $this->to_array($value);
 			}
@@ -82,11 +90,14 @@ class Format {
 
 		return $array;
 	}
-
-	// Format XML for output
-	public function to_xml($data = null, $structure = null, $basenode = 'xml')
+	
+	/**
+	 * Format XML for output
+	 */
+	 
+	public function to_xml($data = NULL, $structure = NULL, $basenode = 'xml')
 	{
-		if ($data === null and ! func_num_args())
+		if ($data === NULL AND ! func_num_args())
 		{
 			$data = $this->_data;
 		}
@@ -97,7 +108,7 @@ class Format {
 			ini_set('zend.ze1_compatibility_mode', 0);
 		}
 
-		if ($structure === null)
+		if ($structure === NULL)
 		{
 			$structure = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$basenode />");
 		}
@@ -114,14 +125,14 @@ class Format {
 			if (is_numeric($key))
             {
                 // make string key...           
-                $key = (singular($basenode) != $basenode) ? singular($basenode) : 'item';
+                $key = (singular($basenode) !== $basenode) ? singular($basenode) : 'item';
             }
 
 			// replace anything not alpha numeric
 			$key = preg_replace('/[^a-z_\-0-9]/i', '', $key);
 
             // if there is another array found recrusively call this function
-            if (is_array($value) || is_object($value))
+            if (is_array($value) OR is_object($value))
             {
                 $node = $structure->addChild($key);
 
@@ -132,7 +143,7 @@ class Format {
             else
             {
                 // add single node.
-				$value = htmlspecialchars(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, "UTF-8");
+				$value = htmlspecialchars(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8');
 
 				$structure->addChild($key, $value);
 			}
@@ -141,7 +152,10 @@ class Format {
 		return $structure->asXML();
 	}
 
-	// Format HTML for output
+	/**
+	 * Format HTML for output
+	 */
+	
 	public function to_html()
 	{
 		$data = $this->_data;
@@ -172,7 +186,10 @@ class Format {
 		return $ci->table->generate();
 	}
 
-	// Format HTML for output
+	/**
+	 * Format HTML for output
+	 */
+	 
 	public function to_csv()
 	{
 		$data = $this->_data;
@@ -199,32 +216,48 @@ class Format {
 		return $output;
 	}
 
-	// Encode as JSON
+	/**
+	 * Encode as JSON
+	 */
+	 
 	public function to_json()
 	{
 		return json_encode($this->_data);
 	}
 
-	// Encode as Serialized array
+	/**
+	 * Encode as Serialized array
+	 */
+	 
 	public function to_serialized()
 	{
 		return serialize($this->_data);
 	}
 	
-	// Output as a string representing the PHP structure
+	/**
+	 * Output as a string representing the PHP structure
+	 */
+	 
 	public function to_php()
 	{
 	    return var_export($this->_data, TRUE);
 	}
 
-	// Format XML for output
+	/**
+	 * Format XML for output
+	 */
+	 
 	protected function _from_xml($string)
 	{
 		return $string ? (array) simplexml_load_string($string, 'SimpleXMLElement', LIBXML_NOCDATA) : array();
 	}
 
-	// Format HTML for output
-	// This function is DODGY! Not perfect CSV support but works with my REST_Controller
+
+	/**
+	 * Format HTML for output
+	 * This function is DODGY! Not perfect CSV support but works with my REST_Controller
+	 */
+	 
 	protected function _from_csv($string)
 	{
 		$data = array();
@@ -234,10 +267,10 @@ class Format {
 		$headings = explode(',', array_shift($rows));
 		foreach ($rows as $row)
 		{
-			// The substr removes " from start and end
+			// The substr removes " from start AND end
 			$data_fields = explode('","', trim(substr($row, 1, -1)));
 
-			if (count($data_fields) == count($headings))
+			if (count($data_fields) === count($headings))
 			{
 				$data[] = array_combine($headings, $data_fields);
 			}
@@ -246,13 +279,19 @@ class Format {
 		return $data;
 	}
 
-	// Encode as JSON
+	/**
+	 * Encode as JSON
+	 */
+	 
 	private function _from_json($string)
 	{
 		return json_decode(trim($string));
 	}
 
-	// Encode as Serialized array
+	/**
+	 * Encode as Serialized array
+	 */
+	 
 	private function _from_serialize($string)
 	{
 		return unserialize(trim($string));

@@ -4,7 +4,7 @@
 require APPPATH.'/libraries/Orbital_Controller.php';
 
 /**
- * Files
+ * Fileupload
  *
  * Gets a list of all projects a user has access to.
  *
@@ -18,44 +18,52 @@ require APPPATH.'/libraries/Orbital_Controller.php';
  */
 
 class Fileupload extends CI_Controller {
-	
-	private $allowedExtensions = array();
-    private $sizeLimit = 314572800;
-    private $file;
 
-    function __construct(array $allowedExtensions = array(), $sizeLimit = 314572800){
-    
-    	parent::__construct();   
-       
-    }
-    
+	private $allowedExtensions = array();
+	private $sizeLimit = 314572800;
+	private $file;
+
+	/**
+	 * Constructor
+	 */
+	 
+	function __construct(array $allowedExtensions = array(), $sizeLimit = 314572800){
+
+		parent::__construct();
+
+	}
+
+	/**
+	 * Gets token and uploads to the core
+	 */
+	 
 	function index()
 	{
-	
+
 		$this->load->library('session');
-	
+
 		if ($this->input->get('token') AND $this->input->get('licence'))
 		{
-		
+
 			$this->load->model('files_model');
-		
+
 			if ($token = $this->session->userdata('form_' . $this->input->get('token')))
 			{
-			
+
 				set_time_limit(900);
 
 				$this->load->helper('fileupload');
-				
+
 				// list of valid extensions, ex. array("jpeg", "xml", "bmp")
 				$allowedExtensions = array();
 				// max file size in bytes
 				$sizeLimit = 314572800;
-				
+
 				$file_id = $this->files_model->get_file_id();
-				
+
 				$uploader = new qqFileUploader($allowedExtensions, $sizeLimit);
 				$result = $uploader->handleUpload($this->config->item('orbital_storage_directory') . '/', $file_id);
-				
+
 				if ($this->input->get('public') === 'public')
 				{
 					$file_visibility = 'public';
@@ -64,21 +72,21 @@ class Fileupload extends CI_Controller {
 				{
 					$file_visibility = 'private';
 				}
-				
+
 				if ($result['success'] === TRUE)
 				{
 					$this->load->helper('file');
 					$this->files_model->add_file(
-							$file_id,
-							$this->input->get('qqfile'),
-							strtolower(substr(strrchr($this->input->get('qqfile'), '.'), 1)),
-							get_mime_by_extension($this->input->get('qqfile')),
-							$token['project'],
-							(int) $this->input->get('licence'),
-							$file_visibility,
-							'staged',
-							$token['user']
-						);
+						$file_id,
+						$this->input->get('qqfile'),
+						strtolower(substr(strrchr($this->input->get('qqfile'), '.'), 1)),
+						get_mime_by_extension($this->input->get('qqfile')),
+						$token['project'],
+						(int) $this->input->get('licence'),
+						$file_visibility,
+						'staged',
+						$token['user']
+					);
 				}
 				// to pass data through iframe you will need to encode all html tags
 				$this->output->set_output(json_encode($result));
@@ -93,24 +101,29 @@ class Fileupload extends CI_Controller {
 			$this->output->set_output(json_encode(array('error' => 'Missing required elements.')));
 		}
 	}
-	
+
+
+	/**
+	 * Form to select files to upload and provide feedback
+	 */
+
 	function form()
 	{
-	
-		if ($this->input->get('token') && $this->input->get('licence'))
+
+		if ($this->input->get('token') AND $this->input->get('licence'))
 		{
-		
+
 			$this->load->model('files_model');
-	
+
 			if ($tokendata = $this->files_model->validate_upload_token($this->input->get('token')))
 			{
-			
+
 				$this->load->library('session');
 				$this->load->helper('form');
 				$this->load->model('licences_model');
 				$formtoken = random_string('alnum', 16);
 				$this->session->set_userdata('form_' . $formtoken, $tokendata);
-			
+
 				$data['token'] = $formtoken;
 				$data['default_licence'] = (int) $this->input->get('licence');
 				$this->load->view('uploader', $data);
@@ -125,7 +138,6 @@ class Fileupload extends CI_Controller {
 			echo 'Missing parameter.';
 		}
 	}
-				
 }
 
 // End of file projects.php
