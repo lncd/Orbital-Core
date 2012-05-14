@@ -41,11 +41,11 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = '';
-$db['default']['password'] = '';
-$db['default']['database'] = '';
-$db['default']['dbdriver'] = 'mysql';
+$db['default']['hostname'] = $_SERVER['ORBITAL_DB_HOST'];
+$db['default']['username'] = $_SERVER['ORBITAL_DB_USER'];
+$db['default']['password'] = $_SERVER['ORBITAL_DB_PASS'];
+$db['default']['database'] = $_SERVER['ORBITAL_DB_NAME'];
+$db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
@@ -55,7 +55,7 @@ $db['default']['char_set'] = 'utf8';
 $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
-$db['default']['stricton'] = FALSE;
+$db['default']['stricton'] = TRUE;
 
 
 /* End of file database.php */

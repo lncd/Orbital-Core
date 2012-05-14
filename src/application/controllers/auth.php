@@ -1,5 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+require APPPATH.'/libraries/Orbital_Controller.php';
+
 /**
  * Authentication
  *
@@ -9,10 +11,11 @@
  * @subpackage Core
  * @author     Nick Jackson <nijackson@lincoln.ac.uk>
  * @copyright  2012 University of Lincoln
+ * @licence    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
  * @link       https://github.com/lncd/Orbital-Core
  */
 
-class Auth extends CI_Controller {
+class Auth extends Orbital_Controller {
 
 	/**
 	 * Constructor
@@ -29,20 +32,20 @@ class Auth extends CI_Controller {
 	 * Builds state variable and routes sign-in requests to the appropriate
 	 * authentication library.
 	 *
-	 * @param string $endpoint  The designated sign-in endpoint.
+	 * @param string $endpoint The designated sign-in endpoint.
 	 */
 
-	function signin($endpoint)
+	function signin_get($endpoint)
 	{
 
 		// Make sure client_id and redirect_uri exist
 		if ($this->input->get('response_type')
-			&& $this->input->get('response_type') === 'code'
-			&& $this->input->get('client_id')
-			&& $this->input->get('redirect_uri'))
+			AND $this->input->get('response_type') === 'code'
+			AND $this->input->get('client_id')
+			AND $this->input->get('redirect_uri'))
 		{
 
-			if ($this->oauth->validate_app_credentials($this->input->get('client_id'), $this->input->get('redirect_uri')))
+			if ($this->oauth_model->validate_app_credentials($this->input->get('client_id'), $this->input->get('redirect_uri')))
 			{
 
 				$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
@@ -78,6 +81,12 @@ class Auth extends CI_Controller {
 			$this->load->view('error', array('message' => 'Client ID, redirect URI or response type not present in sign-in request.'));
 		}
 	}
+	
+	function signout_get($endpoint)
+	{
+		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
+		$this->auth_endpoint->signout();
+	}
 
 	/**
 	 * Callback marshalling
@@ -86,20 +95,19 @@ class Auth extends CI_Controller {
 	 * validates the user data, performs any necessary user creation, builds
 	 * the OAuth response for the client, and redirects accordingly.
 	 *
-	 * @param string $endpoint  The designated sign-in endpoint.
+	 * @param string $endpoint The designated sign-in endpoint.
 	 *
 	 * @todo Rewrite this to use exceptions.
 	 */
 
-	function callback($endpoint)
+	function callback_get($endpoint)
 	{
 		$this->load->library('authentication/Auth_' . $endpoint, '', 'auth_endpoint');
 		if ($response = $this->auth_endpoint->callback())
 		{
-			$this->load->model('users');
 
 			// Ensure that all expected fields are present
-			if (isset($response->state) && isset($response->user_email) && isset($response->user_name))
+			if (isset($response->state) AND isset($response->user_email) AND isset($response->user_name))
 			{
 
 				// Unserialise the state
@@ -108,10 +116,10 @@ class Auth extends CI_Controller {
 				// Fields present!
 
 				// Test to see if user exists
-				if (!$this->users->get_user($response->user_email))
+				if ( ! $this->users_model->get_user($response->user_email))
 				{
 					// User does not exist, try to create!
-					if (!$this->users->create_user($response->user_email, $response->user_name, $response->rdf, $response->institution))
+					if ( ! $this->users_model->create_user($response->user_email, $response->user_name, $response->institution, $response->uri))
 					{
 						$this->output->set_status_header('500');						
 						$redirect_uri =  $state->redirect_uri . '?error=server_error&error_description=Unable to create user object.';
@@ -129,7 +137,7 @@ class Auth extends CI_Controller {
 				// Begin OAuth
 
 				// Generate code and perform redirect
-				if ($code = $this->oauth->generate_code($state->client_id, $response->user_email, $state->scope))
+				if ($code = $this->oauth_model->generate_code($state->client_id, $response->user_email, $state->scope))
 				{
 
 					$redirect_uri = $state->redirect_uri . '?code=' . $code;
@@ -178,19 +186,19 @@ class Auth extends CI_Controller {
 	 * Swaps a code for an access token and refresh token.
 	 */
 
-	function access_token()
+	function access_token_post()
 	{
 	
 		if ($application = $this->access->valid_application())
 		{
 	
-			if ($this->input->post('grant_type')
-				&& $this->input->post('grant_type') === 'authorization_code'
-				&& $this->input->post('code'))
-			{
+
+			if ($this->post('grant_type')
+				AND $this->post('grant_type') === 'authorization_code'
+				AND $this->post('code'))			{
 				
 				// Client credentials valid, try perform swap
-				if ($tokens = $this->oauth->swap_code($this->input->post('code'), $application))
+				if ($tokens = $this->oauth_model->swap_code($this->input->post('code'), $application))
 				{
 			
 					$this->output
@@ -202,7 +210,7 @@ class Auth extends CI_Controller {
 							'refresh_token' => $tokens['refresh_token'],
 							'scope' => implode(' ', $tokens['scope']),
 							'user' => $tokens['user'],
-							'system_admin' => $this->access->user_has_permission_aspect($tokens['user'], 'system_admin')
+							'system_admin' => $this->access->user_is_admin($tokens['user'], TRUE)
 						)));
 						
 				}
@@ -250,17 +258,18 @@ class Auth extends CI_Controller {
 	 * Swaps a refresh token for a new access token and refresh token.
 	 */
 
-	function refresh_token()
+	function refresh_token_post()
 	{
 		if ($application = $this->access->valid_application())
 		{
-			if ($this->input->post('grant_type')
-				&& $this->input->post('grant_type') === 'refresh_token'
-				&& $this->input->post('refresh_token'))
-			{
+
+			if ($this->post('grant_type')
+				AND $this->post('grant_type') === 'refresh_token'
+				AND $this->post('refresh_token'))
+							{
 				
 				// Client credentials valid, try perform swap
-				if ($tokens = $this->oauth->swap_refresh_token($this->input->post('refresh_token'), $application))
+				if ($tokens = $this->oauth_model->swap_refresh_token($this->input->post('refresh_token'), $application))
 				{
 			
 					$this->output
@@ -272,7 +281,7 @@ class Auth extends CI_Controller {
 							'refresh_token' => $tokens['refresh_token'],
 							'scope' => implode(' ', $tokens['scope']),
 							'user' => $tokens['user'],
-							'system_admin' => $this->access->user_has_permission_aspect($tokens['user'], 'system_admin')
+							'system_admin' => $this->access->user_is_admin($tokens['user'], TRUE)
 						)));
 						
 				}

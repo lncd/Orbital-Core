@@ -1,1 +1,4 @@
-src/application/libraries/authentication/Auth_dev.php
+src/application/libraries/authentication
+src/application/cache
+src/application/logs
+.DS_Store
