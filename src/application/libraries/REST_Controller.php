@@ -13,20 +13,82 @@
 
 class REST_Controller extends CI_Controller {
 
-	protected $rest_format = NULL; /** Set this in a controller to use a default format */
-	protected $methods = array(); /** contains a list of method properties such AS limit, log AND level */
-	protected $request = NULL; /** Stores accept, language, body, headers, etc */
-	protected $response = NULL; /** What is gonna happen in output? */
-	protected $rest = NULL; /** Stores DB, keys, key level, etc */
+	/**
+	 * Set this in a controller to use a default format
+	 */
+	 
+	protected $rest_format = NULL;
+	
+	/**
+	 * Contains a list of method properties such AS limit, log and level
+	 */
+	 
+	protected $methods = array();
+	
+	/**
+	 * Stores accept, language, body, headers, etc
+	 */
+	 
+	protected $request = NULL;
+	
+	/**
+	 * What is gonna happen in output?
+	 */
+	 
+	protected $response = NULL;
+	
+	/**
+	 * Stores DB, keys, key level, etc
+	 */
+	 
+	protected $rest = NULL;
+	
+	/**
+	 * Get arguments
+	 */
+	 
 	protected $_get_args = array();
+	
+	/**
+	 * Post arguments
+	 */
+	 
 	protected $_post_args = array();
+	
+	/**
+	 * Put arguments
+	 */
+	 
 	protected $_put_args = array();
+	
+	/**
+	 * Delete arguments
+	 */
+	 
 	protected $_delete_args = array();
+	
+	/**
+	 * Arguments
+	 */
+	 
 	protected $_args = array();
+	
+	/**
+	 * Allow
+	 */
+	 
 	protected $_allow = TRUE;
-	protected $_zlib_oc = FALSE; /** Determines if output compression is enabled */
+	
+	/**
+	 * Determines if output compression is enabled
+	 */
+	 
+	protected $_zlib_oc = FALSE;
 
-	// List all supported methods, the first will be the default format
+	/**
+	 * List all supported methods, the first will be the default format
+	 */
+
 	protected $_supported_formats = array(
 		'xml' => 'application/xml',
 		'rawxml' => 'application/xml',
@@ -48,7 +110,7 @@ class REST_Controller extends CI_Controller {
 
 		$this->_zlib_oc = @ini_get('zlib.output_compression');
 
-		// Lets grab the config AND get ready to party
+		// Lets grab the config and get ready to party
 		$this->load->config('rest');
 
 		// How is this request being made? POST, DELETE, GET, PUT?
@@ -75,15 +137,15 @@ class REST_Controller extends CI_Controller {
 			// Grab proper GET variables
 			parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $get);
 
-			// Merge both the URI segements AND GET params
+			// Merge both the URI segements and GET params
 			$this->_get_args = array_merge($this->_get_args, $get);
 			break;
 
 		case 'post':
 			$this->_post_args = $_POST;
 
-			$this->request->format and $this->request->body = file_get_contents('php://input');
-			break;
+			$this->request->format AND $this->request->body = file_get_contents('php://input');
+						break;
 
 		case 'put':
 			// It might be a HTTP body
@@ -98,16 +160,16 @@ class REST_Controller extends CI_Controller {
 				parse_str(file_get_contents('php://input'), $this->_put_args);
 			}
 
-			break;
+						break;
 
 		case 'delete':
 			// Set up out DELETE variables (which shouldn't really exist, but sssh!)
 			parse_str(file_get_contents('php://input'), $this->_delete_args);
-			break;
+						break;
 		}
 
-		// Now we know all about our request, let's try AND parse the body if it exists
-		if ($this->request->format and $this->request->body)
+		// Now we know all about our request, let's try and parse the body if it exists
+		if ($this->request->format AND $this->request->body)
 		{
 			$this->request->body = $this->format->factory($this->request->body, $this->request->format)->to_array();
 			// Assign payload arguments to proper method container
@@ -145,7 +207,7 @@ class REST_Controller extends CI_Controller {
 		}
 
 		// Load DB if its enabled
-		if (config_item('rest_database_group') and (config_item('rest_enable_keys') OR config_item('rest_enable_logging')))
+		if (config_item('rest_database_group') AND (config_item('rest_enable_keys') OR config_item('rest_enable_logging')))
 		{
 			$this->rest->db = $this->load->database(config_item('rest_database_group'), TRUE);
 		}
@@ -157,7 +219,7 @@ class REST_Controller extends CI_Controller {
 		}
 
 		// only allow ajax requests
-		if ( ! $this->input->is_ajax_request() and config_item('rest_ajax_only') )
+		if ( ! $this->input->is_ajax_request() AND config_item('rest_ajax_only') )
 		{
 			$this->response( array('status' => FALSE, 'error' => 'Only AJAX requests are accepted.'), 505 );
 		}
@@ -167,10 +229,11 @@ class REST_Controller extends CI_Controller {
 	 * Remap
 	 *
 	 * Requests are not made to methods directly The request will be for an "object".
-	 * this simply maps the object AND method to the correct Controller method.
+	 * this simply maps the object and method to the correct Controller method.
 	 *
 	 * @param $object_called string The object to be remapped
-	 * @param $arguments array the array of arguments sent to the function
+	 * @param $arguments array      The array of arguments sent to the function
+	 *
 	 * @return NULL
 	 */
 
@@ -185,15 +248,15 @@ class REST_Controller extends CI_Controller {
 		$controller_method = $object_called . '_' . $this->request->method;
 
 		// Do we want to log this method (if allowed by config)?
-		$log_method = ! (isset($this->methods[$controller_method]['log']) and $this->methods[$controller_method]['log'] === FALSE);
+		$log_method = ! (isset($this->methods[$controller_method]['log']) AND $this->methods[$controller_method]['log'] === FALSE);
 
 		// Use keys for this method?
-		$use_key = ! (isset($this->methods[$controller_method]['key']) and $this->methods[$controller_method]['key'] === FALSE);
+		$use_key = ! (isset($this->methods[$controller_method]['key']) AND $this->methods[$controller_method]['key'] === FALSE);
 
 		// Get that useless shitty key out of here
-		if (config_item('rest_enable_keys') and $use_key and $this->_allow === FALSE)
+		if (config_item('rest_enable_keys') AND $use_key AND $this->_allow === FALSE)
 		{
-			if (config_item('rest_enable_logging') and $log_method)
+			if (config_item('rest_enable_logging') AND $log_method)
 			{
 				$this->_log_request();
 			}
@@ -208,10 +271,10 @@ class REST_Controller extends CI_Controller {
 		}
 
 		// Doing key related stuff? Can only do it if they have a key right?
-		if (config_item('rest_enable_keys') and ! empty($this->rest->key))
+		if (config_item('rest_enable_keys') AND ! empty($this->rest->key))
 		{
 			// Check the limit
-			if (config_item('rest_enable_limits') and ! $this->_check_limit($controller_method))
+			if (config_item('rest_enable_limits') AND ! $this->_check_limit($controller_method))
 			{
 				$this->response(array('status' => FALSE, 'error' => 'This API key has reached the hourly limit for this method.'), 401);
 			}
@@ -223,7 +286,7 @@ class REST_Controller extends CI_Controller {
 			$authorized = $level <= $this->rest->level;
 
 			// IM TELLIN!
-			if (config_item('rest_enable_logging') and $log_method)
+			if (config_item('rest_enable_logging') AND $log_method)
 			{
 				$this->_log_request($authorized);
 			}
@@ -233,10 +296,10 @@ class REST_Controller extends CI_Controller {
 		}
 
 		// No key stuff, but record that stuff is happening
-		else if (config_item('rest_enable_logging') and $log_method)
-			{
-				$this->_log_request($authorized = TRUE);
-			}
+		else if (config_item('rest_enable_logging') AND $log_method)
+		{
+			$this->_log_request($authorized = TRUE);
+		}
 
 		// And...... GO!
 		call_user_func_array(array($this, $controller_method), $arguments);
@@ -246,18 +309,18 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * Response
 	 *
-	 * Takes pure data AND optionally a status code, then creates the response.
+	 * Takes pure data and optionally a status code, then creates the response.
 	 *
-	 * @param $data array The array of data
-	 * @param $http_code string the HTTP code used
+	 * @param $data array       The array of data
+	 * @param $http_code string The HTTP code used
 	 */
 
 	public function response($data = array(), $http_code = NULL)
 	{
-		global $CFG;
+		global $cfg;
 
-		// If data is empty AND not code provide, error AND bail
-		if (empty($data) and $http_code === NULL)
+		// If data is empty and not code provide, error and bail
+		if (empty($data) AND $http_code === NULL)
 		{
 			$http_code = 404;
 
@@ -269,11 +332,11 @@ class REST_Controller extends CI_Controller {
 		else
 		{
 			// Is compression requested?
-			if ($CFG->item('compress_output') === TRUE and $this->_zlib_oc === FALSE)
+			if ($cfg->item('compress_output') === TRUE AND $this->_zlib_oc === FALSE)
 			{
 				if (extension_loaded('zlib'))
 				{
-					if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) and strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE)
+					if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) AND strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== FALSE)
 					{
 						ob_start('ob_gzhandler');
 					}
@@ -282,7 +345,7 @@ class REST_Controller extends CI_Controller {
 
 			is_numeric($http_code) OR $http_code = 200;
 
-			// If the format method exists, call AND return the output in that format
+			// If the format method exists, call and return the output in that format
 			if (method_exists($this, '_format_'.$this->response->format))
 			{
 				// Set the correct format header
@@ -291,7 +354,7 @@ class REST_Controller extends CI_Controller {
 				$output = $this->{'_format_'.$this->response->format}($data);
 			}
 
-			// If the format method exists, call AND return the output in that format
+			// If the format method exists, call and return the output in that format
 			elseif (method_exists($this->format, 'to_'.$this->response->format))
 			{
 				// Set the correct format header
@@ -314,7 +377,7 @@ class REST_Controller extends CI_Controller {
 		// but it will not modify the content-length header to compensate for
 		// the reduction, causing the browser to hang waiting for more data.
 		// We'll just skip content-length in those cases.
-		if ( ! $this->_zlib_oc and ! $CFG->item('compress_output'))
+		if ( ! $this->_zlib_oc AND ! $cfg->item('compress_output'))
 		{
 			header('Content-Length: ' . strlen($output));
 		}
@@ -365,13 +428,13 @@ class REST_Controller extends CI_Controller {
 		$pattern = '/\.(' . implode('|', array_keys($this->_supported_formats)) . ')$/';
 
 		// Check if a file extension is used when no get arguments provided
-		if (!$this->_get_args and preg_match($pattern, $this->uri->uri_string(), $matches))
+		if ( ! $this->_get_args AND preg_match($pattern, $this->uri->uri_string(), $matches))
 		{
 			return $matches[1];
 		}
 
 		// Check if a file extension is used
-		elseif ($this->_get_args and ! is_array(end($this->_get_args)) and preg_match($pattern, end($this->_get_args), $matches))
+		elseif ($this->_get_args AND ! is_array(end($this->_get_args)) AND preg_match($pattern, end($this->_get_args), $matches))
 		{
 			// The key of the last argument
 			$last_key = end(array_keys($this->_get_args));
@@ -383,14 +446,14 @@ class REST_Controller extends CI_Controller {
 			return $matches[1];
 		}
 
-		// A format has been passed AS an argument in the URL AND it is supported
-		if (isset($this->_get_args['format']) and array_key_exists($this->_get_args['format'], $this->_supported_formats))
+		// A format has been passed AS an argument in the URL and it is supported
+		if (isset($this->_get_args['format']) AND array_key_exists($this->_get_args['format'], $this->_supported_formats))
 		{
 			return $this->_get_args['format'];
 		}
 
-		// Otherwise, check the HTTP_ACCEPT (if it exists AND we are allowed)
-		if ($this->config->item('rest_ignore_http_accept') === FALSE and $this->input->server('HTTP_ACCEPT'))
+		// Otherwise, check the HTTP_ACCEPT (if it exists and we are allowed)
+		if ($this->config->item('rest_ignore_http_accept') === FALSE AND $this->input->server('HTTP_ACCEPT'))
 		{
 			// Check all formats against the HTTP_ACCEPT header
 			foreach (array_keys($this->_supported_formats) as $format)
@@ -398,8 +461,8 @@ class REST_Controller extends CI_Controller {
 				// Has this format been requested?
 				if (strpos($this->input->server('HTTP_ACCEPT'), $format) !== FALSE)
 				{
-					// If not HTML OR XML assume its right AND send it on its way
-					if ($format != 'html' and $format != 'xml')
+					// If not HTML OR XML assume its right and send it on its way
+					if ($format !== 'html' AND $format !== 'xml')
 					{
 
 						return $format;
@@ -409,13 +472,13 @@ class REST_Controller extends CI_Controller {
 					else
 					{
 						// If it is truely HTML, it wont want any XML
-						if ($format === 'html' and strpos($this->input->server('HTTP_ACCEPT'), 'xml') === FALSE)
+						if ($format === 'html' AND strpos($this->input->server('HTTP_ACCEPT'), 'xml') === FALSE)
 						{
 							return $format;
 						}
 
 						// If it is truely XML, it wont want any HTML
-						elseif ($format === 'xml' and strpos($this->input->server('HTTP_ACCEPT'), 'html') === FALSE)
+						elseif ($format === 'xml' AND strpos($this->input->server('HTTP_ACCEPT'), 'html') === FALSE)
 						{
 							return $format;
 						}
@@ -453,9 +516,9 @@ class REST_Controller extends CI_Controller {
 				$method = strtolower($this->input->post('_method'));
 			}
 			else if ($this->input->server('HTTP_X_HTTP_METHOD_OVERRIDE'))
-				{
-					$method = strtolower($this->input->server('HTTP_X_HTTP_METHOD_OVERRIDE'));
-				}
+			{
+				$method = strtolower($this->input->server('HTTP_X_HTTP_METHOD_OVERRIDE'));
+			}
 		}
 
 		if (in_array($method, array('get', 'delete', 'post', 'put')))
@@ -497,8 +560,8 @@ class REST_Controller extends CI_Controller {
 
 			$this->rest->key = $row->key;
 
-			isset($row->level) and $this->rest->level = $row->level;
-			isset($row->ignore_limits) and $this->rest->ignore_limits = $row->ignore_limits;
+			isset($row->level) AND $this->rest->level = $row->level;
+			isset($row->ignore_limits) AND $this->rest->ignore_limits = $row->ignore_limits;
 
 			return TRUE;
 		}
@@ -531,7 +594,7 @@ class REST_Controller extends CI_Controller {
 			$i = 1;
 			foreach ($langs as $lang)
 			{
-				// Remove weight AND strip space
+				// Remove weight and strip space
 				list($lang) = explode(';', $lang);
 				$return_langs[] = trim($lang);
 			}
@@ -575,7 +638,7 @@ class REST_Controller extends CI_Controller {
 	protected function _check_limit($controller_method)
 	{
 		// They are special, OR it might not even have a limit
-		if ( ! empty($this->rest->ignore_limits) OR !isset($this->methods[$controller_method]['limit']))
+		if ( ! empty($this->rest->ignore_limits) OR ! isset($this->methods[$controller_method]['limit']))
 		{
 			// On your way sonny-jim.
 			return TRUE;
@@ -796,13 +859,13 @@ class REST_Controller extends CI_Controller {
 
 		$valid_logins = & $this->config->item('rest_valid_logins');
 
-		if (!array_key_exists($username, $valid_logins))
+		if ( ! array_key_exists($username, $valid_logins))
 		{
 			return FALSE;
 		}
 
 		// If actually NULL (not empty string) then do not check it
-		if ($password !== NULL and $valid_logins[$username] != $password)
+		if ($password !== NULL AND $valid_logins[$username] !== $password)
 		{
 			return FALSE;
 		}
@@ -843,7 +906,7 @@ class REST_Controller extends CI_Controller {
 			}
 		}
 
-		if (!$this->_check_login($username, $password))
+		if ( ! $this->_check_login($username, $password))
 		{
 			$this->_force_login();
 		}
@@ -891,7 +954,7 @@ class REST_Controller extends CI_Controller {
 		preg_match_all('@(username|nonce|uri|nc|cnonce|qop|response)=[\'"]?([^\'",]+)@', $digest_string, $matches);
 		$digest = array_combine($matches[1], $matches[2]);
 
-		if (!array_key_exists('username', $digest) OR !$this->_check_login($digest['username']))
+		if ( ! array_key_exists('username', $digest) OR ! $this->_check_login($digest['username']))
 		{
 			$this->_force_login($uniqid);
 		}
@@ -904,7 +967,7 @@ class REST_Controller extends CI_Controller {
 		$A2 = md5(strtoupper($this->request->method) . ':' . $digest['uri']);
 		$valid_response = md5($A1 . ':' . $digest['nonce'] . ':' . $digest['nc'] . ':' . $digest['cnonce'] . ':' . $digest['qop'] . ':' . $A2);
 
-		if ($digest['response'] != $valid_response)
+		if ($digest['response'] !== $valid_response)
 		{
 			header('HTTP/1.0 401 Unauthorized');
 			header('HTTP/1.1 401 Unauthorized');
@@ -970,7 +1033,7 @@ class REST_Controller extends CI_Controller {
 	protected function _force_loopable($data)
 	{
 		// Force it to be something useful
-		if ( ! is_array($data) and ! is_object($data))
+		if ( ! is_array($data) AND ! is_object($data))
 		{
 			$data = (array) $data;
 		}
