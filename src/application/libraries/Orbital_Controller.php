@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Orbital Output Library
@@ -16,7 +16,11 @@
 // This can be removed if you use __autoload() in config.php OR use Modular Extensions
 require APPPATH.'/libraries/REST_Controller.php';
 
-class Orbital_Controller extends REST_Controller {
+class Orbital_controller extends REST_Controller {
+
+	/**
+	 * Response timer
+	 */
 
 	private $_response_clock;
 
@@ -45,6 +49,7 @@ class Orbital_Controller extends REST_Controller {
 	 *
 	 * Takes pure data and optionally a status code, then creates the response
 	 */
+	 
 	/*public function response($response, $http_code = NULL)
 	{
 
@@ -150,4 +155,4 @@ class Orbital_Controller extends REST_Controller {
 	}
 }
 //End of file Orbital_Controller.php
-//ocation: ./libraries/Orbital_Controller.php
+//Location: ./libraries/Orbital_Controller.php

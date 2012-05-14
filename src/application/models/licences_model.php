@@ -25,6 +25,14 @@ class Licences_model extends CI_Model {
 		parent::__construct();
 	}
 	
+	/**
+	 * List all
+	 *
+	 * Lists all licences.
+	 *
+	 * @return ARRAY
+	 */
+	
 	function list_all()
 	{
 		if ($licences = $this->db->order_by('licence_name_full')->get('licences'))
@@ -59,6 +67,14 @@ class Licences_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * List all
+	 *
+	 * Lists all available licences.
+	 *
+	 * @return ARRAY
+	 */
+	
 	function list_all_available()
 	{
 		if ($licences = $this->db->order_by('licence_name_full')->where('licence_enabled', TRUE)->get('licences'))
@@ -80,6 +96,15 @@ class Licences_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * Get licence
+	 *
+	 * Gets a specific licence.
+	 *
+	 * @param $id string The identifier of the licence
+	 * @return ARRAY
+	 */
 	
 	function get_licence($id)
 	{
@@ -122,6 +147,17 @@ class Licences_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * Create licence
+	 *
+	 * Creates a new licence.
+	 *
+	 * @param $name string                The full name of the licence
+	 * @param $name_short string          The short name of the licence
+	 * @param $licence_summary_uri string The uri of the licence
+	 * @return ARRAY
+	 */
+	
 	function create_licence($name, $name_short, $licence_summary_uri)
 	{
 			
@@ -142,6 +178,19 @@ class Licences_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * Update licence
+	 *
+	 * Updates a licence.
+	 *
+	 * @param $id string        The licence identifier
+	 * @param $name string      The full name of the licence
+	 * @param $shortname string The short name of the licence
+	 * @param $uri string       The full name of the licence
+	 * @param $enable bool      If the licence is enabled
+	 * @return ARRAY
+	 */
 	
 	function update_licence($id, $name, $shortname, $uri, $enable = FALSE)
 	{

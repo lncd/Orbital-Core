@@ -880,3 +880,4 @@ class REST_Controller extends CI_Controller {
 		return $this->get('callback') . '(' . json_encode($data) . ')';
 	}
 }
+//End of file REST_Controller.php

@@ -29,7 +29,7 @@ class Mongo_db {
 	private $_config_file = 'mongodb';
 	
 	/**
-	 * Config file data
+	 * Config file data.
 	 * 
 	 * @var array
 	 * @access private
@@ -236,7 +236,7 @@ class Mongo_db {
 			$this->_config_data = $config;
 		}
 		
-		elseif (is_string($config) && $this->_ci)
+		elseif (is_string($config) AND $this->_ci)
 		{
 			$this->_config_data = $this->_ci->config->item($config);
 		}
@@ -1645,7 +1645,8 @@ class Mongo_db {
 	 *
 	 * @access public
 	 * @return array|object
-	 */    
+	 */   
+	  
 	public function remove_all_indexes($collection = '')
 	{
 		if (empty($collection))
@@ -1660,7 +1661,7 @@ class Mongo_db {
 	public function admin_replica_set_status()
 	{
 		$this->load('admin');
-		$response = $this->command(array('replSetGetStatus' => true));
+		$response = $this->command(array('replSetGetStatus' => TRUE));
 		$this->load();
 		
 		if ((int) $response['ok'] === 1)
@@ -1676,7 +1677,7 @@ class Mongo_db {
 	public function admin_server_status()
 	{
 		$this->load('admin');
-		$response = $this->command(array('serverStatus' => true));
+		$response = $this->command(array('serverStatus' => TRUE));
 		$this->load();
 		
 		if ((int) $response['ok'] === 1)
@@ -1844,7 +1845,7 @@ class Mongo_db {
 		} 
 		catch (MongoConnectionException $exception)
 		{
-			if($this->_ci && $this->_ci->config->item('mongo_supress_connect_error'))
+			if($this->_ci AND $this->_ci->config->item('mongo_supress_connect_error'))
 			{
 				$this->_show_error('Unable to connect to MongoDB', 500);
 			}
@@ -1907,6 +1908,8 @@ class Mongo_db {
 	 * Reset the class variables to default settings.
 	 * 
 	 * @access private
+	 * @param $collection array
+	 * @access $action string
 	 * @return void
 	 */
 	private function _clear($collection, $action)
@@ -1973,6 +1976,7 @@ class Mongo_db {
 	 *
 	 * @param string $error_message Error message
 	 * @param int    $response_code Response code 
+	 * @throws 
 	 *
 	 * @access private
 	 * @return void

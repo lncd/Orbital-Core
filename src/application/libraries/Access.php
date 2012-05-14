@@ -17,7 +17,15 @@
 
 class Access {
 	
+	/**
+	 * CodeIngiter instance
+	 */
+
 	private $_ci;
+	
+	/**
+	 * Constructor
+	 */
 	
 	function __construct()
 	{
@@ -30,7 +38,6 @@ class Access {
 	 * Ensures that there is a valid application present.
 	 *
 	 * @access public
-	 *
 	 * @return string|FALSE Client ID if credentials match, FALSE if not.
 	 */
 
@@ -44,7 +51,7 @@ class Access {
 			$this->_ci->output
 				->set_status_header('401')
 				->set_header('WWW-Authenticate: Basic realm="Orbital Core: Application"');
-			// Nothing else can or should happen at this point. Wrap it up.
+			// Nothing else can OR should happen at this point. Wrap it up.
 			return FALSE;
 		}
 		else
@@ -92,7 +99,7 @@ class Access {
 			$this->_ci->output
 				->set_status_header('401')
 				->set_header('WWW-Authenticate: Bearer realm="Orbital Core: User"');
-			// Nothing else can or should happen at this point. Wrap it up.
+			// Nothing else can OR should happen at this point. Wrap it up.
 			return FALSE;
 			
 
@@ -103,7 +110,7 @@ class Access {
 			// Ensure the header is vaguely sensible
 			$authorisation_header = explode(' ', $headers['Authorization']);
 			
-			if (count($authorisation_header) === 2 && $authorisation_header[0] === 'Bearer')
+			if (count($authorisation_header) === 2 AND $authorisation_header[0] === 'Bearer')
 			{
 				// Looks the right length, has the right auth type - see if the token is valid.
 				if ($user = $this->_ci->oauth_model->validate_token(base64_decode($authorisation_header[1])))
@@ -131,7 +138,7 @@ class Access {
 				
 					$this->_ci->output
 						->set_status_header('401')
-						->set_header('WWW-Authenticate: Bearer realm="Orbital Core: User", error="invalid_token", error_description="The access token is invalid, has expired or has been revoked."');
+						->set_header('WWW-Authenticate: Bearer realm="Orbital Core: User", error="invalid_token", error_description="The access token is invalid, has expired OR has been revoked."');
 					return FALSE;
 				}
 			}
@@ -142,7 +149,7 @@ class Access {
 				$this->_ci->output
 					->set_status_header('401')
 					->set_header('WWW-Authenticate: Bearer realm="Orbital Core: User"');
-				// Nothing else can or should happen at this point. Wrap it up.
+				// Nothing else can OR should happen at this point. Wrap it up.
 				return FALSE;
 			}
 		
@@ -156,10 +163,9 @@ class Access {
 	 * Is the specified user a system administrator?
 	 *
 	 * @access public
-	 *
-	 * @param string $user       Email address of the user to test against.
-	 *
-	 * @return bool TRUE if the user is an administrator, FALSE if not.
+	 * @param string $user      Email address of the user to test against.
+	 * @param string $softfail  Fails the function safley.
+	 * @return bool TRUE        If the user is an administrator, FALSE if not.
 	 */
 	 
 	function user_is_admin($user, $softfail = FALSE)
@@ -189,6 +195,18 @@ class Access {
 			return FALSE;
 		}
 	}
+		
+	/**
+	 * User has permission
+	 *
+	 * Check if the user has permission
+	 *
+	 * @access public
+	 * @param string $user       Email address of the user to test against.
+	 * @param string $permission permission to test.
+	 * @param string $softfail   Fails the function safley.
+	 * @return bool TRUE         TRUE if the user has this permission, FALSE if not.
+	 */
 		 
 	function user_has_permission($user, $permission, $softfail = FALSE)
 	{
@@ -221,18 +239,17 @@ class Access {
 	/**
 	 * User Has Permission
 	 *
-	 * Does the specified user have the specified permission?
+	 * Does the specified user have the specified permission
 	 *
 	 * @access public
-	 *
 	 * @param string $user       Email address of the user to test against.
-	 * @param string $aspect     Aspect to test for permission.
-	 * @param mixed  $value      Value to see if present.
-	 * @param string $identifier Identifier to test for permission against.
+	 * @param string $project    project to test if the user has permission to.
+	 * @param mixed  $permission permission to test for.
+	 * @param string $softfail   Fails the function safely.
 	 *
 	 * @return bool TRUE if the user has the aspect, FALSE if not.
 	 */
-	 
+ 
 	function user_has_project_permission($user, $project, $permission, $softfail = FALSE)
 	{
 		
@@ -249,7 +266,7 @@ class Access {
 		}
 		else
 		{
-		if ($softfail !== TRUE)
+			if ($softfail !== TRUE)
 			{
 				$this->_ci->output
 					->set_status_header('403')

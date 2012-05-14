@@ -30,6 +30,8 @@ class Files extends Orbital_Controller {
 
 	/**
 	 * Get File Information
+	 *
+	 * @param $identifier string The file identifier
 	*/
 
 	public function file_view_get($identifier)
@@ -57,6 +59,8 @@ class Files extends Orbital_Controller {
 	
 	/**
 	 * Get One-Time Download Key
+	 *
+	 * @param $identifier string The file identifier
 	*/
 	
 	public function get_otk_get($identifier)
@@ -88,6 +92,8 @@ class Files extends Orbital_Controller {
 	
 	/**
 	 * Download File
+	 *
+	 * @param $identifier string The file identifier
 	*/
 	
 	public function download_get($identifier)
@@ -99,7 +105,7 @@ class Files extends Orbital_Controller {
 			$file = $this->files_model->file_get_details($identifier);
 			$expires = time() + 60;
 			$path = '/v1/MossoCloudFS_e4c5ab67-0b7a-4095-999c-32aaf03a6886/project:' . $file['project'] . '/'. $identifier .'.'. $file['extension'];
-			$key = hash_hmac('sha1', "GET\n$expires\n$path", $_SERVER['RACKSPACE_METADATAKEY']);
+			$key = hash_hmac('sha1', "GET\n{$expires}\n{$path}", $_SERVER['RACKSPACE_METADATAKEY']);
 			$this->output->set_header('Location: ' . 'https://storage101.lon3.clouddrive.com' . $path . '?temp_url_sig=' . $key . '&temp_url_expires=' . $expires);
 
 		}
@@ -107,6 +113,8 @@ class Files extends Orbital_Controller {
 	
 	/**
 	 * Process Download Queue
+	 *
+	 * @return NULL
 	*/
 	
 	function process_queue_get()

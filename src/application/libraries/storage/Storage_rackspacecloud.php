@@ -17,7 +17,8 @@ include_once('cloud_files/cloudfiles.php');
 class Storage_rackspacecloud {
 
 	/**
-	 * CodeIgniter instance
+	 * CodeIgniter instance.
+	 * @var _ci instance of CodeIngiter
 	 */
 
 	private $_ci;
@@ -38,6 +39,7 @@ class Storage_rackspacecloud {
 	 * @param string $identifier    The project identifier.
 	 * @param array  $metadata      Additional information about the file.
 	 * @param string $container     Folder containing the project.
+	 * @return NULL
 	 */
 
 	function save($file_location, $identifier, $metadata, $container)
@@ -87,8 +89,9 @@ class Storage_rackspacecloud {
 	/**
 	 * Delete file from rackspace server
 	 *
-	 * @param string $identifier    The project identifier.
-	 * @param string $container     Folder containing the project.
+	 * @param string $identifier The project identifier.
+	 * @param string $container Folder containing the project.
+	 * @return BOOL
 	 */
 	
 	function delete($identifier, $container)
@@ -131,3 +134,4 @@ class Storage_rackspacecloud {
 		}
 	}
 }
+//End of file Storage_rackspacecloud.php
