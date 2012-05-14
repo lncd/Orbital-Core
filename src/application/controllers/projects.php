@@ -27,6 +27,12 @@ class Projects extends Orbital_Controller {
 	{
 		parent::__construct();
 	}
+	
+	/**
+	 * Get projects
+	 *
+	 * Gets projects list
+	 */
 
 	public function index_get()
 	{
@@ -53,6 +59,12 @@ class Projects extends Orbital_Controller {
 			$this->response($response, 200);
 		}
 	}
+	
+	/**
+	 * Public get
+	 *
+	 * Gets public projects list
+	 */
 
 	public function public_get()
 	{
@@ -85,7 +97,12 @@ class Projects extends Orbital_Controller {
 		$this->response($response, 200);
 	}
 
-
+	/**
+	 * View Get
+	 *
+	 * Gets project details
+	 */
+	 
 	public function view_get($identifier)
 	{
 		if ($user = $this->access->valid_user(array('projects')))
@@ -127,6 +144,12 @@ class Projects extends Orbital_Controller {
 		}
 	}
 	
+	/**
+	 * Public view Get
+	 *
+	 * Gets public details
+	 */
+	
 	public function view_public_get($identifier)
 	{
 		$this->load->model('projects_model');
@@ -152,6 +175,12 @@ class Projects extends Orbital_Controller {
 		}	
 	}
 	
+	/**
+	 * Dataset Get
+	 *
+	 * Gets Datasets for project
+	 */
+	 
 	public function datasets_get($identifier)
 	{
 		if ($user = $this->access->valid_user(array('projects')))
@@ -180,6 +209,14 @@ class Projects extends Orbital_Controller {
 			}
 		}
 	}
+	
+	/**
+	 * View Put
+	 *
+	 * Updates a project
+	 *
+	 * @param $identifer string The identifier of the project
+	 */
 
 	public function view_put($identifier)
 	{
@@ -242,6 +279,14 @@ class Projects extends Orbital_Controller {
 			}
 		}
 	}
+	
+	/**
+	 * View Delete
+	 *
+	 * Deletes a project
+	 *
+	 * @param $identifer string The identifier of the project
+	 */
 
 	public function view_delete($identifier)
 	{
@@ -297,6 +342,12 @@ class Projects extends Orbital_Controller {
 			$this->response($response, 409);
 		}
 	}
+	
+	/**
+	 * Create Post
+	 *
+	 * Creates a project
+	 */
 
 	public function create_post()
 	{

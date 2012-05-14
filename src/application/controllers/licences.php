@@ -112,6 +112,10 @@ class Licences extends Orbital_Controller {
 	
 	/**
 	* Get Licence
+	*
+	* Returns licence details
+	*
+	* @param $identifier string The identifier of the licence
 	*/
 	
 	public function specific_get($identifier)
@@ -134,6 +138,10 @@ class Licences extends Orbital_Controller {
 	
 	/**
 	* Update Licence
+	*
+	* Updates the speciufied licence
+	*
+	* @param $identifier The identifier of the licence
 	*/
 	
 	public function specific_post($identifier)
@@ -188,6 +196,10 @@ class Licences extends Orbital_Controller {
 	
 	/**
 	* Get licence in JSON format
+	*
+	* Returns the licence details in JSON format
+	*
+	* @param $identifier The identifier of the licence
 	*/
 	
 	function licence_json_get($identifier)

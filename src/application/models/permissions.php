@@ -30,10 +30,10 @@ class Permissions extends CI_Model {
 	 *
 	 * Returns projects that user has access to.
 	 *
-	 * @param $user string   user whose permissions will be retrieved
-	 * @param $aspect string what the permission is for
-	 * @param $value string  what the user can do
-	 * @return identifiers The list of projects that the user has access to.
+	 * @param $user string     User whose permissions will be retrieved
+	 * @param $aspect string   What the permission is for
+	 * @param $value string    What the user can do
+	 * @return identifiers     The list of projects that the user has access to.
 	 */
 
 	function get_permissions_with_value($user, $aspect, $value)
@@ -65,10 +65,10 @@ class Permissions extends CI_Model {
 	 *
 	 * Returns permissions that user has access to a project.
 	 *
-	 * @param $user string       user whose permissions will be retrieved
-	 * @param $aspect string     what the permission is for
-	 * @param $identifier string the project the the permissions are being retrieved for
-	 * @return identifiers The list of permissions that the user has for the project.
+	 * @param $user string       User whose permissions will be retrieved
+	 * @param $aspect string     What the permission is for
+	 * @param $identifier string The project the the permissions are being retrieved for
+	 * @return identifiers       The list of permissions that the user has for the project.
 	 */
 
 	function get_permissions_for_identifier($user, $aspect, $identifier)
@@ -101,9 +101,9 @@ class Permissions extends CI_Model {
 	 *
 	 * Returns users with permissions of an item.
 	 *
-	 * @param $aspect string     the type of item
-	 * @param $identifier string the item that the users are found for
-	 * @return users The list of users that the item has.
+	 * @param $aspect string     The type of item
+	 * @param $identifier string The item that the users are found for
+	 * @return users             The list of users that the item has.
 	 */
 
 	function get_users_for_identifier($aspect, $identifier)
@@ -143,7 +143,7 @@ class Permissions extends CI_Model {
 	 * @param $aspect string     The aspect
 	 * @param $values array      The type of item
 	 * @param $identifier string The item that the users are found for
-	 * @return users The list of users that the item has.
+	 * @return users             The list of users that the item has.
 	 */
 
 	function create_permission($user, $aspect, $values = NULL, $identifier = NULL)

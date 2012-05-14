@@ -19,22 +19,40 @@ require APPPATH.'/libraries/Orbital_Controller.php';
 
 class Fileupload extends CI_Controller {
 
-	private $allowedExtensions = array();
-	private $sizeLimit = 314572800;
+	/**
+	 * Allowed file extensions
+	 */
+	 
+	private $allowed_extensions = array();
+	
+	/**
+	 * Max size limit of files
+	 */
+	 
+	private $size_limit = 314572800;
+	
+	/**
+	 * File contruct
+	 */
+	 
 	private $file;
 
 	/**
 	 * Constructor
+	 *
+	 * @param $allowedExtentions array Allowed file extensions
+	 * param $sizeLimie The Max size limit of files
 	 */
 	 
-	function __construct(array $allowedExtensions = array(), $sizeLimit = 314572800){
-
+	function __construct(array $allowed_extensions = array(), $size_limit = 314572800)
+	{
 		parent::__construct();
-
 	}
 
 	/**
 	 * Gets token and uploads to the core
+	 *
+	 * @return NULL
 	 */
 	 
 	function index()
@@ -55,13 +73,13 @@ class Fileupload extends CI_Controller {
 				$this->load->helper('fileupload');
 
 				// list of valid extensions, ex. array("jpeg", "xml", "bmp")
-				$allowedExtensions = array();
+				$allowed_extensions = array();
 				// max file size in bytes
-				$sizeLimit = 314572800;
+				$size_limit = 314572800;
 
 				$file_id = $this->files_model->get_file_id();
 
-				$uploader = new qqFileUploader($allowedExtensions, $sizeLimit);
+				$uploader = new qqFileUploader($allowed_extensions, $size_limit);
 				$result = $uploader->handleUpload($this->config->item('orbital_storage_directory') . '/', $file_id);
 
 				if ($this->input->get('public') === 'public')
@@ -105,6 +123,8 @@ class Fileupload extends CI_Controller {
 
 	/**
 	 * Form to select files to upload and provide feedback
+	 *
+	 * @return NULL
 	 */
 
 	function form()
