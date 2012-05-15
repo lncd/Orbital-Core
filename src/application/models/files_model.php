@@ -59,8 +59,8 @@ class Files_model extends CI_Model {
 	 *
 	 * Validates an OTK against a file, and marks it as used.
 	 *
-	 * @param string $key   		One-time key.
-	 * @param string $identifier	Identifier of file.
+	 * @param string $key        One-time key.
+	 * @param string $identifier Identifier of file.
 	 *
 	 * @return bool TRUE if key is valid, FALSE if not.
 	 */
@@ -188,8 +188,8 @@ class Files_model extends CI_Model {
 	 *
 	 * Sets the status of a file.
 	 *
-	 * @param string $identifier	Identifier of file.
-	 * @param string $status		Status of file.
+	 * @param string $identifier Identifier of file.
+	 * @param string $status     Status of file.
 	 *
 	 * @return bool TRUE if key is valid, FALSE if not.
 	 */
@@ -361,10 +361,10 @@ class Files_model extends CI_Model {
 	 * @return ARRAY
 	 */
 	
-	function add_file($id, $originalname, $extension, $mimetype, $project, $licence, $visibility, $status, $uploader)
+	function add_file($identifier, $originalname, $extension, $mimetype, $project, $licence, $visibility, $status, $uploader)
 	{
 		$insert = array(
-			'file_id' => $id,
+			'file_id' => $identifier,
 			'file_original_name' => $originalname,
 			'file_extension' => $extension,
 			'file_mimetype' => $mimetype,
@@ -384,24 +384,6 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	
-	/**
-	 * Delete file
-	 *
-	 * Deletes file from rackspace.
-	 *
-	 * @param string $identifier The file identifier
-	 * @param string $project_id The project the file blongs to
-	 * THIS FUNCTION IS NOT YET FINISHED
-	 *
-	 * @return NULL
-	 */
-	
-	function delete_file($identifier, $project_id)
-	{
-		
-	}
-
 }
 
 // End of file projects.php

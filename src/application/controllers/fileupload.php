@@ -20,19 +20,25 @@ require APPPATH.'/libraries/Orbital_Controller.php';
 class Fileupload extends CI_Controller {
 
 	/**
-	 * Allowed file extensions
+	 * Allowed file extensions.
+	 *
+	 * @var $allowed_extensions Allowed file extensions
 	 */
 	 
 	private $allowed_extensions = array();
 	
 	/**
-	 * Max size limit of files
+	 * Max size limit of files.
+	 *
+	 * @var $size_limit Allowed file size limit
 	 */
 	 
 	private $size_limit = 314572800;
 	
 	/**
-	 * File contruct
+	 * File contruct.
+	 *
+	 * @var $file file to be processed
 	 */
 	 
 	private $file;
@@ -40,11 +46,11 @@ class Fileupload extends CI_Controller {
 	/**
 	 * Constructor
 	 *
-	 * @param $allowedExtentions array Allowed file extensions
-	 * param $sizeLimie The Max size limit of files
+	 * @param $allowed_extentions array Allowed file extensions
+	 * @param $size_limit         array Allowed file size limit
 	 */
-	 
-	function __construct(array $allowed_extensions = array(), $size_limit = 314572800)
+
+	function __construct()
 	{
 		parent::__construct();
 	}
@@ -54,7 +60,7 @@ class Fileupload extends CI_Controller {
 	 *
 	 * @return NULL
 	 */
-	 
+
 	function index()
 	{
 

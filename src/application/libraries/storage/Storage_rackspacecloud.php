@@ -18,6 +18,7 @@ class Storage_rackspacecloud {
 
 	/**
 	 * CodeIgniter instance.
+	 *
 	 * @var _ci instance of CodeIngiter
 	 */
 
@@ -39,6 +40,7 @@ class Storage_rackspacecloud {
 	 * @param string $identifier    The project identifier.
 	 * @param array  $metadata      Additional information about the file.
 	 * @param string $container     Folder containing the project.
+	 *
 	 * @return NULL
 	 */
 
@@ -91,6 +93,7 @@ class Storage_rackspacecloud {
 	 *
 	 * @param string $identifier The project identifier.
 	 * @param string $container Folder containing the project.
+	 *
 	 * @return BOOL
 	 */
 	

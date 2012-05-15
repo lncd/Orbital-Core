@@ -1,18 +1,20 @@
 <?php
- 
+
 /**
  * Format class
  *
  * Help convert between various formats such as XML, JSON, CSV, etc.
  *
- * @author  Phil Sturgeon <psturgeon@lincoln.ac.uk>
- * @license Don't be a Dick Public License 
- * @link    http://philsturgeon.co.uk/code/dbad-license
- * @package Orbital
+ * PHP Version 5
+ *
  * @category Library
+ * @package  Orbital
+ * @author   Phil Sturgeon <psturgeon@lincoln.ac.uk>
+ * @license  Don't be a Dick Public License 
+ * @link     http://philsturgeon.co.uk/code/dbad-license
  */
 
-class format {
+class Format {
 
 	/**
 	 * Array to convert.
@@ -26,7 +28,7 @@ class format {
 	 *
 	 * @var mixed $_from_type 
 	 */
-	 
+
 	protected $_from_type = NULL;
 
 	/**
@@ -34,8 +36,8 @@ class format {
 	 *
 	 * echo $this->format->factory(array('foo' => 'bar'))->to_xml();
 	 *
-	 * @param $data      mixed  general date to be converted
-	 * @param $from_type string data format the file was provided in
+	 * @param mixed  $data      general date to be converted
+	 * @param string $from_type data format the file was provided in
 	 * @return mixed
 	 */
 
@@ -49,10 +51,10 @@ class format {
 	/**
 	 * Do not use this directly, call factory()
 	 *
-	 * @param $data      mixed Array of data
-	 * @param $from_type mixed Type of data
+	 * @param mixed $data      Array of data
+	 * @param mixed $from_type Type of data
 	 *
-	 * @throws exception 
+	 * @throws Exception 
 	 */
 
 	public function __construct($data = NULL, $from_type = NULL)
@@ -82,6 +84,7 @@ class format {
 	 * to_array
 	 *
 	 * @param mixed $data Data to convert to array
+	 * @return array
 	 */
 
 	public function to_array($data = NULL)
@@ -119,7 +122,7 @@ class format {
 	 *
 	 * @return string 
 	 */
-	 
+
 	public function to_xml($data = NULL, $structure = NULL, $basenode = 'xml')
 	{
 		if ($data === NULL AND ! func_num_args())
@@ -338,7 +341,8 @@ class format {
 	/**
 	 * Encode as Serialized array
 	 *
-	 * @param $string string Input string
+	 * @param string $string Input string
+	 *
 	 * @return array
 	 */
 	 

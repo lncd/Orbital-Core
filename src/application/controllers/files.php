@@ -31,8 +31,10 @@ class Files extends Orbital_Controller {
 	/**
 	 * Get File Information
 	 *
-	 * @param $identifier string The file identifier
-	*/
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
+	 */
 
 	public function file_view_get($identifier)
 	{
@@ -48,7 +50,7 @@ class Files extends Orbital_Controller {
 		}
 		else
 		{
-			if ($user = $this->access->valid_user(array('projects')))
+			if ($this->access->valid_user(array('projects')))
 			{
 				$response->status = TRUE;
 				$response->file = $this->files_model->file_get_details($identifier);
@@ -60,7 +62,7 @@ class Files extends Orbital_Controller {
 	/**
 	 * Get One-Time Download Key
 	 *
-	 * @param $identifier string The file identifier
+	 * @param string $identifier The file identifier
 	*/
 	
 	public function get_otk_get($identifier)
@@ -93,7 +95,9 @@ class Files extends Orbital_Controller {
 	/**
 	 * Download File
 	 *
-	 * @param $identifier string The file identifier
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
 	*/
 	
 	public function download_get($identifier)

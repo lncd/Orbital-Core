@@ -155,14 +155,10 @@ class Qqfileuploader {
 	private $size_limit = 10485760;
 
 	/**
-	 * File to be processed.
-	 *
-	 * @var string @file File to be processed.
-	 */
-	private $_file;
-
-	/**
 	 * Construct
+	 *
+	 * @var $allowed_extensions Allowed file extensions
+	 * @var $size_limit         Allowed file size limit
 	 */
 
 	function __construct(array $allowed_extensions = array(), $size_limit = 10485760)
@@ -209,7 +205,8 @@ class Qqfileuploader {
 	/**
 	 * Convert string to bytes
 	 *
-	 * @param $str String to convert to bytes
+	 * @param string $str to convert to bytes
+	 *
 	 * @return $var bytes
 	 */
 
@@ -234,7 +231,7 @@ class Qqfileuploader {
 	 *
 	 * @return array
 	 */
- 
+
 	function handleUpload($upload_directory, $file_id, $replace_old_file = FALSE)
 	{
 		if ( ! is_writable($upload_directory))

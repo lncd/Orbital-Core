@@ -35,7 +35,7 @@ class REST_Controller extends CI_Controller {
 	 * @var mixed $request
 	 */
 
- 	protected $request = NULL;
+	protected $request = NULL;
 	
 	/**
 	 * What is gonna happen in output.
@@ -777,8 +777,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * GET
 	 *
-	 * @param string $key       
-	 * @param bool   $xss_clean 
+	 * @param string $key       The key
+	 * @param bool   $xss_clean Xss_clean
 	 * 
 	 * @return mixed
 	 */ 
@@ -796,8 +796,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * POST
 	 *
-	 * @param string $key       
-	 * @param bool   $xss_clean 
+	 * @param string $key       The key
+	 * @param bool   $xss_clean Xss_clean
 	 * 
 	 * @return mixed
 	 */
@@ -815,8 +815,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * PUT
 	 *
-	 * @param string $key       
-	 * @param bool   $xss_clean 
+	 * @param string $key       The key
+	 * @param bool   $xss_clean Xss_clean
 	 * 
 	 * @return mixed
 	 */
@@ -834,8 +834,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * DELETE
 	 *
-	 * @param string $key       
-	 * @param bool   $xss_clean 
+	 * @param string $key       The key
+	 * @param bool   $xss_clean Xss_clean
 	 * 
 	 * @return mixed
 	 */
@@ -887,8 +887,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * Check login
 	 *
-	 * @param string $username 
-	 * @param string $password 
+	 * @param string $username Username
+	 * @param string $password Password
      * 
      * @return bool
 	 */
@@ -969,7 +969,7 @@ class REST_Controller extends CI_Controller {
 			$this->_check_whitelist_auth();
 		}
 
-		$uniqid = uniqid(""); // Empty argument for backward compatibility
+		$uniqid = uniqid(''); // Empty argument for backward compatibility
 		// We need to test which server authentication variable to use
 		// because the PHP ISAPI module in IIS acts different from CGI
 		if ($this->input->server('PHP_AUTH_DIGEST'))
@@ -982,12 +982,10 @@ class REST_Controller extends CI_Controller {
 		}
 		else
 		{
-			$digest_string = "";
+			$digest_string = '';
 		}
 
-		/* The $_SESSION['error_prompted'] variabile is used to ask
-		  the password again if none given OR if the user enters
-		  a wrong auth. informations. */
+		// The $_SESSION['error_prompted'] variabile is used to ask the password again if none given OR if the user enters a wrong auth. informations.
 		if (empty($digest_string))
 		{
 			$this->_force_login($uniqid);
@@ -1006,9 +1004,9 @@ class REST_Controller extends CI_Controller {
 		$valid_pass = $valid_logins[$digest['username']];
 
 		// This is the valid response expected
-		$A1 = md5($digest['username'] . ':' . $this->config->item('rest_realm') . ':' . $valid_pass);
-		$A2 = md5(strtoupper($this->request->method) . ':' . $digest['uri']);
-		$valid_response = md5($A1 . ':' . $digest['nonce'] . ':' . $digest['nc'] . ':' . $digest['cnonce'] . ':' . $digest['qop'] . ':' . $A2);
+		$a1 = md5($digest['username'] . ':' . $this->config->item('rest_realm') . ':' . $valid_pass);
+		$a2 = md5(strtoupper($this->request->method) . ':' . $digest['uri']);
+		$valid_response = md5($a1 . ':' . $digest['nonce'] . ':' . $digest['nc'] . ':' . $digest['cnonce'] . ':' . $digest['qop'] . ':' . $a2);
 
 		if ($digest['response'] !== $valid_response)
 		{
@@ -1024,9 +1022,9 @@ class REST_Controller extends CI_Controller {
 	 * @return NULL
 	 */
 
-	// Check if the client's ip is in the 'rest_ip_whitelist' config
 	protected function _check_whitelist_auth()
 	{
+		// Check if the client's ip is in the 'rest_ip_whitelist' config
 		$whitelist = explode(',', config_item('rest_ip_whitelist'));
 
 		array_push($whitelist, '127.0.0.1', '0.0.0.0');
@@ -1045,7 +1043,7 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * Force login
 	 *
-	 * @param $nonce string authentication
+	 * @param string $nonce authentication
 	 *
 	 * @return NULL
 	 */
@@ -1072,7 +1070,6 @@ class REST_Controller extends CI_Controller {
 	 * @return mixed
 	 */
 
-	// Force it into an array
 	protected function _force_loopable($data)
 	{
 		// Force it to be something useful
@@ -1087,7 +1084,7 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * Format as JSON
 	 *
-	 * @param $data array The data to encode as JSON
+	 * @param array $data The data to encode as JSON
 	 *
 	 * @return mixed
 	 */
