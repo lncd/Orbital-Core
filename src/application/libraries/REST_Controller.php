@@ -18,7 +18,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $rest_format mixed
      */
-	 
+ 
 	protected $rest_format = NULL;
 	
     /**
@@ -26,7 +26,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $methods array
      */
-	 
+ 
 	protected $methods = array();
 	
     /**
@@ -34,7 +34,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $request mixed
      */
-	 
+ 
 	protected $request = NULL;
 	
     /**
@@ -42,7 +42,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $response mixed
      */
-	 
+ 
 	protected $response = NULL;
 	
      /**
@@ -50,7 +50,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $rest mixed
       */
-	 
+ 
 	protected $rest = NULL;
 	
     /**
@@ -58,7 +58,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $_get_args array
      */
-	 
+ 
 	protected $_get_args = array();
 	
     /**
@@ -66,7 +66,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $_post_args array
      */
-	 
+ 
 	protected $_post_args = array();
 	
     /**
@@ -74,7 +74,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $_put_args array
      */
-	 
+ 
 	protected $_put_args = array();
 	
     /**
@@ -82,7 +82,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $_delete_args array
      */
-	 
+ 
 	protected $_delete_args = array();
 	
     /**
@@ -90,7 +90,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $rest_format array
      */
-	 
+ 
 	protected $_args = array();
 	
     /**
@@ -98,7 +98,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $_allow bool
      */
-	 
+ 
 	protected $_allow = TRUE;
 	
     /**
@@ -106,7 +106,7 @@ class REST_Controller extends CI_Controller {
      *
      * @var $_zlib_oc bool
      */
-	 
+ 
 	protected $_zlib_oc = FALSE;
 
     /**
@@ -126,9 +126,9 @@ class REST_Controller extends CI_Controller {
 		'csv' => 'application/csv'
 	);
 
-	/**
-	 * Constructor
-	 */
+    /**
+     * Constructor
+     */
 
 	public function __construct()
 	{
@@ -251,17 +251,17 @@ class REST_Controller extends CI_Controller {
 		}
 	}
 
-	/**
-	 * Remap
-	 *
-	 * Requests are not made to methods directly The request will be for an "object".
-	 * this simply maps the object and method to the correct Controller method.
-	 *
-	 * @param $object_called string The object to be remapped
-	 * @param $arguments array      The array of arguments sent to the function
-	 *
-	 * @return NULL
-	 */
+    /**
+     * Remap
+     *
+     * Requests are not made to methods directly The request will be for an "object".
+     * this simply maps the object and method to the correct Controller method.
+     *
+     * @param string $object_called The object to be remapped
+     * @param string $arguments     The array of arguments sent to the function
+     *
+     * @return NULL
+     */
 
 	public function _remap($object_called, $arguments)
 	{
@@ -332,14 +332,14 @@ class REST_Controller extends CI_Controller {
 	}
 
 
-	/**
-	 * Response
-	 *
-	 * Takes pure data and optionally a status code, then creates the response.
-	 *
-	 * @param $data array       The array of data
-	 * @param $http_code string The HTTP code used
-	 */
+    /**
+     * Response
+     *
+     * Takes pure data and optionally a status code, then creates the response.
+     *
+     * @param array $data       The array of data
+     * @param string $http_code The HTTP code used
+     */
 
 	public function response($data = array(), $http_code = NULL)
 	{
@@ -411,13 +411,13 @@ class REST_Controller extends CI_Controller {
 		exit($output);
 	}
 
-	/**
-	 * Detect input format
-	 *
-	 * Detect which format the HTTP Body is provided in
-	 *
-	 * @return $format Input format
-	 */
+    /**
+     * Detect input format
+     *
+     * Detect which format the HTTP Body is provided in
+     *
+     * @return $format Input format
+     */
 
 	protected function _detect_input_format()
 	{
@@ -441,13 +441,13 @@ class REST_Controller extends CI_Controller {
 		return NULL;
 	}
 
-	/**
-	 * Detect format
-	 *
-	 * Detect which format should be used to output the data
-	 *
-	 * @return $format The format
-	 */
+    /**
+     * Detect format
+     *
+     * Detect which format should be used to output the data
+     *
+     * @return $format The format
+     */
 
 	protected function _detect_output_format()
 	{
@@ -523,13 +523,13 @@ class REST_Controller extends CI_Controller {
 		return config_item('rest_default_format');
 	}
 
-	/**
-	 * Detect method
-	 *
-	 * Detect which method (POST, PUT, GET, DELETE) is being used
-	 *
-	 * @return $method the HTTP method used
-	 */
+    /**
+     * Detect method
+     *
+     * Detect which method (POST, PUT, GET, DELETE) is being used
+     *
+     * @return $method the HTTP method used
+     */
 
 	protected function _detect_method()
 	{
@@ -555,13 +555,13 @@ class REST_Controller extends CI_Controller {
 		return 'get';
 	}
 
-	/**
-	 * Detect API Key
-	 *
-	 * See if the user has provided an API key
-	 *
-	 * @return BOOL
-	 */
+    /**
+     * Detect API Key
+     *
+     * See if the user has provided an API key
+     *
+     * @return BOOL
+     */
 
 	protected function _detect_api_key()
 	{
@@ -596,13 +596,13 @@ class REST_Controller extends CI_Controller {
 		return FALSE;
 	}
 
-	/**
-	 * Detect language(s)
-	 *
-	 * What language do they want it in?
-	 *
-	 * @return $return_langs
-	 */
+    /**
+     * Detect language(s)
+     *
+     * What language do they want it in?
+     *
+     * @return $return_langs
+     */
 
 	protected function _detect_lang()
 	{
@@ -632,14 +632,14 @@ class REST_Controller extends CI_Controller {
 		return $lang;
 	}
 
-	/**
-	 * Log request
-	 *
-	 * Record the entry for awesomeness purposes
-	 *
-	 * @param $authorized bool Check for authorisation
-	 * @return array
-	 */
+    /**
+     * Log request
+     *
+     * Record the entry for awesomeness purposes
+     *
+     * @param bool $authorized Check for authorisation
+     * @return array
+     */
 
 	protected function _log_request($authorized = FALSE)
 	{
@@ -654,14 +654,14 @@ class REST_Controller extends CI_Controller {
 			));
 	}
 
-	/**
-	 * Log request
-	 *
-	 * Record the entry for awesomeness purposes
-	 *
-	 * @param $controller_method array
-	 * @return bool
-	 */
+    /**
+     * Log request
+     *
+     * Record the entry for awesomeness purposes
+     *
+     * @param array $controller_method
+     * @return bool
+     */
 
 	protected function _check_limit($controller_method)
 	{
@@ -713,13 +713,13 @@ class REST_Controller extends CI_Controller {
 		return TRUE;
 	}
 
-	/**
-	 * Auth override check
-	 *
-	 * Check if there is a specific auth type set for the current class/method being called
-	 *
-	 * @return bool
-	 */
+    /**
+     * Auth override check
+     *
+     * Check if there is a specific auth type set for the current class/method being called
+     *
+     * @return bool
+     */
 
 	protected function _auth_override_check()
 	{
@@ -773,8 +773,8 @@ class REST_Controller extends CI_Controller {
     /**
      * GET
      *
-     * @param $key string
-     * @param $xss_clean bool
+     * @param string $key
+     * @param bool $xss_clean
      * @return mixed
      */ 
 
@@ -791,8 +791,8 @@ class REST_Controller extends CI_Controller {
     /**
      * POST
      *
-     * @param $key string
-     * @param $xss_clean bool
+     * @param string $key
+     * @param bool $xss_clean
      * @return mixed
      */
 
@@ -809,8 +809,8 @@ class REST_Controller extends CI_Controller {
     /**
      * PUT
      *
-     * @param $key string
-     * @param $xss_clean bool
+     * @param string $key
+     * @param bool $xss_clean
      * @return mixed
      */
 
@@ -827,8 +827,8 @@ class REST_Controller extends CI_Controller {
     /**
      * DELETE
      *
-     * @param $key string
-     * @param $xss_clean bool
+     * @param string $key
+     * @param bool $xss_clean
      * @return mixed
      */
 
@@ -879,8 +879,8 @@ class REST_Controller extends CI_Controller {
     /**
      * Check login
      *
-     * @param $username string
-     * @param $password string
+     * @param string $username
+     * @param string $password
      * @return bool
      */
 
