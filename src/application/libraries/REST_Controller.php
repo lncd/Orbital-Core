@@ -13,107 +13,107 @@
 
 class REST_Controller extends CI_Controller {
 
-    /**
-     * Set this in a controller to use a default format.
-     *
-     * @var mixed $rest_format
-     */
+	/**
+	 * Set this in a controller to use a default format.
+	 *
+	 * @var mixed $rest_format
+	 */
  
 	protected $rest_format = NULL;
 	
-    /**
-     * Contains a list of method properties such AS limit, log and level.
-     *
-     * @var array $methods
-     */
+	/**
+	 * Contains a list of method properties such AS limit, log and level.
+	 *
+	 * @var array $methods
+	 */
  
 	protected $methods = array();
 	
-    /**
-     * Stores accept, language, body, headers, etc.
-     *
-     * @var mixed $request
-     */
+	/**
+	 * Stores accept, language, body, headers, etc.
+	 *
+	 * @var mixed $request
+	 */
  
 	protected $request = NULL;
 	
-    /**
-     * What is gonna happen in output.
-     *
-     * @var mixed $response
-     */
+	/**
+	 * What is gonna happen in output.
+	 *
+	 * @var mixed $response
+	 */
  
 	protected $response = NULL;
 	
-     /**
-      * Stores DB, keys, key level, etc.
-     *
-     * @var mixed $rest
-      */
+	/**
+	 * Stores DB, keys, key level, etc.
+	 *
+	 * @var mixed $rest
+	 */
  
 	protected $rest = NULL;
 	
-    /**
-     * Get arguments.
-     *
-     * @var array $_get_args
-     */
+	/**
+	 * Get arguments.
+	 *
+	 * @var array $_get_args
+	 */
  
 	protected $_get_args = array();
 	
-    /**
-     * Post arguments.
-     *
-     * @var array $_post_args
-     */
+	/**
+	 * Post arguments.
+	 *
+	 * @var array $_post_args
+	 */
  
 	protected $_post_args = array();
 	
-    /**
-     * Put arguments.
-     *
-     * @var array $_put_args
-     */
+	/**
+	 * Put arguments.
+	 *
+	 * @var array $_put_args
+	 */
  
 	protected $_put_args = array();
 	
-    /**
-     * Delete arguments.
-     *
-     * @var array $_delete_args
-     */
+	/**
+	 * Delete arguments.
+	 *
+	 * @var array $_delete_args
+	 */
  
 	protected $_delete_args = array();
 	
-    /**
-     * Arguments.
-     *
-     * @var array $rest_format
-     */
+	/**
+	 * Arguments.
+	 *
+	 * @var array $rest_format
+	 */
  
 	protected $_args = array();
 	
-    /**
-     * Allow.
-     *
-     * @var bool $_allow
-     */
+	/**
+	 * Allow.
+	 *
+	 * @var bool $_allow
+	 */
  
 	protected $_allow = TRUE;
 	
-    /**
-     * Determines if output compression is enabled.
-     *
-     * @var bool $_zlib_oc
-     */
+	/**
+	 * Determines if output compression is enabled.
+	 *
+	 * @var bool $_zlib_oc
+	 */
  
 	protected $_zlib_oc = FALSE;
 
-    /**
-     * List all supported methods, the first will be the default format.
-     *
-     * @var array $_supported_formats
-     */
+	/**
+	 * List all supported methods, the first will be the default format.
+	 *
+	 * @var array $_supported_formats
+	 */
 
 	protected $_supported_formats = array(
 		'xml' => 'application/xml',
@@ -126,9 +126,9 @@ class REST_Controller extends CI_Controller {
 		'csv' => 'application/csv'
 	);
 
-    /**
-     * Constructor
-     */
+	/**
+	 * Constructor
+	 */
 
 	public function __construct()
 	{
@@ -165,7 +165,7 @@ class REST_Controller extends CI_Controller {
 
 			// Merge both the URI segements and GET params
 			$this->_get_args = array_merge($this->_get_args, $get);
-			break;
+						break;
 
 		case 'post':
 			$this->_post_args = $_POST;
@@ -251,17 +251,17 @@ class REST_Controller extends CI_Controller {
 		}
 	}
 
-    /**
-     * Remap
-     *
-     * Requests are not made to methods directly The request will be for an "object".
-     * this simply maps the object and method to the correct Controller method.
-     *
-     * @param string $object_called The object to be remapped
-     * @param string $arguments     The array of arguments sent to the function
-     *
-     * @return NULL
-     */
+	/**
+	 * Remap
+	 *
+	 * Requests are not made to methods directly The request will be for an "object".
+	 * this simply maps the object and method to the correct Controller method.
+	 *
+	 * @param string $object_called The object to be remapped
+	 * @param string $arguments     The array of arguments sent to the function
+	 *
+	 * @return NULL
+	 */
 
 	public function _remap($object_called, $arguments)
 	{
@@ -339,6 +339,8 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @param array  $data      The array of data
 	 * @param string $http_code The HTTP code used
+	 *
+	 * @return NULL
 	 */
 
 	public function response($data = array(), $http_code = NULL)
@@ -617,7 +619,7 @@ class REST_Controller extends CI_Controller {
 			$langs = explode(',', $lang);
 
 			$return_langs = array();
-			$i = 1;
+			//$i = 1;
 			foreach ($langs as $lang)
 			{
 				// Remove weight and strip space
@@ -660,7 +662,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * Record the entry for awesomeness purposes
 	 *
-	 * @param array $controller_method
+	 * @param array $controller_method 
 	 *
 	 * @return bool
 	 */
@@ -775,8 +777,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * GET
 	 *
-	 * @param string $key
-	 * @param bool   $xss_clean
+	 * @param string $key       
+	 * @param bool   $xss_clean 
 	 * 
 	 * @return mixed
 	 */ 
@@ -794,8 +796,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * POST
 	 *
-	 * @param string $key
-	 * @param bool   $xss_clean
+	 * @param string $key       
+	 * @param bool   $xss_clean 
 	 * 
 	 * @return mixed
 	 */
@@ -813,8 +815,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * PUT
 	 *
-	 * @param string $key
-	 * @param bool   $xss_clean
+	 * @param string $key       
+	 * @param bool   $xss_clean 
 	 * 
 	 * @return mixed
 	 */
@@ -832,8 +834,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * DELETE
 	 *
-	 * @param string $key
-	 * @param bool   $xss_clean
+	 * @param string $key       
+	 * @param bool   $xss_clean 
 	 * 
 	 * @return mixed
 	 */
@@ -851,8 +853,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * XSS Clean
 	 *
-	 * @param $val  value
-	 * @param $bool boolean
+	 * @param $val  value   
+	 * @param $bool boolean 
 	 *
 	 * @return mixed
 	 */
@@ -872,7 +874,7 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * Validation errors
 	 *
-	 * @return mixed
+	 * @return mixed 
 	 */
 
 	public function validation_errors()
@@ -885,8 +887,8 @@ class REST_Controller extends CI_Controller {
 	/**
 	 * Check login
 	 *
-	 * @param string $username
-	 * @param string $password
+	 * @param string $username 
+	 * @param string $password 
      * 
      * @return bool
 	 */
