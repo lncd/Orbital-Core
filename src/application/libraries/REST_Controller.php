@@ -18,7 +18,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var mixed $rest_format
 	 */
- 
+
 	protected $rest_format = NULL;
 	
 	/**
@@ -26,7 +26,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var array $methods
 	 */
- 
+
 	protected $methods = array();
 	
 	/**
@@ -34,15 +34,15 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var mixed $request
 	 */
- 
-	protected $request = NULL;
+
+ 	protected $request = NULL;
 	
 	/**
 	 * What is gonna happen in output.
 	 *
 	 * @var mixed $response
 	 */
- 
+
 	protected $response = NULL;
 	
 	/**
@@ -50,7 +50,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var mixed $rest
 	 */
- 
+
 	protected $rest = NULL;
 	
 	/**
@@ -58,7 +58,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var array $_get_args
 	 */
- 
+
 	protected $_get_args = array();
 	
 	/**
@@ -66,7 +66,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var array $_post_args
 	 */
- 
+
 	protected $_post_args = array();
 	
 	/**
@@ -74,7 +74,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var array $_put_args
 	 */
- 
+
 	protected $_put_args = array();
 	
 	/**
@@ -82,7 +82,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var array $_delete_args
 	 */
- 
+
 	protected $_delete_args = array();
 	
 	/**
@@ -90,7 +90,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var array $rest_format
 	 */
- 
+
 	protected $_args = array();
 	
 	/**
@@ -98,7 +98,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var bool $_allow
 	 */
- 
+
 	protected $_allow = TRUE;
 	
 	/**
@@ -106,7 +106,7 @@ class REST_Controller extends CI_Controller {
 	 *
 	 * @var bool $_zlib_oc
 	 */
- 
+
 	protected $_zlib_oc = FALSE;
 
 	/**

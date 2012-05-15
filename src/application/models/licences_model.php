@@ -102,7 +102,7 @@ class Licences_model extends CI_Model {
 	 *
 	 * Gets a specific licence.
 	 *
-	 * @param $id string The identifier of the licence
+	 * @param string $id The identifier of the licence
 	 * @return ARRAY
 	 */
 	
@@ -152,9 +152,9 @@ class Licences_model extends CI_Model {
 	 *
 	 * Creates a new licence.
 	 *
-	 * @param $name string                The full name of the licence
-	 * @param $name_short string          The short name of the licence
-	 * @param $licence_summary_uri string The uri of the licence
+	 * @param string $name                The full name of the licence
+	 * @param string $name_short          The short name of the licence
+	 * @param string $licence_summary_uri The uri of the licence
 	 * @return ARRAY
 	 */
 	
@@ -184,11 +184,11 @@ class Licences_model extends CI_Model {
 	 *
 	 * Updates a licence.
 	 *
-	 * @param $id string        The licence identifier
-	 * @param $name string      The full name of the licence
-	 * @param $shortname string The short name of the licence
-	 * @param $uri string       The full name of the licence
-	 * @param $enable bool      If the licence is enabled
+	 * @param string $id        The licence identifier
+	 * @param string $name      The full name of the licence
+	 * @param string $shortname The short name of the licence
+	 * @param string $uri       The full name of the licence
+	 * @param bool $enable      If the licence is enabled
 	 * @return ARRAY
 	 */
 	

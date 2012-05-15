@@ -19,7 +19,7 @@ class Qquploadedfilexhr
 	/**
 	 * Save the file to the specified path
 	 *
-	 * @param $path string The path of the file to save
+	 * @param string $path The path of the file to save
 	 *
 	 * @return boolean TRUE on success
 	 */
@@ -44,11 +44,11 @@ class Qquploadedfilexhr
 		return TRUE;
 	}
 
-    /**
-     * Gets name of file
-     *
-     * @return string File name
-     */
+	/**
+	 * Gets name of file
+	 *
+	 * @return string File name
+	 */
 
 	function getName()
 	{
@@ -91,7 +91,7 @@ class Qquploadedfileform {
 	/**
 	 * Save the file to the specified path
 	 *
-	 * @param $path string the path of the file
+	 * @param string $path the path of the file
 	 *
 	 * @return boolean TRUE on success
 	 */
@@ -105,20 +105,20 @@ class Qquploadedfileform {
 		return TRUE;
 	}
 
-    /**
-     * Gets name of file
-     *
-     * @return mixed
-     */
-	 
+	/**
+	 * Gets name of file
+	 *
+	 * @return mixed
+	 */
+
 	function getName()
 	{
 		return $_FILES['qqfile']['name'];
 	}
-	
-    /**
-     * Gets size of file
-     */
+
+	/**
+	 * Gets size of file
+	 */
 
 	function getSize()
 	{
@@ -140,31 +140,31 @@ class Qquploadedfileform {
 
 class Qqfileuploader {
 
-    /**
-     * Allowed file extensions
-     *
-     * @var @allowedExtensions array Allowed file extensions.
-     */
+	/**
+	 * Allowed file extensions.
+	 *
+	 * @var array @allowedExtensions Allowed file extensions.
+	 */
 	private $allowed_extensions = array();
 	
-    /**
-     * File size limit
-     *
-     * @var @size_limit int Allowed file size.
-     */
+	/**
+	 * File size limit.
+	 *
+	 * @var int @size_limit Allowed file size.
+	 */
 	private $size_limit = 10485760;
-	
-    /**
-     * File to be processed
-     *
-     * @var @file string File to be processed.
-     */
+
+	/**
+	 * File to be processed.
+	 *
+	 * @var string @file File to be processed.
+	 */
 	private $_file;
 
-    /**
-     * Construct
-     */
- 
+	/**
+	 * Construct
+	 */
+
 	function __construct(array $allowed_extensions = array(), $size_limit = 10485760)
 	{
 		$allowed_extensions = array_map('strtolower', $allowed_extensions);
@@ -188,30 +188,30 @@ class Qqfileuploader {
 		}
 	}
 
-    /**
-     * Checks settings on the server
-     *
-     * @return NULL
-     */
+	/**
+	 * Checks settings on the server
+	 *
+	 * @return NULL
+	 */
 
 	private function checkServerSettings()
 	{
-		$postSize = $this->toBytes(ini_get('post_max_size'));
-		$uploadSize = $this->toBytes(ini_get('upload_max_filesize'));
+		$post_size = $this->toBytes(ini_get('post_max_size'));
+		$upload_size = $this->toBytes(ini_get('upload_max_filesize'));
 
-		if ($postSize < $this->sizeLimit OR $uploadSize < $this->sizeLimit)
+		if ($post_size < $this->sizeLimit OR $upload_size < $this->sizeLimit)
 		{
 			$size = max(1, $this->sizeLimit / 1024 / 1024) . 'M';
 			die("{'error':'increase post_max_size AND upload_max_filesize to {$size}'}");
 		}
 	}
 
-    /**
-     * Convert string to bytes
-     *
-     * @param $str String to convert to bytes
-     * @return $var bytes
-     */
+	/**
+	 * Convert string to bytes
+	 *
+	 * @param $str String to convert to bytes
+	 * @return $var bytes
+	 */
 
 	private function toBytes($str)
 	{
@@ -228,13 +228,13 @@ class Qqfileuploader {
 	/**
 	 * Returns array('success'=>true) OR array('error'=>'error message')
 	 *
-	 * @param string $upload_directory The directory the file is uploaded to
-	 * @param string $file_id         The identifier of the file
+	 * @param string  $upload_directory The directory the file is uploaded to
+	 * @param string  $file_id          The identifier of the file
 	 * @param boolean $replace_old_file If the previous file should be replaced or not
 	 *
 	 * @return array
 	 */
- 	 
+ 
 	function handleUpload($upload_directory, $file_id, $replace_old_file = FALSE)
 	{
 		if ( ! is_writable($upload_directory))

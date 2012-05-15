@@ -1,27 +1,32 @@
 <?php
  
- /**
+/**
  * Format class
  *
  * Help convert between various formats such as XML, JSON, CSV, etc.
  *
- * @author	Phil Sturgeon <psturgeon@lincoln.ac.uk>
- * @license	Don't be a Dick Public License 
- * @link	http://philsturgeon.co.uk/code/dbad-license
- * @package	Orbital
- * @catgory	Library
+ * @author  Phil Sturgeon <psturgeon@lincoln.ac.uk>
+ * @license Don't be a Dick Public License 
+ * @link    http://philsturgeon.co.uk/code/dbad-license
+ * @package Orbital
+ * @category Library
  */
- 
-class Format {
+
+class format {
 
 	/**
-	 * Array to convert
+	 * Array to convert.
+	 *
+	 * @var array $data 
 	 */
 	protected $_data = array();
 
 	/**
-	 * View filename
+	 * View filename.
+	 *
+	 * @var mixed $_from_type 
 	 */
+	 
 	protected $_from_type = NULL;
 
 	/**
@@ -29,8 +34,8 @@ class Format {
 	 *
 	 * echo $this->format->factory(array('foo' => 'bar'))->to_xml();
 	 *
-	 * @param $data mixed general date to be converted
-	 * @param $from_type  string data format the file was provided in
+	 * @param $data      mixed  general date to be converted
+	 * @param $from_type string data format the file was provided in
 	 * @return mixed
 	 */
 
@@ -44,10 +49,12 @@ class Format {
 	/**
 	 * Do not use this directly, call factory()
 	 *
-	 * @param $data mixed Array of data
-	 * @param $from_type  Type of data
+	 * @param $data      mixed Array of data
+	 * @param $from_type mixed Type of data
+	 *
+	 * @throws exception 
 	 */
-	 
+
 	public function __construct($data = NULL, $from_type = NULL)
 	{
 		get_instance()->load->helper('inflector');
@@ -74,9 +81,9 @@ class Format {
 	/**
 	 * to_array
 	 *
-	 * @param $data mixed Data to convert to array
+	 * @param mixed $data Data to convert to array
 	 */
-	 
+
 	public function to_array($data = NULL)
 	{
 		// If not just null, but nopthing is provided
@@ -106,9 +113,11 @@ class Format {
 	/**
 	 * Format XML for output
 	 *
-	 * @param $data mixed      input data
-	 * @param $structure mixed structure of data
-	 * @param $basenode string format of data
+	 * @param mixed  $data      input data
+	 * @param mixed  $structure structure of data
+	 * @param string $basenode  format of data
+	 *
+	 * @return string 
 	 */
 	 
 	public function to_xml($data = NULL, $structure = NULL, $basenode = 'xml')
@@ -147,7 +156,7 @@ class Format {
 			// replace anything not alpha numeric
 			$key = preg_replace('/[^a-z_\-0-9]/i', '', $key);
 
-            // if there is another array found recrusively call this function
+			// if there is another array found recrusively call this function
 			if (is_array($value) OR is_object($value))
 			{
 				$node = $structure->addChild($key);
@@ -209,7 +218,7 @@ class Format {
 	 *
 	 * @return string
 	 */
-	 
+
 	public function to_csv()
 	{
 		$data = $this->_data;
@@ -241,7 +250,7 @@ class Format {
 	 *
 	 * @return string
 	 */
-	 
+
 	public function to_json()
 	{
 		return json_encode($this->_data);
@@ -252,30 +261,31 @@ class Format {
 	 *
 	 * @return array
 	 */
-	 
+
 	public function to_serialized()
 	{
 		return serialize($this->_data);
 	}
-	
+
 	/**
 	 * Output as a string representing the PHP structure
 	 *
 	 * @return string
 	 */
-	 
+
 	public function to_php()
 	{
-	    return var_export($this->_data, TRUE);
+		return var_export($this->_data, TRUE);
 	}
 
 	/**
 	 * Format XML for output
 	 *
-	 * @param $string string Input string
+	 * @param string $string Input string
+	 *
 	 * @return string
 	 */
-	 
+
 	protected function _from_xml($string)
 	{
 		return $string ? (array) simplexml_load_string($string, 'SimpleXMLElement', LIBXML_NOCDATA) : array();
@@ -286,10 +296,11 @@ class Format {
 	 * Format HTML for output
 	 * This function is DODGY! Not perfect CSV support but works with my REST_Controller
 	 *
-	 * @param $string string Input string
+	 * @param string $string Input string
+	 *
 	 * @return string
 	 */
-	 
+
 	protected function _from_csv($string)
 	{
 		$data = array();
@@ -314,10 +325,11 @@ class Format {
 	/**
 	 * Encode as JSON
 	 *
-	 * @param $string string Input string
+	 * @param string $string Input string
+	 *
 	 * @return string
 	 */
-	 
+
 	private function _from_json($string)
 	{
 		return json_decode(trim($string));
@@ -334,7 +346,6 @@ class Format {
 	{
 		return unserialize(trim($string));
 	}
-
 }
 
 /* End of file format.php */
