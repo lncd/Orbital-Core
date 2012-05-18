@@ -93,6 +93,51 @@ class Files extends Orbital_Controller {
 	}
 	
 	/**
+	 * View Put
+	 *
+	 * Updates a file
+	 *
+	 * @param $identifer string The identifier of the file
+	 */
+
+	public function view_put($identifier)
+	{
+		//Check for valid user
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+
+			//Check file exists
+			if($file = $this->files_model->file_get_details($identifier))
+			{
+		//CHANGE TO CHECK FOR FILE PERMISSIONS
+				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
+				//{				
+					if ($file = $this->files_model->update_file($identifier, $this->put('name'), $this->put('default_licence')))
+					{
+						$response->file = $file;
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occurred in updating the file.';
+						$this->response($response, 400);
+					}
+				//}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+
+	
+	/**
 	 * Download File
 	 *
 	 * @param string $identifier The file identifier

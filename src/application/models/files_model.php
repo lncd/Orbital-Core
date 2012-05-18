@@ -384,6 +384,43 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * Update File
+	 *
+	 * Updates a files details.
+	 *
+	 * @param string $identifier      The file identifier
+	 * @param string $name            The file name
+	 * @param string $default_licence The file default_licence
+	 * @param array $other            Other information
+	 *
+	 * @return $identifier.
+	 */
+
+	function update_file($identifier, $name, $default_licence, $other = array())
+	{
+		$update = array(
+			'file_original_name' => $name,
+			'file_licence' => $default_licence
+		);
+
+		foreach($other as $name => $value)
+		{
+			$this->db->set($name, $value);
+		}
+
+		// Attempt update
+
+		if ($this->db->where('file_id', $identifier) -> update('archive_files', $update))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file projects.php
