@@ -398,11 +398,12 @@ class Files_model extends CI_Model {
 	 * @return $identifier.
 	 */
 
-	function update_file($identifier, $name, $default_licence, $other = array())
+	function update_file($identifier, $name, $default_licence, $public_view,  $other = array())
 	{
 		$update = array(
 			'file_original_name' => $name,
-			'file_licence' => $default_licence
+			'file_licence' => $default_licence,
+			'file_visibility' => $public_view
 		);
 
 		foreach($other as $name => $value)

@@ -125,10 +125,10 @@ class Files extends Orbital_Controller {
 			//Check file exists
 			if($file = $this->files_model->file_get_details($identifier))
 			{
-		//CHANGE TO CHECK FOR FILE PERMISSIONS
+				//CHANGE TO CHECK FOR FILE PERMISSIONS
 				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
 				//{				
-					if ($file = $this->files_model->update_file($identifier, $this->put('name'), $this->put('default_licence')))
+					if ($file = $this->files_model->update_file($identifier, $this->put('name'), $this->put('default_licence'), $this->put('public_view')))
 					{
 						$response->file = $file;
 						$response->status = TRUE;
