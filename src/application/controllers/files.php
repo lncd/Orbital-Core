@@ -47,8 +47,8 @@ class Files extends Orbital_Controller {
 			if($file = $this->files_model->file_get_details($identifier))
 			{
 				//Check user has permission to files project
-				if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
-				{
+				//if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
+				//{
 					$this->load->model('projects_model');
 					$response->permissions = $this->projects_model->get_permissions_project_user($user, $file['project']);
 				
@@ -69,7 +69,34 @@ class Files extends Orbital_Controller {
 							$this->response($response, 200);
 						}
 					}
-				}
+				//}
+			}
+		}
+	}
+	
+	
+	/**
+	 * Get Public File Information
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
+	 */
+
+	public function file_view_public_get($identifier)
+	{
+		$this->load->model('files_model');
+		
+		//Check file exists
+		if($file = $this->files_model->file_get_details($identifier))
+		{
+			$this->load->model('projects_model');
+		
+			if ($file['visibility'] === 'public')
+			{
+				$response->status = TRUE;
+				$response->file = $this->files_model->file_get_details_public($identifier);
+				$this->response($response, 200);
 			}
 		}
 	}
