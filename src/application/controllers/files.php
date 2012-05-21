@@ -38,23 +38,38 @@ class Files extends Orbital_Controller {
 
 	public function file_view_get($identifier)
 	{
-		$this->load->model('files_model');
-		
-		$file = $this->files_model->file_get_details($identifier);
-
-		if ($file['visibility'] === 'public')
+		//Check user is valid
+		if ($user = $this->access->valid_user(array('projects')))
 		{
-			$response->status = TRUE;
-			$response->file = $this->files_model->file_get_details_public($identifier);
-			$this->response($response, 200);
-		}
-		else
-		{
-			if ($this->access->valid_user(array('projects')))
+			$this->load->model('files_model');
+			
+			//Check file exists
+			if($file = $this->files_model->file_get_details($identifier))
 			{
-				$response->status = TRUE;
-				$response->file = $this->files_model->file_get_details($identifier);
-				$this->response($response, 200);
+				//Check user has permission to files project
+				if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
+				{
+					$this->load->model('projects_model');
+					$response->permissions = $this->projects_model->get_permissions_project_user($user, $file['project']);
+				
+					//CHECK FOR CREATE FILE PERMISSION
+	
+					if ($file['visibility'] === 'public')
+					{
+						$response->status = TRUE;
+						$response->file = $this->files_model->file_get_details_public($identifier);
+						$this->response($response, 200);
+					}
+					else
+					{
+						if ($this->access->valid_user(array('projects')))
+						{
+							$response->status = TRUE;
+							$response->file = $this->files_model->file_get_details($identifier);
+							$this->response($response, 200);
+						}
+					}
+				}
 			}
 		}
 	}
