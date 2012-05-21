@@ -100,7 +100,7 @@ class Files extends Orbital_Controller {
 	 * @param $identifer string The identifier of the file
 	 */
 
-	public function view_put($identifier)
+	public function file_view_put($identifier)
 	{
 		//Check for valid user
 		if ($user = $this->access->valid_user(array('projects')))
