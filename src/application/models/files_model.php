@@ -269,6 +269,7 @@ class Files_model extends CI_Model {
 			(
 				'id' => $archive_file->file_id,
 				'original_name' => $archive_file->file_original_name,
+				'title' => $archive_file->file_title,
 				'extension' => $archive_file->file_extension,
 				'mimetype' => $archive_file->file_mimetype,
 				'project' => $archive_file->file_project,
@@ -314,6 +315,7 @@ class Files_model extends CI_Model {
 			(
 				'id' => $archive_file->file_id,
 				'original_name' => $archive_file->file_original_name,
+				'title' => $archive_file->file_title,
 				'extension' => $archive_file->file_extension,
 				'mimetype' => $archive_file->file_mimetype,
 				'project' => $archive_file->file_project,
@@ -366,6 +368,7 @@ class Files_model extends CI_Model {
 		$insert = array(
 			'file_id' => $identifier,
 			'file_original_name' => $originalname,
+			'file_title' => $originalname . ' (' . date('d/m/y H:i') . ')',
 			'file_extension' => $extension,
 			'file_mimetype' => $mimetype,
 			'file_project' => $project,
@@ -401,7 +404,7 @@ class Files_model extends CI_Model {
 	function update_file($identifier, $name, $default_licence, $public_view,  $other = array())
 	{
 		$update = array(
-			'file_original_name' => $name,
+			'file_title' => $name,
 			'file_licence' => $default_licence,
 			'file_visibility' => $public_view
 		);
