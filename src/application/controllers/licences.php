@@ -139,7 +139,7 @@ class Licences extends Orbital_Controller {
 	/**
 	* Update Licence
 	*
-	* Updates the speciufied licence
+	* Updates the specified licence
 	*
 	* @param $identifier The identifier of the licence
 	*/
@@ -189,6 +189,37 @@ class Licences extends Orbital_Controller {
 					$response->message = 'Missing parameters in request.';
 					$response->status = FALSE;
 					$this->response($response, 400);
+				}
+			}
+		}
+	}
+	
+	/**
+	* Delete Licence
+	*
+	* Deletes the specified licence
+	*
+	* @param $identifier The identifier of the licence
+	*/
+	
+	public function specific_delete($identifier)
+	{
+	
+		if ($user = $this->access->valid_user(array('administration')))
+		{
+			if ($this->access->user_has_permission($user, 'licences'))
+			{
+				$this->load->model('licences_model');
+				
+				if ($this->licences_model->delete_licence($identifier))
+				{
+					$response->status = TRUE;
+					$this->response($response, 200);
+				}
+				else
+				{
+					$response->status = FALSE;
+					$this->response($response, 500);
 				}
 			}
 		}
