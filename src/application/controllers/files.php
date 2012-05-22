@@ -30,26 +30,72 @@ class Files extends Orbital_Controller {
 
 	/**
 	 * Get File Information
-	*/
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
+	 */
 
 	public function file_view_get($identifier)
 	{
+		//Check user is valid
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+			
+			//Check file exists
+			if($file = $this->files_model->file_get_details($identifier))
+			{
+				//Check user has permission to files project
+				//if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
+				//{
+					$this->load->model('projects_model');
+					$response->permissions = $this->projects_model->get_permissions_project_user($user, $file['project']);
+				
+					//CHECK FOR CREATE FILE PERMISSION
+	
+					if ($file['visibility'] === 'public')
+					{
+						$response->status = TRUE;
+						$response->file = $this->files_model->file_get_details_public($identifier);
+						$this->response($response, 200);
+					}
+					else
+					{
+						if ($this->access->valid_user(array('projects')))
+						{
+							$response->status = TRUE;
+							$response->file = $this->files_model->file_get_details($identifier);
+							$this->response($response, 200);
+						}
+					}
+				//}
+			}
+		}
+	}
+	
+	
+	/**
+	 * Get Public File Information
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
+	 */
+
+	public function file_view_public_get($identifier)
+	{
 		$this->load->model('files_model');
 		
-		$file = $this->files_model->file_get_details($identifier);
-
-		if ($file['visibility'] === 'public')
+		//Check file exists
+		if($file = $this->files_model->file_get_details($identifier))
 		{
-			$response->status = TRUE;
-			$response->file = $this->files_model->file_get_details_public($identifier);
-			$this->response($response, 200);
-		}
-		else
-		{
-			if ($user = $this->access->valid_user(array('projects')))
+			$this->load->model('projects_model');
+		
+			if ($file['visibility'] === 'public')
 			{
 				$response->status = TRUE;
-				$response->file = $this->files_model->file_get_details($identifier);
+				$response->file = $this->files_model->file_get_details_public($identifier);
 				$this->response($response, 200);
 			}
 		}
@@ -57,6 +103,8 @@ class Files extends Orbital_Controller {
 	
 	/**
 	 * Get One-Time Download Key
+	 *
+	 * @param string $identifier The file identifier
 	*/
 	
 	public function get_otk_get($identifier)
@@ -87,7 +135,56 @@ class Files extends Orbital_Controller {
 	}
 	
 	/**
+	 * View Put
+	 *
+	 * Updates a file
+	 *
+	 * @param $identifer string The identifier of the file
+	 */
+
+	public function file_view_put($identifier)
+	{
+		//Check for valid user
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+
+			//Check file exists
+			if($file = $this->files_model->file_get_details($identifier))
+			{
+				//CHANGE TO CHECK FOR FILE PERMISSIONS
+				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
+				//{				
+					if ($file = $this->files_model->update_file($identifier, $this->put('name'), $this->put('default_licence'), $this->put('public_view')))
+					{
+						$response->file = $file;
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occurred in updating the file.';
+						$this->response($response, 400);
+					}
+				//}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+
+	
+	/**
 	 * Download File
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
 	*/
 	
 	public function download_get($identifier)
@@ -99,7 +196,7 @@ class Files extends Orbital_Controller {
 			$file = $this->files_model->file_get_details($identifier);
 			$expires = time() + 60;
 			$path = '/v1/MossoCloudFS_e4c5ab67-0b7a-4095-999c-32aaf03a6886/project:' . $file['project'] . '/'. $identifier .'.'. $file['extension'];
-			$key = hash_hmac('sha1', "GET\n$expires\n$path", $_SERVER['RACKSPACE_METADATAKEY']);
+			$key = hash_hmac('sha1', "GET\n{$expires}\n{$path}", $_SERVER['RACKSPACE_METADATAKEY']);
 			$this->output->set_header('Location: ' . 'https://storage101.lon3.clouddrive.com' . $path . '?temp_url_sig=' . $key . '&temp_url_expires=' . $expires);
 
 		}
@@ -107,6 +204,8 @@ class Files extends Orbital_Controller {
 	
 	/**
 	 * Process Download Queue
+	 *
+	 * @return NULL
 	*/
 	
 	function process_queue_get()

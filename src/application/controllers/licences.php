@@ -6,7 +6,7 @@ require APPPATH.'/libraries/Orbital_Controller.php';
 /**
  * Licences
  *
- * Allows viewing and manipulation of available licences
+ * Allows viewing AND manipulation of available licences
  *
  * @package    Orbital
  * @subpackage Core
@@ -21,16 +21,16 @@ class Licences extends Orbital_Controller {
 
 	/**
 	 * Constructor
-	*/
+	 */
 
 	function __construct()
 	{
 		parent::__construct();
 	}
 	
-	/*
+	/**
 	 * List all licences
-	*/
+	 */
 
 	public function index_get()
 	{
@@ -41,7 +41,7 @@ class Licences extends Orbital_Controller {
 			{
 				$this->load->model('licences_model');
 	
-				// Iterate through projects, and append each one to the projects array.
+				// Iterate through projects, AND append each one to the projects array.
 				$response->licences = $this->licences_model->list_all();
 	
 				$response->status = TRUE;
@@ -51,8 +51,8 @@ class Licences extends Orbital_Controller {
 		}
 	}
 	
-	/*
-	 * Create licence
+	/**
+	* Create licence
 	*/
 
 	public function index_post()
@@ -63,9 +63,9 @@ class Licences extends Orbital_Controller {
 			if ($this->access->user_has_permission($user, 'licences'))
 			{
 			
-				// Ensure all expected fields have arrived and are valid
+				// Ensure all expected fields have arrived AND are valid
 				
-				if ($this->post('name') && $this->post('shortname') && $this->post('uri'))
+				if ($this->post('name') AND $this->post('shortname') AND $this->post('uri'))
 				{
 					$this->load->model('licences_model');
 	
@@ -95,14 +95,14 @@ class Licences extends Orbital_Controller {
 	}
 	
 	/**
-	 * List Enabled Licences
+	* List Enabled Licences
 	*/
 	
 	public function list_enabled_get()
 	{
 			$this->load->model('licences_model');
 
-			// Iterate through projects, and append each one to the projects array.
+			// Iterate through projects, AND append each one to the projects array.
 			$response->licences = $this->licences_model->list_all_available();
 
 			$response->status = TRUE;
@@ -111,7 +111,11 @@ class Licences extends Orbital_Controller {
 	}
 	
 	/**
-	 * Get Licence
+	* Get Licence
+	*
+	* Returns licence details
+	*
+	* @param $identifier string The identifier of the licence
 	*/
 	
 	public function specific_get($identifier)
@@ -133,7 +137,11 @@ class Licences extends Orbital_Controller {
 	}
 	
 	/**
-	 * Update Licence
+	* Update Licence
+	*
+	* Updates the specified licence
+	*
+	* @param $identifier The identifier of the licence
 	*/
 	
 	public function specific_post($identifier)
@@ -143,7 +151,7 @@ class Licences extends Orbital_Controller {
 		{
 			if ($this->access->user_has_permission($user, 'licences'))
 			{
-				if ($this->post('name') && $this->post('shortname') && $this->post('uri'))
+				if ($this->post('name') AND $this->post('shortname') AND $this->post('uri'))
 				{
 				
 					$this->load->model('licences_model');
@@ -185,6 +193,45 @@ class Licences extends Orbital_Controller {
 			}
 		}
 	}
+	
+	/**
+	* Delete Licence
+	*
+	* Deletes the specified licence
+	*
+	* @param $identifier The identifier of the licence
+	*/
+	
+	public function specific_delete($identifier)
+	{
+	
+		if ($user = $this->access->valid_user(array('administration')))
+		{
+			if ($this->access->user_has_permission($user, 'licences'))
+			{
+				$this->load->model('licences_model');
+				
+				if ($this->licences_model->delete_licence($identifier))
+				{
+					$response->status = TRUE;
+					$this->response($response, 200);
+				}
+				else
+				{
+					$response->status = FALSE;
+					$this->response($response, 500);
+				}
+			}
+		}
+	}
+	
+	/**
+	* Get licence in JSON format
+	*
+	* Returns the licence details in JSON format
+	*
+	* @param $identifier The identifier of the licence
+	*/
 	
 	function licence_json_get($identifier)
 	{

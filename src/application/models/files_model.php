@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') or exit('No direct script access allowed');
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
  * Archive Files Model
@@ -59,7 +59,7 @@ class Files_model extends CI_Model {
 	 *
 	 * Validates an OTK against a file, and marks it as used.
 	 *
-	 * @param string $key   One-time key.
+	 * @param string $key        One-time key.
 	 * @param string $identifier Identifier of file.
 	 *
 	 * @return bool TRUE if key is valid, FALSE if not.
@@ -146,6 +146,16 @@ class Files_model extends CI_Model {
 		}
 	}
 
+	/**
+	 * List for Project
+	 *
+	 * Lists all files for project and their upload status.
+	 *
+	 * @param string $identifier The project identifier
+	 *
+	 * @return ARRAY
+	 */
+
 	function list_for_project($identifier)
 	{
 		if ($archive_files = $this->db
@@ -173,6 +183,17 @@ class Files_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * Set file status
+	 *
+	 * Sets the status of a file.
+	 *
+	 * @param string $identifier Identifier of file.
+	 * @param string $status     Status of file.
+	 *
+	 * @return bool TRUE if key is valid, FALSE if not.
+	 */
+	
 	function set_file_status($identifier, $status)
 	{
 		if ($this->db->where('file_id', $identifier)
@@ -187,6 +208,15 @@ class Files_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * List public for Project
+	 *
+	 * Lists all files for public project and their upload status.
+	 *
+	 * @param string $identifier The project identifier
+	 *
+	 * @return ARRAY
+	 */
 
 	function list_public_for_project($identifier)
 	{
@@ -214,6 +244,16 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * File get details
+	 *
+	 * Lists a files details.
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return ARRAY
+	 */
 
 	function file_get_details($identifier)
 	{
@@ -229,6 +269,7 @@ class Files_model extends CI_Model {
 			(
 				'id' => $archive_file->file_id,
 				'original_name' => $archive_file->file_original_name,
+				'title' => $archive_file->file_title,
 				'extension' => $archive_file->file_extension,
 				'mimetype' => $archive_file->file_mimetype,
 				'project' => $archive_file->file_project,
@@ -250,6 +291,15 @@ class Files_model extends CI_Model {
 		}
 	}
 
+	/**
+	 * File get details public
+	 *
+	 * Lists all files for a public project and their upload status.
+	 *
+	 * @param string $identifier The project identifier
+	 *
+	 * @return ARRAY
+	 */
 
 	function file_get_details_public($identifier)
 	{
@@ -265,6 +315,7 @@ class Files_model extends CI_Model {
 			(
 				'id' => $archive_file->file_id,
 				'original_name' => $archive_file->file_original_name,
+				'title' => $archive_file->file_title,
 				'extension' => $archive_file->file_extension,
 				'mimetype' => $archive_file->file_mimetype,
 				'project' => $archive_file->file_project,
@@ -281,16 +332,43 @@ class Files_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * Get file id
+	 *
+	 * Generates a files id.
+	 *
+	 * @return STRING
+	 */
+	
 	function get_file_id()
 	{
 		return random_string('alnum', 16);
 	}
 	
-	function add_file($id, $originalname, $extension, $mimetype, $project, $licence, $visibility, $status, $uploader)
+	/**
+	 * Add file
+	 *
+	 * Adds file to upload queue.
+	 *
+	 * @param string $identifier   The file identifier
+	 * @param string $originalname The files original name
+	 * @param string $extension    The file extension
+	 * @param string $mimetype     The mimetype of the file
+	 * @param string $project      The project the file belongs to
+	 * @param string $licence      The licence of teh file
+	 * @param bool   $visibility   If the project is public or private
+	 * @param string $status       The upload status of the file
+	 * @param string $uploader     Who the file is uploaded by
+	 *
+	 * @return ARRAY
+	 */
+	
+	function add_file($identifier, $originalname, $extension, $mimetype, $project, $licence, $visibility, $status, $uploader)
 	{
 		$insert = array(
-			'file_id' => $id,
+			'file_id' => $identifier,
 			'file_original_name' => $originalname,
+			'file_title' => $originalname . ' (' . date('d/m/y H:i') . ')',
 			'file_extension' => $extension,
 			'file_mimetype' => $mimetype,
 			'file_project' => $project,
@@ -310,11 +388,43 @@ class Files_model extends CI_Model {
 		}
 	}
 	
-	function delete_file($identifier, $project_id)
-	{
-		
-	}
+	/**
+	 * Update File
+	 *
+	 * Updates a files details.
+	 *
+	 * @param string $identifier      The file identifier
+	 * @param string $name            The file name
+	 * @param string $default_licence The file default_licence
+	 * @param array $other            Other information
+	 *
+	 * @return $identifier.
+	 */
 
+	function update_file($identifier, $name, $default_licence, $public_view,  $other = array())
+	{
+		$update = array(
+			'file_title' => $name,
+			'file_licence' => $default_licence,
+			'file_visibility' => $public_view
+		);
+
+		foreach($other as $name => $value)
+		{
+			$this->db->set($name, $value);
+		}
+
+		// Attempt update
+
+		if ($this->db->where('file_id', $identifier) -> update('archive_files', $update))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file projects.php

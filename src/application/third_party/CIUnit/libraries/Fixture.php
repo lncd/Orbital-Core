@@ -33,7 +33,7 @@ class Fixture {
 		// E.g. outputted by spyc from reading a YAML file
 		$this->CI->db->simple_query('truncate table ' . $table . ';');
 
-		foreach ( $fixt as $id => $row )
+		foreach ( $fixt as $row )
 		{
 			foreach ($row as $key=>$val)
 			{

@@ -20,7 +20,7 @@ class Archive extends Orbital_Controller
 {
 	public function get_otk()
 	{
-		if ($user = $this->access->valid_user(array('archivefiles_read')))
+		if ($this->access->valid_user(array('archivefiles_read')))
 		{
 			$this->load->model('files_model');
 
@@ -38,8 +38,6 @@ class Archive extends Orbital_Controller
 			// If not, show an unauthorised
 		}
 	}
-	
-
 }
 
 // End of file archive.php

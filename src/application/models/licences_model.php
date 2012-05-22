@@ -25,6 +25,14 @@ class Licences_model extends CI_Model {
 		parent::__construct();
 	}
 	
+	/**
+	 * List all
+	 *
+	 * Lists all licences.
+	 *
+	 * @return ARRAY
+	 */
+	
 	function list_all()
 	{
 		if ($licences = $this->db->order_by('licence_name_full')->get('licences'))
@@ -59,6 +67,14 @@ class Licences_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * List all
+	 *
+	 * Lists all available licences.
+	 *
+	 * @return ARRAY
+	 */
+	
 	function list_all_available()
 	{
 		if ($licences = $this->db->order_by('licence_name_full')->where('licence_enabled', TRUE)->get('licences'))
@@ -80,6 +96,15 @@ class Licences_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * Get licence
+	 *
+	 * Gets a specific licence.
+	 *
+	 * @param string $id The identifier of the licence
+	 * @return ARRAY
+	 */
 	
 	function get_licence($id)
 	{
@@ -122,6 +147,17 @@ class Licences_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * Create licence
+	 *
+	 * Creates a new licence.
+	 *
+	 * @param  string $name                The full name of the licence
+	 * @param  string $name_short          The short name of the licence
+	 * @param  string $licence_summary_uri The uri of the licence
+	 * @return bool
+	 */
+	
 	function create_licence($name, $name_short, $licence_summary_uri)
 	{
 			
@@ -143,6 +179,19 @@ class Licences_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * Update licence
+	 *
+	 * Updates a licence.
+	 *
+	 * @param  string $id        The licence identifier
+	 * @param  string $name      The full name of the licence
+	 * @param  string $shortname The short name of the licence
+	 * @param  string $uri       The full name of the licence
+	 * @param  bool   $enable    If the licence is enabled
+	 * @return bool
+	 */
+	
 	function update_licence($id, $name, $shortname, $uri, $enable = FALSE)
 	{
 		
@@ -159,6 +208,38 @@ class Licences_model extends CI_Model {
 			if ($this->db
 				->where('licence_id', $id)
 				->update('licences', $update))
+			{
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Delete licence
+	 *
+	 * Deletes a licence.
+	 *
+	 * @param  string $id The licence identifier
+	 * @return bool
+	 */
+	
+	function delete_licence($id)
+	{
+		
+		if ($this->get_licence($id))
+		{
+		
+			if ($this->db
+				->where('licence_id', $id)
+				->delete('licences'))
 			{
 				return TRUE;
 			}

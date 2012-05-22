@@ -1,20 +1,34 @@
 <?php
- 
- /**
+
+/**
  * Format class
  *
  * Help convert between various formats such as XML, JSON, CSV, etc.
  *
- * @author		Phil Sturgeon
- * @license		http://philsturgeon.co.uk/code/dbad-license
+ * PHP Version 5
+ *
+ * @category Library
+ * @package  Orbital
+ * @author   Phil Sturgeon <psturgeon@lincoln.ac.uk>
+ * @license  Don't be a Dick Public License 
+ * @link     http://philsturgeon.co.uk/code/dbad-license
  */
- 
+
 class Format {
 
-	// Array to convert
+	/**
+	 * Array to convert.
+	 *
+	 * @var array $data 
+	 */
 	protected $_data = array();
 
-	// View filename
+	/**
+	 * View filename.
+	 *
+	 * @var mixed $_from_type 
+	 */
+
 	protected $_from_type = NULL;
 
 	/**
@@ -22,11 +36,11 @@ class Format {
 	 *
 	 * echo $this->format->factory(array('foo' => 'bar'))->to_xml();
 	 *
-	 * @param	mixed	general date to be converted
-	 * @param	string	data format the file was provided in
-	 * @return	Factory
+	 * @param mixed  $data      general date to be converted
+	 * @param string $from_type data format the file was provided in
+	 * @return mixed
 	 */
-	 
+
 	public function factory($data, $from_type = NULL)
 	{
 		// Stupid stuff to emulate the "new static()" stuff in this libraries PHP 5.3 equivilent
@@ -36,8 +50,13 @@ class Format {
 
 	/**
 	 * Do not use this directly, call factory()
+	 *
+	 * @param mixed $data      Array of data
+	 * @param mixed $from_type Type of data
+	 *
+	 * @throws Exception 
 	 */
-	 
+
 	public function __construct($data = NULL, $from_type = NULL)
 	{
 		get_instance()->load->helper('inflector');
@@ -63,8 +82,11 @@ class Format {
 
 	/**
 	 * to_array
+	 *
+	 * @param mixed $data Data to convert to array
+	 * @return array
 	 */
-	 
+
 	public function to_array($data = NULL)
 	{
 		// If not just null, but nopthing is provided
@@ -93,8 +115,14 @@ class Format {
 	
 	/**
 	 * Format XML for output
+	 *
+	 * @param mixed  $data      input data
+	 * @param mixed  $structure structure of data
+	 * @param string $basenode  format of data
+	 *
+	 * @return string 
 	 */
-	 
+
 	public function to_xml($data = NULL, $structure = NULL, $basenode = 'xml')
 	{
 		if ($data === NULL AND ! func_num_args())
@@ -103,14 +131,14 @@ class Format {
 		}
 
 		// turn off compatibility mode as simple xml throws a wobbly if you don't.
-		if (ini_get('zend.ze1_compatibility_mode') == 1)
+		if (ini_get('zend.ze1_compatibility_mode') === 1)
 		{
 			ini_set('zend.ze1_compatibility_mode', 0);
 		}
 
 		if ($structure === NULL)
 		{
-			$structure = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$basenode />");
+			$structure = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><{$basenode} />");
 		}
 
 		// Force it to be something useful
@@ -123,26 +151,26 @@ class Format {
 		{
 			// no numeric keys in our xml please!
 			if (is_numeric($key))
-            {
-                // make string key...           
-                $key = (singular($basenode) !== $basenode) ? singular($basenode) : 'item';
-            }
+			{
+				// make string key...           
+				$key = (singular($basenode) !== $basenode) ? singular($basenode) : 'item';
+			}
 
 			// replace anything not alpha numeric
 			$key = preg_replace('/[^a-z_\-0-9]/i', '', $key);
 
-            // if there is another array found recrusively call this function
-            if (is_array($value) OR is_object($value))
-            {
-                $node = $structure->addChild($key);
+			// if there is another array found recrusively call this function
+			if (is_array($value) OR is_object($value))
+			{
+				$node = $structure->addChild($key);
 
-                // recrusive call.
-                $this->to_xml($value, $node, $key);
-            }
+				// recrusive call.
+				$this->to_xml($value, $node, $key);
+			}
 
-            else
-            {
-                // add single node.
+			else
+			{
+				// add single node.
 				$value = htmlspecialchars(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, 'UTF-8');
 
 				$structure->addChild($key, $value);
@@ -154,6 +182,8 @@ class Format {
 
 	/**
 	 * Format HTML for output
+	 *
+	 * @return string
 	 */
 	
 	public function to_html()
@@ -188,8 +218,10 @@ class Format {
 
 	/**
 	 * Format HTML for output
+	 *
+	 * @return string
 	 */
-	 
+
 	public function to_csv()
 	{
 		$data = $this->_data;
@@ -218,8 +250,10 @@ class Format {
 
 	/**
 	 * Encode as JSON
+	 *
+	 * @return string
 	 */
-	 
+
 	public function to_json()
 	{
 		return json_encode($this->_data);
@@ -227,26 +261,34 @@ class Format {
 
 	/**
 	 * Encode as Serialized array
+	 *
+	 * @return array
 	 */
-	 
+
 	public function to_serialized()
 	{
 		return serialize($this->_data);
 	}
-	
+
 	/**
 	 * Output as a string representing the PHP structure
+	 *
+	 * @return string
 	 */
-	 
+
 	public function to_php()
 	{
-	    return var_export($this->_data, TRUE);
+		return var_export($this->_data, TRUE);
 	}
 
 	/**
 	 * Format XML for output
+	 *
+	 * @param string $string Input string
+	 *
+	 * @return string
 	 */
-	 
+
 	protected function _from_xml($string)
 	{
 		return $string ? (array) simplexml_load_string($string, 'SimpleXMLElement', LIBXML_NOCDATA) : array();
@@ -256,8 +298,12 @@ class Format {
 	/**
 	 * Format HTML for output
 	 * This function is DODGY! Not perfect CSV support but works with my REST_Controller
+	 *
+	 * @param string $string Input string
+	 *
+	 * @return string
 	 */
-	 
+
 	protected function _from_csv($string)
 	{
 		$data = array();
@@ -281,8 +327,12 @@ class Format {
 
 	/**
 	 * Encode as JSON
+	 *
+	 * @param string $string Input string
+	 *
+	 * @return string
 	 */
-	 
+
 	private function _from_json($string)
 	{
 		return json_decode(trim($string));
@@ -290,13 +340,16 @@ class Format {
 
 	/**
 	 * Encode as Serialized array
+	 *
+	 * @param string $string Input string
+	 *
+	 * @return array
 	 */
 	 
 	private function _from_serialize($string)
 	{
 		return unserialize(trim($string));
 	}
-
 }
 
 /* End of file format.php */

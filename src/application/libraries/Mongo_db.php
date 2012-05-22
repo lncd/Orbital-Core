@@ -29,7 +29,7 @@ class Mongo_db {
 	private $_config_file = 'mongodb';
 	
 	/**
-	 * Config file data
+	 * Config file data.
 	 * 
 	 * @var array
 	 * @access private
@@ -236,7 +236,7 @@ class Mongo_db {
 			$this->_config_data = $config;
 		}
 		
-		elseif (is_string($config) && $this->_ci)
+		elseif (is_string($config) AND $this->_ci)
 		{
 			$this->_config_data = $this->_ci->config->item($config);
 		}
@@ -1645,7 +1645,8 @@ class Mongo_db {
 	 *
 	 * @access public
 	 * @return array|object
-	 */    
+	 */   
+
 	public function remove_all_indexes($collection = '')
 	{
 		if (empty($collection))
@@ -1656,11 +1657,11 @@ class Mongo_db {
 		$this->_clear($collection, 'remove_all_indexes');
 		return $this;
 	}
-	
+
 	public function admin_replica_set_status()
 	{
 		$this->load('admin');
-		$response = $this->command(array('replSetGetStatus' => true));
+		$response = $this->command(array('replSetGetStatus' => TRUE));
 		$this->load();
 		
 		if ((int) $response['ok'] === 1)
@@ -1672,11 +1673,11 @@ class Mongo_db {
 			return FALSE;
 		}
 	}
-	
+
 	public function admin_server_status()
 	{
 		$this->load('admin');
-		$response = $this->command(array('serverStatus' => true));
+		$response = $this->command(array('serverStatus' => TRUE));
 		$this->load();
 		
 		if ((int) $response['ok'] === 1)
@@ -1688,7 +1689,7 @@ class Mongo_db {
 			return FALSE;
 		}
 	}
-	
+
 	/**
 	 * List indexes.
 	 *
@@ -1702,7 +1703,8 @@ class Mongo_db {
 	 *
 	 * @access public
 	 * @return array|object
-	 */    
+	 */
+
 	public function list_indexes($collection = '')
 	{
 		if (empty($collection))
@@ -1726,7 +1728,8 @@ class Mongo_db {
 	 *
 	 * @access public
 	 * @return array|object
-	 */    
+	 */
+
 	public function date($timestamp = NULL)
 	{
 		if ($timestamp === NULL)
@@ -1750,7 +1753,8 @@ class Mongo_db {
 	 *
 	 * @access public
 	 * @return array|object
-	 */    
+	 */
+
 	public function get_dbhandleref($object)
 	{
 		if (empty($object) OR ! isset($object))
@@ -1777,6 +1781,7 @@ class Mongo_db {
 	 * @access public
 	 * @return array|object
 	 */
+
 	public function create_dbhandleref($collection = '', $field = '', $db_name = '')
 	{
 		if (empty($collection))
@@ -1793,7 +1798,7 @@ class Mongo_db {
 		
 		return MongoDBRef::create($collection, $field, $database);
 	}
-	
+
 	/**
 	 * last_query.
 	 * 
@@ -1806,11 +1811,12 @@ class Mongo_db {
 	 * @access public
 	 * @return array
 	 */
+
 	public function last_query()
 	{
 		return $this->_query_log;
 	}
-		
+
 	/**
 	 * Connect to MongoDB
 	 * 
@@ -1822,6 +1828,7 @@ class Mongo_db {
 	 * @return object
 	 * @access private
 	 */
+
 	private function _connect()
 	{
 		$options = array();
@@ -1844,7 +1851,7 @@ class Mongo_db {
 		} 
 		catch (MongoConnectionException $exception)
 		{
-			if($this->_ci && $this->_ci->config->item('mongo_supress_connect_error'))
+			if($this->_ci AND $this->_ci->config->item('mongo_supress_connect_error'))
 			{
 				$this->_show_error('Unable to connect to MongoDB', 500);
 			}
@@ -1854,13 +1861,14 @@ class Mongo_db {
 			}
 		}
 	}
-	
+
 	/**
 	 * Build connectiong string.
 	 * 
 	 * @access private
 	 * @return void
 	 */
+
 	private function _connection_string() 
 	{		
 		$this->_host = trim($this->_config_data['mongo_hostbase']);
@@ -1902,13 +1910,16 @@ class Mongo_db {
 			$this->_connection_string = trim($connection_string);
 		}
 	}
-	
+
 	/**
 	 * Reset the class variables to default settings.
 	 * 
 	 * @access private
+	 * @param $collection array
+	 * @access $action string
 	 * @return void
 	 */
+
 	private function _clear($collection, $action)
 	{
 		$this->_query_log = array(
@@ -1939,7 +1950,8 @@ class Mongo_db {
 	 *
 	 * @access private
 	 * @return void
-	 */	
+	 */
+
 	private function _where_init($field)
 	{
 		if ( ! isset($this->wheres[$field]))
@@ -1947,7 +1959,7 @@ class Mongo_db {
 			$this->wheres[$field] = array();
 		}
 	}
-	
+
 	/**
 	 * Update initializer.
 	 *
@@ -1958,6 +1970,7 @@ class Mongo_db {
 	 * @access private
 	 * @return void
 	 */
+
 	private function _update_init($field = '')
 	{
 		if ( ! isset($this->updates[$field]))
@@ -1973,10 +1986,12 @@ class Mongo_db {
 	 *
 	 * @param string $error_message Error message
 	 * @param int    $response_code Response code 
+	 * @throws 
 	 *
 	 * @access private
 	 * @return void
 	 */
+
 	private function _show_error($error_message = '', $response_code = 500)
 	{
 		if ( ! function_exists('show_error')) // If we're not using CodeIgniter throw a normal exception
@@ -1989,7 +2004,6 @@ class Mongo_db {
 			show_error($error_message, $response_code);
 		}
 	}
-	
 }
 
 // End of file mongo_db.php

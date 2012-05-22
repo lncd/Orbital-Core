@@ -65,6 +65,16 @@ class Projects_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * List public
+	 *
+	 * Lists all public projects up to the given limit.
+	 *
+	 * @param int $limit limit for the number of public projects to be listed.
+	 *
+	 * @return ARRAY The list of public projects.
+	 */
+	
 	function list_public($limit = 20)
 	{
 		if ($projects = $this->db->where('project_public_view', 'visible')->limit($limit)->get('projects'))
@@ -83,6 +93,16 @@ class Projects_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * List public archive files
+	 *
+	 * Returns list of public archive files for given project.
+	 *
+	 * @param string $identifier Identifier of project.
+	 *
+	 * @return ARRAY The list of public archive files.
+	 */
+	
 	function list_public_archive_files($identifier)
 	{
 		if ($archive_files = $this->db->where('file_project', $identifier)->where('file_visibility', 'public')->get('archive_files'))
@@ -100,7 +120,17 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}		
 	}
-	
+		
+	/**
+	 * List datasets
+	 *
+	 * Returns list of datasets for given project.
+	 *
+	 * @param string $identifier Identifier of project.
+	 *
+	 * @return ARRAY The list of datasets.
+	 */
+	 
 	function list_datasets($identifier)
 	{
 		if ($datasets = $this->db->where('dset_project', $identifier)->where('dset_visibility', 'public')->get('datasets'))
@@ -118,6 +148,16 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}		
 	}
+	
+	/**
+	 * List archive files
+	 *
+	 * Returns list of archive files for given project.
+	 *
+	 * @param string $identifier Identifier of project.
+	 *
+	 * @return ARRAY The list of archive files.
+	 */
 	
 	function list_archive_files($identifier)
 	{
@@ -137,6 +177,17 @@ class Projects_model extends CI_Model {
 		}		
 	}
 	
+	/**
+	 * List user
+	 *
+	 * Returns list of projects the user is part of.
+	 *
+	 * @param string $user The current user.
+	 * @param int $limit   The limit of projects to display.
+	 *
+	 * @return ARRAY The list of projects.
+	 */
+	
 	function list_user($user, $limit = 20)
 	{
 		if ($projects = $this->db->join('permissions_projects', 'p_proj_project = project_id')->where('p_proj_user', $user)->where('p_proj_read', TRUE)->limit($limit)->get('projects'))
@@ -154,6 +205,18 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	/**
+	 * Create project
+	 *
+	 * Creates a new project.
+	 *
+	 * @param string $name     The project title.
+	 * @param string $abstract The project abstract
+	 * @param string $user     The current user
+	 *
+	 * @return ARRAY The list of projects.
+	 */
 
 	function create_project($name, $abstract, $user)
 	{
@@ -179,6 +242,24 @@ class Projects_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * Add permission
+	 *
+	 * Adds a permission to the specified user for the specified project.
+	 *
+	 * @param string $project_id  The specified project.
+	 * @param string $user        The specified user.
+	 * @param bool $read          Read permission.
+	 * @param bool $write         Write permission.
+	 * @param bool $delete        Delete permission.
+	 * @param bool $archive_read  Read archive files permission.
+	 * @param bool $archive_write Write archive files permission.
+	 * @param bool $workspace     View workspace permission.
+	 * @param bool $manage_users  Permission to manage users.
+	 *
+	 * @return ARRAY The list of projects.
+	 */
+	
 	function add_permission($project_id, $user, $read = TRUE, $write = FALSE, $delete = FALSE, $archive_read = TRUE, $archive_write = FALSE, $workspace = TRUE, $manage_users = FALSE)
 	{
 		$insert = array(
@@ -194,6 +275,17 @@ class Projects_model extends CI_Model {
 		);
 		$this->db->insert('permissions_projects', $insert);
 	}
+	
+	/**
+	 * Get permissions for project user
+	 *
+	 * Gets the current users permissions for the project.
+	 *
+	 * @param string $user    The current user
+	 * @param string $project The current project
+	 *
+	 * @return ARRAY The list of permissions.
+	 */
 	
 	function get_permissions_project_user($user, $project)
 	{
@@ -223,7 +315,17 @@ class Projects_model extends CI_Model {
 			return false;
 		}
 	}
-	
+		
+	/**
+	 * Get project users
+	 *
+	 * Gets the list of project users.
+	 *
+	 * @param string $project The current project
+	 *
+	 * @return ARRAY The list of project users.
+	 */
+	 
 	function get_project_users($project)
 	{
 		if ($permissions = $this->db->where('p_proj_project', $project) -> get('permissions_projects'))
@@ -257,6 +359,23 @@ class Projects_model extends CI_Model {
 		}
 	}
 
+	/**
+	 * Update Project
+	 *
+	 * Updates a projects details.
+	 *
+	 * @param string $identifier      The project identifier
+	 * @param string $name            The project name
+	 * @param string $abstract        The project abstract
+	 * @param string $research_group  The project research_group
+	 * @param string $start_date      The project start_date
+	 * @param string $end_date        The project end_date
+	 * @param string $default_licence The project default_licence
+	 * @param array $other            Other information
+	 *
+	 * @return ARRAY The list of permissions.
+	 */
+
 	function update_project($identifier, $name, $abstract, $research_group, $start_date, $end_date, $default_licence, $other = array())
 	{
 		$update = array(
@@ -284,6 +403,16 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * Is Deletable
+	 *
+	 * Checks if a project is deletable
+	 *
+	 * @param string $identifier The project identifier
+	 *
+	 * @return BOOL.
+	 */
 
 	function is_deletable($identifier)
 	{
@@ -304,6 +433,16 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * Delete project
+	 *
+	 * Deletes a project
+	 *
+	 * @param string $identifier The project identifier
+	 *
+	 * @return BOOL.
+	 */
 	
 	function delete_project($identifier)
 	{

@@ -116,7 +116,6 @@ class CIU_Output extends CI_Output {
 	*/
 	function ob_flush_clean()
 	{
-		$CI =& get_instance();
 		if (ob_get_level() > $this->_ci_ob_level + 1)
 		{
 			ob_end_flush();

@@ -2,29 +2,36 @@
 
 /**
  * Handle file uploads via XMLHttpRequest
+ *
+ * PHP Version 5
+ *
+ * @category   Helper
  * @package    Orbital
  * @subpackage Core
  * @author     Nick Jackson <nijackson@lincoln.ac.uk>
  * @copyright  2012 University of Lincoln
- * @licence    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
+ * @license    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
  * @link       https://github.com/lncd/Orbital-Core
  */
 
-class qquploadedfilexhr
+class Qquploadedfilexhr
 {
 	/**
 	 * Save the file to the specified path
+	 *
+	 * @param string $path The path of the file to save
+	 *
 	 * @return boolean TRUE on success
 	 */
 
 	function save($path)
 	{
-		$input = fopen('php://input', "r");
+		$input = fopen('php://input', 'r');
 		$temp = tmpfile();
-		$realSize = stream_copy_to_stream($input, $temp);
+		$real_size = stream_copy_to_stream($input, $temp);
 		fclose($input);
 
-		if ($realSize !== $this->getSize())
+		if ($real_size !== $this->getSize())
 		{
 			return FALSE;
 		}
@@ -39,8 +46,10 @@ class qquploadedfilexhr
 
 	/**
 	 * Gets name of file
+	 *
+	 * @return string File name
 	 */
- 
+
 	function getName()
 	{
 		return $_GET['qqfile'];
@@ -48,6 +57,9 @@ class qquploadedfilexhr
 	
 	/**
 	 * Gets size of file
+	 *
+	 * @return int
+	 * @throws Exception
 	 */
 
 	function getSize()
@@ -64,18 +76,23 @@ class qquploadedfilexhr
 
 /**
  * Handle file uploads via regular form post (uses the $_FILES array)
+ *
+ * @category   Helper
  * @package    Orbital
  * @subpackage Core
  * @author     Nick Jackson <nijackson@lincoln.ac.uk>
  * @copyright  2012 University of Lincoln
- * @licence    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
+ * @license    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
  * @link       https://github.com/lncd/Orbital-Core
  */
 
-class qquploadedfileform {
+class Qquploadedfileform {
 
 	/**
 	 * Save the file to the specified path
+	 *
+	 * @param string $path the path of the file
+	 *
 	 * @return boolean TRUE on success
 	 */
 
@@ -90,13 +107,15 @@ class qquploadedfileform {
 
 	/**
 	 * Gets name of file
+	 *
+	 * @return mixed
 	 */
-	 
+
 	function getName()
 	{
 		return $_FILES['qqfile']['name'];
 	}
-	
+
 	/**
 	 * Gets size of file
 	 */
@@ -109,30 +128,45 @@ class qquploadedfileform {
 
 /**
  * Handle file uploads
+ *
+ * @category   Helper
  * @package    Orbital
  * @subpackage Core
  * @author     Nick Jackson <nijackson@lincoln.ac.uk>
  * @copyright  2012 University of Lincoln
- * @licence    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
+ * @license    https://www.gnu.org/licenses/agpl-3.0.html  GNU Affero General Public License
  * @link       https://github.com/lncd/Orbital-Core
  */
 
-class qqfileuploader {
+class Qqfileuploader {
 
-	private $allowedExtensions = array();
-	private $sizeLimit = 10485760;
-	private $file;
+	/**
+	 * Allowed file extensions.
+	 *
+	 * @var array @allowedExtensions Allowed file extensions.
+	 */
+	private $allowed_extensions = array();
+	
+	/**
+	 * File size limit.
+	 *
+	 * @var int @size_limit Allowed file size.
+	 */
+	private $size_limit = 10485760;
 
 	/**
 	 * Construct
+	 *
+	 * @var $allowed_extensions Allowed file extensions
+	 * @var $size_limit         Allowed file size limit
 	 */
-	 
-	function __construct(array $allowedExtensions = array(), $sizeLimit = 10485760)
-	{
-		$allowedExtensions = array_map('strtolower', $allowedExtensions);
 
-		$this->allowedExtensions = $allowedExtensions;
-		$this->sizeLimit = $sizeLimit;
+	function __construct(array $allowed_extensions = array(), $size_limit = 10485760)
+	{
+		$allowed_extensions = array_map('strtolower', $allowed_extensions);
+
+		$this->allowedExtensions = $allowed_extensions;
+		$this->sizeLimit = $size_limit;
 
 		$this->checkServerSettings();
 
@@ -152,22 +186,28 @@ class qqfileuploader {
 
 	/**
 	 * Checks settings on the server
+	 *
+	 * @return NULL
 	 */
-	 
+
 	private function checkServerSettings()
 	{
-		$postSize = $this->toBytes(ini_get('post_max_size'));
-		$uploadSize = $this->toBytes(ini_get('upload_max_filesize'));
+		$post_size = $this->toBytes(ini_get('post_max_size'));
+		$upload_size = $this->toBytes(ini_get('upload_max_filesize'));
 
-		if ($postSize < $this->sizeLimit OR $uploadSize < $this->sizeLimit)
+		if ($post_size < $this->sizeLimit OR $upload_size < $this->sizeLimit)
 		{
 			$size = max(1, $this->sizeLimit / 1024 / 1024) . 'M';
-			die("{'error':'increase post_max_size AND upload_max_filesize to $size'}");
+			die("{'error':'increase post_max_size AND upload_max_filesize to {$size}'}");
 		}
 	}
 
 	/**
 	 * Convert string to bytes
+	 *
+	 * @param string $str to convert to bytes
+	 *
+	 * @return $var bytes
 	 */
 
 	private function toBytes($str)
@@ -184,19 +224,22 @@ class qqfileuploader {
 
 	/**
 	 * Returns array('success'=>true) OR array('error'=>'error message')
-	 * @param string $uploadDirectory The directory the file is uploaded to
-	 * @param string $file_id The identifier of the file
-	 * @param boolean $replaceOldFile If the previous file should be replaced or not
+	 *
+	 * @param string  $upload_directory The directory the file is uploaded to
+	 * @param string  $file_id          The identifier of the file
+	 * @param boolean $replace_old_file If the previous file should be replaced or not
+	 *
+	 * @return array
 	 */
-	 	 
-	function handleUpload($uploadDirectory, $file_id, $replaceOldFile = FALSE)
+
+	function handleUpload($upload_directory, $file_id, $replace_old_file = FALSE)
 	{
-		if (! is_writable($uploadDirectory))
+		if ( ! is_writable($upload_directory))
 		{
 			return array('error' => "Server error. Upload directory isn't writable.");
 		}
 
-		if (! $this->file)
+		if ( ! $this->file)
 		{
 			return array('error' => 'No files were uploaded.');
 		}
@@ -224,16 +267,16 @@ class qqfileuploader {
 			return array('error' => 'File has an invalid extension, it should be one of '. $these . '.');
 		}
 
-		if(! $replaceOldFile)
+		if( ! $replace_old_file)
 		{
 			/// don't overwrite previous files that were uploaded
-			while (file_exists($uploadDirectory . $filename . '.' . $ext))
+			while (file_exists($upload_directory . $filename . '.' . $ext))
 			{
 				$filename .= rand(10, 99);
 			}
 		}
 
-		if ($this->file->save($uploadDirectory . $filename . '.' . $ext))
+		if ($this->file->save($upload_directory . $filename . '.' . $ext))
 		{
 			return array('success'=>TRUE);
 		}
@@ -241,8 +284,7 @@ class qqfileuploader {
 		{
 			return array('error'=> 'Could not save uploaded file. The upload was cancelled, OR server error encountered');
 		}
-
 	}
 }
 
-// EOF
+// End of file fileupload_helper.php

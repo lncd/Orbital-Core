@@ -95,7 +95,7 @@ class Auth extends Orbital_Controller {
 	 * validates the user data, performs any necessary user creation, builds
 	 * the OAuth response for the client, and redirects accordingly.
 	 *
-	 * @param string $endpoint The designated sign-in endpoint.
+	 * @param $endpoint string The designated sign-in endpoint.
 	 *
 	 * @todo Rewrite this to use exceptions.
 	 */
