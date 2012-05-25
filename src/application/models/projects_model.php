@@ -456,6 +456,29 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function update_project_members($identifier, $read, $write, $delete, $archivefiles_read, $archivefiles_write, $dataset_create)
+	{
+			$update = array(
+			'read' => $read,
+			'write' => $write,
+			'delete' => $delete,
+			'archivefiles_read' => $archivefiles_read,
+			'archivefiles_write' => $archivefiles_write,
+			'dataset_create' => $dataset_create
+		);
+
+		// Attempt update
+
+		if ($this->db->where('p_proj_project', $identifier) -> update('permissions_projects', $update))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file projects.php

@@ -229,45 +229,62 @@ class Projects extends Orbital_Controller {
 			{
 				if ($this->access->user_has_project_permission($user, $identifier, 'write'))
 				{
-				
-					if ($this->put('start_date') !== '')
+					if (TRUE) //$this->put('read') !== '' AND $this->put('read') !== NULL)				
 					{
-						$startdate = $this->put('start_date');
+						if ($project = $this->projects_model->update_project_members($identifier, $this->put('read'), $this->put('write'), $this->put('delete'), $this->put('archivefiles_read'), $this->put('archivefiles_write'), $this->put('dataset_create')))
+						{
+							$response->project = $project;
+							$response->status = TRUE;
+							$this->response($response, 200); // 200 being the HTTP response code
+						}
+						else
+						{
+							$response->status = FALSE;
+							$response->error = 'An unspecified error occured in updating the projects members.';
+							$this->response($response, 400);
+						}
 					}
 					else
 					{
-						$startdate = NULL;
-					}
+						if ($this->put('start_date') !== '')
+						{
+							$startdate = $this->put('start_date');
+						}
+						else
+						{
+							$startdate = NULL;
+						}
+						
+						if ($this->put('end_date') !== '')
+						{
+							$enddate = $this->put('end_date');
+						}
+						else
+						{
+							$enddate = NULL;
+						}
+						
+						if ($this->put('google_analytics') !== '')
+						{
+							$ga = $this->put('google_analytics');
+						}
+						else
+						{
+							$ga = NULL;
+						}
 					
-					if ($this->put('end_date') !== '')
-					{
-						$enddate = $this->put('end_date');
-					}
-					else
-					{
-						$enddate = NULL;
-					}
-					
-					if ($this->put('google_analytics') !== '')
-					{
-						$ga = $this->put('google_analytics');
-					}
-					else
-					{
-						$ga = NULL;
-					}
-				
-					if ($project = $this->projects_model->update_project($identifier, $this->put('name'), $this->put('abstract'), $this->put('research_group'), $startdate, $enddate, $this->put('default_licence'), array('project_public_view' =>$this->put('public_view'), 'project_google_analytics' => $ga)))
-					{
-						$response->project = $project;
-						$response->status = TRUE;
-						$this->response($response, 200); // 200 being the HTTP response code
-					}
-					else
-					{
-						$response->status = FALSE;
-						$response->error = 'An unspecified error occured in updating the project.';
-						$this->response($response, 400);
+						if ($project = $this->projects_model->update_project($identifier, $this->put('name'), $this->put('abstract'), $this->put('research_group'), $startdate, $enddate, $this->put('default_licence'), array('project_public_view' =>$this->put('public_view'), 'project_google_analytics' => $ga)))
+						{
+							$response->project = $project;
+							$response->status = TRUE;
+							$this->response($response, 200); // 200 being the HTTP response code
+						}
+						else
+						{
+							$response->status = FALSE;
+							$response->error = 'An unspecified error occured in updating the project.';
+							$this->response($response, 400);
+						}
 					}
 				}
 			}
