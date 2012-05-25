@@ -229,7 +229,7 @@ class Projects extends Orbital_Controller {
 			{
 				if ($this->access->user_has_project_permission($user, $identifier, 'write'))
 				{
-					if (TRUE) //$this->put('read') !== '' AND $this->put('read') !== NULL)				
+					if ($this->put('read') !== '' AND $this->put('read') !== NULL)				
 					{
 						if ($project = $this->projects_model->update_project_members($identifier, $this->put('read'), $this->put('write'), $this->put('delete'), $this->put('archivefiles_read'), $this->put('archivefiles_write'), $this->put('dataset_create')))
 						{
