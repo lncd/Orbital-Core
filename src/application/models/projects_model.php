@@ -456,6 +456,104 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function update_project_members($identifier, $user, $read, $write, $delete, $manage_users, $archivefiles_read, $archivefiles_write, $sharedworkspace_read, $dataset_create)
+	{	
+		if ( ! isset($read) OR $read === '')
+		{
+			$read = 1;
+		}
+		else
+		{
+			$read = 0;
+		}
+		
+		if ( ! isset($write) OR $write === '')
+		{
+			$write = 1;
+		}
+		else
+		{
+			$write = 0;
+		}
+		
+		if ( ! isset($delete) OR $delete === '')
+		{
+			$delete = 1;
+		}
+		else
+		{
+			$delete = 0;
+		}
+		
+		if ( ! isset($manage_users) OR $manage_users === '')
+		{
+			$manage_users = 1;
+		}
+		else
+		{
+			$manage_users = 0;
+		}
+		
+		if ( ! isset($archivefiles_read) OR $archivefiles_read === '')
+		{
+			$archivefiles_read = 1;
+		}
+		else
+		{
+			$archivefiles_read = 0;
+		}
+		
+		if ( ! isset($archivefiles_write) OR $archivefiles_write === '')
+		{
+			$archivefiles_write = 1;
+		}
+		else
+		{
+			$archivefiles_write = 0;
+		}
+		
+		if ( ! isset($sharedworkspace_read) OR $sharedworkspace_read === '')
+		{
+			$sharedworkspace_read = 1;
+		}
+		else
+		{
+			$sharedworkspace_read = 0;
+		}
+		
+		if ( ! isset($dataset_create) OR $dataset_create === '')
+		{
+			$dataset_create = 1;
+		}
+		else
+		{
+			$dataset_create = 0;
+		}
+		
+	
+		$update = array(
+		'p_proj_read' => $read,
+		'p_proj_write' => $write,
+		'p_proj_delete' => $delete,
+		'p_proj_manage_users' => $manage_users,
+		'p_proj_workspace' => $sharedworkspace_read,
+		'p_proj_dataset_create' => $dataset_create,
+		'p_proj_archive_read' => $archivefiles_read,
+		'p_proj_archive_write' => $archivefiles_write
+		);
+
+		// Attempt update
+
+		if ($this->db->where('p_proj_project', $identifier) -> where('p_proj_user', $user) -> update('permissions_projects', $update))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file projects.php

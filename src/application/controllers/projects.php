@@ -229,7 +229,6 @@ class Projects extends Orbital_Controller {
 			{
 				if ($this->access->user_has_project_permission($user, $identifier, 'write'))
 				{
-				
 					if ($this->put('start_date') !== '')
 					{
 						$startdate = $this->put('start_date');
@@ -269,6 +268,7 @@ class Projects extends Orbital_Controller {
 						$response->error = 'An unspecified error occured in updating the project.';
 						$this->response($response, 400);
 					}
+				
 				}
 			}
 			else
