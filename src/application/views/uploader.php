@@ -33,25 +33,28 @@ echo form_dropdown('licence', $file_licences, $default_licence, 'id="licence"');
 
 <div class="well">
 
-<div id="licenceAllow" style="display:none">
-	<h4>This licence allows:</h4>
-	<div id="licenceAllowContent">
+	<div id="licenceAllow" style="display:none">
+		<h4>This licence allows:</h4>
+		<div id="licenceAllowContent">
+		</div>
 	</div>
-</div>
-
-<div id="licenceDeny" style="display:none">
-	<h4>This licence forbids:</h4>
-	<div id="licenceDenyContent">
+	
+	<div id="licenceDeny" style="display:none">
+		<h4>This licence forbids:</h4>
+		<div id="licenceDenyContent">
+		</div>
 	</div>
-</div>
-
-<div id="licenceConditions" style="display:none">
-	<h4>This licence has the following conditions:</h4>
-	<div id="licenceConditionsContent">
+	
+	<div id="licenceConditions" style="display:none">
+		<h4>This licence has the following conditions:</h4>
+		<div id="licenceConditionsContent">
+		</div>
 	</div>
-</div>
-
-</div>
+	
+	<h4>Read More</h4>
+		<p>More information about this licence, including legal text, is available at:<br>
+		<span id="licenceInfoURL">Unknown Location</span></p>
+	</div>
 
 <div id="file-uploader">		
 	<noscript>			
@@ -101,6 +104,9 @@ echo form_dropdown('licence', $file_licences, $default_licence, 'id="licence"');
 			$('#licenceDenyContent').html(data.forbid);
 			$('#licenceDeny').show();
 		}
+		
+		$('#licenceInfoURL').html('<a href="' + data.summary_uri + '" target="_blank">' + data.summary_uri + '</a>');
+		
 	  
 	});
 	
@@ -138,6 +144,8 @@ echo form_dropdown('licence', $file_licences, $default_licence, 'id="licence"');
 			{
 				$('#licenceDeny').hide();
 			}
+			
+			$('#licenceInfoURL').html('<a href="' + data.summary_uri + '" target="_blank">' + data.summary_uri + '</a>');
 		  
 		});
 	  
