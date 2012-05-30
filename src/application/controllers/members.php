@@ -68,6 +68,49 @@ class Members extends Orbital_Controller {
 			}
 		}
 	}
+	
+		
+	/**
+	 * View Delete
+	 *
+	 * Deletes a member from a project
+	 *
+	 * @param $identifer string The identifier of the project
+	 */
+
+	public function specific_delete($identifier, $member)
+	{
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('projects_model');
+
+			//Check project exists
+			if($project = $this->projects_model->get_project($identifier))
+			{
+				if ($this->access->user_has_project_permission($user, $identifier, 'write'))
+				{
+					if ($project = $this->projects_model->delete_project_members($identifier, urldecode($member)))
+					{
+						$response->project = $project;
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occured in updating the projects members.';
+						$this->response($response, 400);
+					}
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified project does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
 }
 
 // End of file projects.php

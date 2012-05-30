@@ -471,7 +471,6 @@ class Projects_model extends CI_Model {
 		);
 
 		// Attempt update
-
 		if ($this->db->where('p_proj_project', $identifier) -> where('p_proj_user', $user) -> count_all_results('permissions_projects') > 0)
 		{
 			if ($this->db->where('p_proj_project', $identifier) -> where('p_proj_user', $user) -> update('permissions_projects', $update))
@@ -483,6 +482,7 @@ class Projects_model extends CI_Model {
 				return FALSE;
 			}
 		}
+		//else insert
 		else
 		{
 			$update['p_proj_project'] = $identifier;
@@ -496,6 +496,19 @@ class Projects_model extends CI_Model {
 			{
 				return FALSE;
 			}
+		}
+	}
+	
+	function delete_project_members($identifier, $user)
+	{	
+		// Attempt delete
+		if ($this->db->where('p_proj_project', $identifier) -> where('p_proj_user', $user) -> delete('permissions_projects'))
+		{
+			return $identifier;		
+		}
+		else
+		{
+			return FALSE;
 		}
 	}
 }

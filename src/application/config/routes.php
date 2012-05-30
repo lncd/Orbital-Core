@@ -42,6 +42,7 @@ $route['default_controller'] = "splash";
 $route['404_override'] = '';
 $route['project/(:any)/datasets'] = "projects/datasets/$1";
 $route['project/(:any)/public'] = "projects/view_public/$1";
+$route['project/(:any)/member/(:any)'] = "members/specific/$1/$2";
 $route['project/(:any)'] = "projects/view/$1";
 $route['members/(:any)'] = "members/view/$1";
 $route['file/(:any)/download'] = "files/download/$1";
