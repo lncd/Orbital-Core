@@ -156,11 +156,12 @@ class Files_model extends CI_Model {
 	 * @return ARRAY
 	 */
 
-	function list_for_project($identifier)
+	function list_for_project($identifier, $limit = 5)
 	{
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
-			->order_by('file_original_name')
+			->order_by('file_uploaded_timestamp')
+			->limit($limit)
 			->get('archive_files'))
 		{
 			$output = array();
@@ -209,6 +210,45 @@ class Files_model extends CI_Model {
 	}
 	
 	/**
+	 * List public files for Project
+	 *
+	 * Lists all files for public project and their upload status.
+	 *
+	 * @param string $identifier The project identifier
+	 *
+	 * @return ARRAY
+	 */
+
+	function list_public_for_project($identifier, $limit = 5)
+	{
+		if ($archive_files = $this->db
+			->where('file_project', $identifier)
+			->where('file_visibility', 'public')
+			->where('file_upload_status', 'uploaded')
+			->order_by('file_uploaded_timestamp')
+			->limit($limit)
+			->get('archive_files'))
+		{
+			$output = array();
+
+			foreach ($archive_files->result() as $archive_file)
+			{
+				$output[] = array
+				(
+					'file_set_id' => $file_set->set_id,
+					'file_set_name' => $file_set->set_name,
+					'file_set_visibility' => $file_set->set_visibility
+				);
+			}
+			return $output;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	/**
 	 * List public for Project
 	 *
 	 * Lists all files for public project and their upload status.
@@ -218,23 +258,64 @@ class Files_model extends CI_Model {
 	 * @return ARRAY
 	 */
 
-	function list_public_for_project($identifier)
+	function list_file_sets($identifier, $limit = 5)
 	{
-		if ($archive_files = $this->db
-			->where('file_project', $identifier)
-			->where('file_visibility', 'public')
-			->where('file_upload_status', 'uploaded')
-			->order_by('file_original_name')
-			->get('archive_files'))
+		if ($file_sets = $this->db
+			->where('set_project', $identifier)
+			->order_by('set_name')
+			->limit($limit)
+			->get('archive_file_sets'))
 		{
 			$output = array();
 
-			foreach ($archive_files->result() as $archive_file)
+			foreach ($file_sets->result() as $file_set)
 			{
 				$output[] = array
 				(
-					'id' => $archive_file->file_id,
-					'original_name' => $archive_file->file_original_name
+					'file_set_id' => $file_set->set_id,
+					'file_set_name' => $file_set->set_name,
+					'file_set_visibility' => $file_set->set_visibility,
+					'file_set_description' => $file_set->set_description
+					
+				);
+			}
+			return $output;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * List public for Project
+	 *
+	 * Lists all files for public project and their upload status.
+	 *
+	 * @param string $identifier The project identifier
+	 *
+	 * @return ARRAY
+	 */
+
+	function list_public_file_sets($identifier, $limit = 5)
+	{
+		if ($file_sets = $this->db
+			->where('set_project', $identifier)
+			->where('set_visibility', 'public')
+			->order_by('set_name')
+			->limit($limit)
+			->get('archive_file_sets'))
+		{
+			$output = array();
+
+			foreach ($file_sets->result() as $file_set)
+			{
+				$output[] = array
+				(
+					'file_set_id' => $file_set->set_id,
+					'file_set_name' => $file_set->set_name,
+					'file_set_visibility' => $file_set->set_visibility,
+					'file_set_description' => $file_set->set_description
 				);
 			}
 			return $output;
