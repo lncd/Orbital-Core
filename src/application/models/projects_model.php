@@ -485,7 +485,7 @@ class Projects_model extends CI_Model {
 		}
 		else
 		{
-			$update['p_proj_id'] = $identifier;
+			$update['p_proj_project'] = $identifier;
 			$update['p_proj_user'] = $user;
 			
 			if ($this->db->insert('permissions_projects', $update))
