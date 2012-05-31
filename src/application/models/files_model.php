@@ -160,7 +160,7 @@ class Files_model extends CI_Model {
 	{
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
-			->order_by('file_uploaded_timestamp')
+			->order_by('file_title')
 			->limit($limit)
 			->get('archive_files'))
 		{
@@ -171,6 +171,7 @@ class Files_model extends CI_Model {
 				$output[] = array
 				(
 					'id' => $archive_file->file_id,
+					'title' => $archive_file->file_title,
 					'original_name' => $archive_file->file_original_name,
 					'visibility' => $archive_file->file_visibility,
 					'status' => $archive_file->file_upload_status
