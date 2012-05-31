@@ -119,7 +119,7 @@ class Auth extends Orbital_Controller {
 				if ( ! $this->users_model->get_user($response->user_email))
 				{
 					// User does not exist, try to create!
-					if ( ! $this->users_model->create_user($response->user_email, $response->user_name, $response->institution, $response->uri))
+					if ( ! $this->users_model->create_user($response->user_email, $response->user_name, $response->uri, $response->institution))
 					{
 						$this->output->set_status_header('500');						
 						$redirect_uri =  $state->redirect_uri . '?error=server_error&error_description=Unable to create user object.';

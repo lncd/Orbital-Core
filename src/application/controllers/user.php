@@ -44,6 +44,7 @@ class User extends Orbital_Controller
 
 			$response->user->name = $user_details['name'];
 			$response->user->institution = $user_details['institution'];
+			$response->timeline = $this->timeline_model->get_for_user($user);
 
 			$this->response($response, 200); // 200 being the HTTP response code
 
