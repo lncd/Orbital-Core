@@ -48,6 +48,7 @@ class Projects_model extends CI_Model {
 					'abstract' => $project->project_abstract,
 					'start_date' => $project->project_start,
 					'end_date' => $project->project_end,
+					'created' => $project->project_created,
 					'research_group' => $project->project_research_group,
 					'public_view' => $project->project_public_view,
 					'default_licence' => $project->project_default_licence,
@@ -231,8 +232,12 @@ class Projects_model extends CI_Model {
 		// Attempt create
 
 		if ($this->db->insert('projects', $insert))
-			{ $this->load->model('permissions');
+		{
+			$this->load->model('permissions');
 			$this->add_permission($identifier, $user, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);
+
+			$this->timeline_model->add_item($identifier, $user, $name . ' was added to Orbital');
+			$this->stream_model->add_item($user, 'created', 'project', $identifier);
 
 			return $identifier;
 		}

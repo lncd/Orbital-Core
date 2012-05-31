@@ -123,7 +123,9 @@ class Projects extends Orbital_Controller {
 					$response->users = $this->projects_model->get_project_users($identifier);
 					$response->archive_files = $this->files_model->list_for_project($identifier);
 					$response->upload_token = $this->files_model->get_upload_token($identifier, $user);
-
+					
+					// Project Timeline Items
+					$response->timeline = $this->timeline_model->get_for_project($identifier);
 
 					$response->status = TRUE;
 					$this->response($response, 200);
