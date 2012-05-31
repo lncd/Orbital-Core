@@ -100,6 +100,10 @@ class Users_model extends CI_Model {
 			
 			if ($this->db->insert('users', $insert))
 			{
+				// Log it!
+				$this->timeline_model->add_item(NULL, $email, $name . ' was added to Orbital');
+				$this->stream_model->add_item('system', 'created', 'user', $email);
+				
 				return TRUE;
 			}
 			else
