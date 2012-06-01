@@ -121,7 +121,7 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}		
 	}
-		
+	
 	/**
 	 * List datasets
 	 *
