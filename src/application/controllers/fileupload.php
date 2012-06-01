@@ -111,6 +111,9 @@ class Fileupload extends CI_Controller {
 						'staged',
 						$token['user']
 					);
+					$this->timeline_model->add_item($token['project'], $token['user'], $originalname . ' was uploaded');
+					$this->stream_model->add_item($token['user'], 'uploaded', 'file', $file_id);
+
 				}
 				// to pass data through iframe you will need to encode all html tags
 				$this->output->set_output(json_encode($result));
