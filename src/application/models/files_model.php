@@ -160,6 +160,7 @@ class Files_model extends CI_Model {
 	{
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
+			->join('licences', 'licence_id = file_licence')
 			->order_by('file_title')
 			->limit($limit)
 			->get('archive_files'))
@@ -172,10 +173,12 @@ class Files_model extends CI_Model {
 				(
 					'id' => $archive_file->file_id,
 					'title' => $archive_file->file_title,
+					'size' => $archive_file->file_size,
 					'original_name' => $archive_file->file_original_name,
-					'licence' => $archive_file->file_licence,
+					'uploaded' => $archive_file->file_uploaded_timestamp,
 					'visibility' => $archive_file->file_visibility,
-					'status' => $archive_file->file_upload_status
+					'status' => $archive_file->file_upload_status,
+					'licence' => $archive_file->licence_name_short
 				);
 			}
 			return $output;
@@ -185,6 +188,45 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	/**
+	 * Create file set
+	 *
+	 * Creates a new file set.
+	 *
+	 * @param string $identifier The project identifier
+	 * @param string $identifier The file set name
+	 * @param string $identifier The file set description
+	 *
+	 * @return ARRAY
+	 */
+
+	function create_file_set($identifier, $name, $description, $user)
+	{
+		$identifier = uniqid($this->config->item('orbital_cluster_sn'));
+
+		$insert = array(
+			'set_id' => $identifier,
+			'set_name' => $name,
+			'set_description' => $description
+		);
+
+		// Attempt create
+
+		if ($this->db->insert('archive_file_sets', $insert))
+		{
+
+			$this->timeline_model->add_item($identifier, $user, $name . ' was added to Orbital');
+			$this->stream_model->add_item($user, 'created', 'project', $identifier);
+
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
 	
 	/**
 	 * Set file status
@@ -473,6 +515,9 @@ class Files_model extends CI_Model {
 				(
 					'id' => $archive_file->file_id,
 					'original_name' => $archive_file->file_original_name,
+					'licence' => $archive_file->file_licence,
+					'uploaded' => $archive_file->file_uploaded_timestamp,
+					'size' => $archive_file->file_size,
 					'visibility' => $archive_file->file_visibility,
 					'status' => $archive_file->file_upload_status
 				);
@@ -511,6 +556,9 @@ class Files_model extends CI_Model {
 				(
 					'id' => $archive_file->file_id,
 					'original_name' => $archive_file->file_original_name,
+					'licence' => $archive_file->file_licence,
+					'uploaded' => $archive_file->file_uploaded_timestamp,
+					'size' => $archive_file->file_size,
 					'visibility' => $archive_file->file_visibility,
 					'status' => $archive_file->file_upload_status
 				);
@@ -522,6 +570,7 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
 
 	/**
 	 * File get details public
@@ -650,6 +699,39 @@ class Files_model extends CI_Model {
 		// Attempt update
 
 		if ($this->db->where('file_id', $identifier) -> update('archive_files', $update))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+
+	/**
+	 * Update File file set
+	 *
+	 * Updates a file sets details.
+	 *
+	 * @param string $identifier  The file identifier
+	 * @param string $name        The file name
+	 * @param string $description The file description
+	 * @param array $other        Other information
+	 *
+	 * @return $identifier.
+	 */
+
+	function update_file_set($identifier, $name, $description)
+	{
+		$update = array(
+			'set_name' => $name,
+			'set_description' => $description
+		);
+
+		// Attempt update
+
+		if ($this->db->where('set_id', $identifier) -> update('archive_file_sets', $update))
 		{
 			return $identifier;
 		}

@@ -123,6 +123,79 @@ class Files extends Orbital_Controller {
 	
 	
 	/**
+	 * Get File Set Information
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
+	 */
+
+	public function file_set_view_put($identifier)
+	{
+		//Check for valid user
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+
+			//Check file exists
+			if($file = $this->files_model->file_set_get_details($identifier))
+			{
+				//CHANGE TO CHECK FOR FILE PERMISSIONS
+				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
+				//{				
+				
+					if ($file_set = $this->files_model->update_file_set($identifier, $this->put('name'), $this->put('description')))
+					{
+						$response->file_set = $file_set;
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occurred in updating the file.';
+						$this->response($response, 400);
+					}
+				//}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+	
+	
+	/**
+	 * Create Post
+	 *
+	 * Creates a file set
+	 */
+
+	public function file_set_create_post()
+	{
+		if ($user = $this->access->valid_user(array('create_projects')))
+		{
+			if ($this->access->user_has_permission($user, 'project_create'))
+			{
+				$this->load->model('projects_model');
+
+				if ($file_set = $this->files_model->create_file_set($this->input->post('identifier'), $this->input->post('name'), $this->input->post('abstract'), $user))
+				{
+					$response->file_set_id = $file_set;
+					$this->output->set_header('Location: ' . site_url('collection/' . $file_set));
+
+					$response->status = TRUE;
+					$response->message = 'File set created.';
+					$this->response($response, 201);
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Get Public File Information
 	 *
 	 * @param string $identifier The file identifier
