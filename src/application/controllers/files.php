@@ -150,7 +150,7 @@ class Files extends Orbital_Controller {
 			$this->load->model('files_model');
 
 			//Check file exists
-			if($file = $this->files_model->file_get_details($identifier))
+			if($file_current = $this->files_model->file_get_details($identifier))
 			{
 				//CHANGE TO CHECK FOR FILE PERMISSIONS
 				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
@@ -159,6 +159,8 @@ class Files extends Orbital_Controller {
 					{
 						$response->file = $file;
 						$response->status = TRUE;
+						$this->timeline_model->add_item($file_current['project'], $user, 'File ' . $this->put('name') . ' was updated');
+						$this->stream_model->add_item($user, 'updated', 'file', $identifier);
 						$this->response($response, 200); // 200 being the HTTP response code
 					}
 					else

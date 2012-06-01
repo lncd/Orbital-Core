@@ -236,9 +236,6 @@ class Projects_model extends CI_Model {
 			$this->load->model('permissions');
 			$this->add_permission($identifier, $user, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);
 
-			$this->timeline_model->add_item($identifier, $user, $name . ' was added to Orbital');
-			$this->stream_model->add_item($user, 'created', 'project', $identifier);
-
 			return $identifier;
 		}
 		else

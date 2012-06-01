@@ -366,6 +366,8 @@ class Projects extends Orbital_Controller {
 
 					$response->status = TRUE;
 					$response->message = 'Project created.';
+					$this->timeline_model->add_item($project, $user, $this->input->post('name') . ' was added to Orbital');
+					$this->stream_model->add_item($user, 'created', 'project', $project);
 					$this->response($response, 201);
 				}
 			}
