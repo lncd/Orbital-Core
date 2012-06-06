@@ -77,12 +77,8 @@ class Timeline_model extends CI_Model {
 						'timestamp' => $item->tl_timestamp,
 						'timestamp_unix' => strtotime($item->tl_timestamp),
 						'timestamp_human' => date('D jS M Y \a\t g.ia', strtotime($item->tl_timestamp)),
-<<<<<<< HEAD
-						'user' => $item->tl_user
-=======
 						'user' => $item->tl_user,
 						'visibility' => $item->tl_visibility
->>>>>>> timeline
 					);
 				}
 				
@@ -132,12 +128,8 @@ class Timeline_model extends CI_Model {
 						'timestamp' => $item->tl_timestamp,
 						'timestamp_unix' => strtotime($item->tl_timestamp),
 						'timestamp_human' => date('D jS M Y \a\t g.ia', strtotime($item->tl_timestamp)),
-<<<<<<< HEAD
-						'project' => $item->tl_project
-=======
 						'project' => $item->tl_project,
 						'visibility' => $item->tl_visibility
->>>>>>> timeline
 					);
 				}
 				
