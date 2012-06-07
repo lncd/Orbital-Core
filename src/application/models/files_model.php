@@ -201,24 +201,22 @@ class Files_model extends CI_Model {
 	 * @return ARRAY
 	 */
 
-	function create_file_set($identifier, $name, $description, $user)
+	function create_file_set($project_identifier, $name, $description)
 	{
 		$identifier = uniqid($this->config->item('orbital_cluster_sn'));
 
 		$insert = array(
 			'set_id' => $identifier,
+			'set_project' => $project_identifier,
 			'set_name' => $name,
-			'set_description' => $description
+			'set_description' => $description,
+			'set_visibility' => 'private'
 		);
 
 		// Attempt create
 
 		if ($this->db->insert('archive_file_sets', $insert))
 		{
-
-			$this->timeline_model->add_item($identifier, $user, $name . ' was added to Orbital');
-			$this->stream_model->add_item($user, 'created', 'project', $identifier);
-
 			return $identifier;
 		}
 		else

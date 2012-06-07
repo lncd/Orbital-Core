@@ -227,9 +227,9 @@ class Files extends Orbital_Controller {
 		{
 			if ($this->access->user_has_permission($user, 'project_create'))
 			{
-				$this->load->model('projects_model');
+				$this->load->model('files_model');
 
-				if ($file_set = $this->files_model->create_file_set($this->input->post('identifier'), $this->input->post('name'), $this->input->post('abstract'), $user))
+				if ($file_set = $this->files_model->create_file_set($this->input->post('identifier'), $this->input->post('name'), $this->input->post('abstract')))
 				{
 					$response->file_set_id = $file_set;
 					$this->output->set_header('Location: ' . site_url('collection/' . $file_set));
