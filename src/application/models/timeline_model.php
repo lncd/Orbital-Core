@@ -25,13 +25,14 @@ class Timeline_model extends CI_Model {
 		parent::__construct();
 	}
 
-	function add_item($project, $user, $text, $payload = NULL)
+	function add_item($project, $user, $text, $payload = NULL, $type = 'system')
 	{
 		$insert = array(
 			'tl_project' => $project,
 			'tl_user' => $user,
 			'tl_text' => $text,
-			'tl_payload' => $payload
+			'tl_payload' => $payload,
+			'tl_type' => $type
 		);
 		
 		if ($this->db->insert('timeline', $insert))
