@@ -637,16 +637,17 @@ class Files_model extends CI_Model {
 	 * @param string $originalname The files original name
 	 * @param string $extension    The file extension
 	 * @param string $mimetype     The mimetype of the file
+	 * @param int    $size         The size (in bytes) of the file
 	 * @param string $project      The project the file belongs to
-	 * @param string $licence      The licence of teh file
-	 * @param bool   $visibility   If the project is public or private
+	 * @param string $licence      The licence the file should be under
+	 * @param bool   $visibility   If the file is public or private
 	 * @param string $status       The upload status of the file
 	 * @param string $uploader     Who the file is uploaded by
 	 *
 	 * @return ARRAY
 	 */
 	
-	function add_file($identifier, $originalname, $extension, $mimetype, $project, $licence, $visibility, $status, $uploader)
+	function add_file($identifier, $originalname, $extension, $mimetype, $size, $project, $licence, $visibility, $status, $uploader)
 	{
 		$insert = array(
 			'file_id' => $identifier,
@@ -654,6 +655,7 @@ class Files_model extends CI_Model {
 			'file_title' => $originalname . ' (' . date('d/m/y H:i') . ')',
 			'file_extension' => $extension,
 			'file_mimetype' => $mimetype,
+			'file_size' => (int) $size,
 			'file_project' => $project,
 			'file_licence' => $licence,
 			'file_visibility' => $visibility,
