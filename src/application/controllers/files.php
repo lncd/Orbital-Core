@@ -114,6 +114,7 @@ class Files extends Orbital_Controller {
 						$response->status = TRUE;
 						$response->file_set = $this->files_model->file_set_get_details($identifier);
 						$response->archive_files = $this->files_model->file_set_get_files($identifier);
+						$response->archive_files_project = $this->files_model->list_for_project($response->file_set['project'], 9999999); //CHANGE LIMIT TO UNLIMITED
 						$this->response($response, 200);
 					}
 				//}
@@ -190,7 +191,7 @@ class Files extends Orbital_Controller {
 				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
 				//{				
 				
-					if ($file_set = $this->files_model->update_file_set_files($identifier, $this->put('file'). $this->put('action')))
+					if ($file_set = $this->files_model->update_file_set_files($identifier, $this->put('file'), $this->put('action')))
 					{
 						$response->file_set = $file_set;
 						$response->status = TRUE;

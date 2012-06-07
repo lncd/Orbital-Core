@@ -764,9 +764,10 @@ class Files_model extends CI_Model {
 			
 		if ($action === 'add')
 		{
-			if ( ! $this->db->where('fslink_set', $identifier) -> where('fslink_file', $file) -> get('archive_file_set_links'))
+			$check_existing_records = $this->db->where('fslink_set', $identifier) -> where('fslink_file', $file) -> get('archive_file_set_links');
+			if ($check_existing_records->num_rows() === 0)
 			{
-				if ($this->db->where('set_id', $identifier) -> insert('archive_file_set_links', $update))
+				if ($this->db->insert('archive_file_set_links', $update))
 				{
 					return $identifier;
 				}
