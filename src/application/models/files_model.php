@@ -515,6 +515,7 @@ class Files_model extends CI_Model {
 				(
 					'id' => $archive_file->file_id,
 					'original_name' => $archive_file->file_original_name,
+					'title' => $archive_file->file_title,
 					'licence' => $archive_file->file_licence,
 					'uploaded' => $archive_file->file_uploaded_timestamp,
 					'size' => $archive_file->file_size,
@@ -734,6 +735,50 @@ class Files_model extends CI_Model {
 		if ($this->db->where('set_id', $identifier) -> update('archive_file_sets', $update))
 		{
 			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	/**
+	 * Update File file set files
+	 *
+	 * Updates a file sets files.
+	 *
+	 * @param string $identifier  The file identifier
+	 * @param string $name        The file
+	 *
+	 * @return $identifier.
+	 */
+
+	function update_file_set_files($identifier, $file, $action)
+	{
+		$update = array(
+				'fslink_file' => $file,
+				'fslink_set' => $identifier
+			);
+			
+		if ($action === 'add')
+		{
+			if ( ! $this->db->where('fslink_set', $identifier) -> where('fslink_file', $file) -> get('archive_file_set_links'))
+			{
+				if ($this->db->where('set_id', $identifier) -> insert('archive_file_set_links', $update))
+				{
+					return $identifier;
+				}
+			}
+		}
+		else if ($action === 'remove')
+		{
+			if ($this->db->where('fslink_set', $identifier) -> where('fslink_file', $file) -> get('archive_file_set_links'))
+			{
+				if ($this->db->where('fslink_set', $identifier) -> where('fslink_file', $file) -> delete('archive_file_set_links'))
+				{				
+					return $identifier;
+				}
+			}			
 		}
 		else
 		{

@@ -123,7 +123,7 @@ class Files extends Orbital_Controller {
 	
 	
 	/**
-	 * Get File Set Information
+	 * Set File Set Information
 	 *
 	 * @param string $identifier The file identifier
 	 *
@@ -137,7 +137,7 @@ class Files extends Orbital_Controller {
 		{
 			$this->load->model('files_model');
 
-			//Check file exists
+			//Check file set exists
 			if($file = $this->files_model->file_set_get_details($identifier))
 			{
 				//CHANGE TO CHECK FOR FILE PERMISSIONS
@@ -145,6 +145,52 @@ class Files extends Orbital_Controller {
 				//{				
 				
 					if ($file_set = $this->files_model->update_file_set($identifier, $this->put('name'), $this->put('description')))
+					{
+						$response->file_set = $file_set;
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occurred in updating the file.';
+						$this->response($response, 400);
+					}
+				//}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+	
+	
+	/**
+	 * Set File Set Files
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
+	 */
+
+	public function file_set_files_put($identifier)
+	{
+		//Check for valid user
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+
+			//Check file set exists
+			if($file = $this->files_model->file_set_get_details($identifier))
+			{
+				//CHANGE TO CHECK FOR FILE PERMISSIONS
+				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
+				//{				
+				
+					if ($file_set = $this->files_model->update_file_set_files($identifier, $this->put('file'). $this->put('action')))
 					{
 						$response->file_set = $file_set;
 						$response->status = TRUE;
