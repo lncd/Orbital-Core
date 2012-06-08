@@ -46,6 +46,9 @@ class Projects extends Orbital_Controller {
 			// Projects defaults to an empty array.
 			$response->projects = array();
 
+			// Timeline Items
+			$response->timeline = $this->timeline_model->get_for_user($user);
+
 			// Iterate through projects, and append each one to the projects array.
 			if ($projects = $this->projects_model->list_user($user))
 			{
