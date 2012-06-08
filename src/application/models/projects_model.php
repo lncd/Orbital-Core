@@ -490,12 +490,19 @@ class Projects_model extends CI_Model {
 		//else insert
 		else
 		{
-			$update['p_proj_project'] = $identifier;
-			$update['p_proj_user'] = $user;
-			
-			if ($this->db->insert('permissions_projects', $update))
+			if ($this->db->where('user_email', $user) -> count_all_results('users') > 0)
 			{
-				return $identifier;
+				$update['p_proj_project'] = $identifier;
+				$update['p_proj_user'] = $user;
+				
+				if ($this->db->insert('permissions_projects', $update))
+				{
+					return $identifier;
+				}
+				else
+				{
+					return FALSE;
+				}
 			}
 			else
 			{

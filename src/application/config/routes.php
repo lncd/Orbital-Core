@@ -52,6 +52,7 @@ $route['file/(:any)'] = "files/file_view/$1";
 $route['file_set/create'] = "files/file_set_create";
 $route['file_set/(:any)'] = "files/file_set_view/$1";
 $route['file_set_files/(:any)'] = "files/file_set_files/$1";
+$route['file_file_sets/(:any)'] = "files/file_file_sets/$1";
 $route['licence/(:any)'] = "licences/specific/$1";
 
 

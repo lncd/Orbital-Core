@@ -291,9 +291,9 @@ class Files_model extends CI_Model {
 	}
 	
 	/**
-	 * List public for Project
+	 * List File sets
 	 *
-	 * Lists all files for public project and their upload status.
+	 * Lists all files sets.
 	 *
 	 * @param string $identifier The project identifier
 	 *
@@ -307,6 +307,45 @@ class Files_model extends CI_Model {
 			->order_by('set_name')
 			->limit($limit)
 			->get('archive_file_sets'))
+		{
+			$output = array();
+
+			foreach ($file_sets->result() as $file_set)
+			{
+				$output[] = array
+				(
+					'file_set_id' => $file_set->set_id,
+					'file_set_name' => $file_set->set_name,
+					'file_set_visibility' => $file_set->set_visibility,
+					'file_set_description' => $file_set->set_description
+					
+				);
+			}
+			return $output;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+		
+	/**
+	 * List file sets file belongs to
+	 *
+	 * Lists all file sets a file belongs to.
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return ARRAY
+	 */
+
+	function file_file_set_list($identifier)
+	{
+		if ($file_sets = $this->db
+			->where('fslink_file', $identifier)
+			->join('archive_file_sets', 'set_id = fslink_set')
+			->get('archive_file_set_links'))
 		{
 			$output = array();
 
@@ -743,12 +782,13 @@ class Files_model extends CI_Model {
 	}
 	
 	/**
-	 * Update File file set files
+	 * Update File set files
 	 *
 	 * Updates a file sets files.
 	 *
-	 * @param string $identifier  The file identifier
-	 * @param string $name        The file
+	 * @param string $identifier  The file set identifier
+	 * @param string $file        The file
+	 * @param string $action      Add or remove the file
 	 *
 	 * @return $identifier.
 	 */
@@ -786,6 +826,56 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	/**
+	 * Update File file sets
+	 *
+	 * Updates a files file sets.
+	 *
+	 * @param string $identifier  The file identifier
+	 * @param string $file        The file set
+	 * @param string $action      Add or remove the file
+	 *
+	 * @return $identifier.
+	 */
+
+	function update_file_file_sets($identifier, $file_set, $action)
+	{
+		$update = array(
+				'fslink_file' => $identifier,
+				'fslink_set' => $file_set
+			);
+			
+		if ($action === 'add')
+		{
+			$check_existing_records = $this->db->where('fslink_set', $file_set) -> where('fslink_file', $identifier) -> get('archive_file_set_links');
+			
+			if ($check_existing_records->num_rows() === 0)
+			{
+				if ($this->db->insert('archive_file_set_links', $update))
+				{
+					return $identifier;
+				}
+			}
+		}
+		else if ($action === 'remove')
+		{
+			if ($this->db->where('fslink_set', $file_set) -> where('fslink_file', $identifier) -> get('archive_file_set_links'))
+			{
+				if ($this->db->where('fslink_set', $file_set) -> where('fslink_file', $identifier) -> delete('archive_file_set_links'))
+				{				
+					return $identifier;
+				}
+			}			
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
+
+
+
 
 // End of file projects.php
