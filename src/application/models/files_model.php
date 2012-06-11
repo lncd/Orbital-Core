@@ -547,6 +547,7 @@ class Files_model extends CI_Model {
 		if ($archive_files = $this->db
 			->where('fslink_set', $identifier)
 			->join('archive_files', 'file_id = fslink_file')
+			->join('licences', 'licence_id = file_licence')
 			->get('archive_file_set_links'))
 		{
 			$output = array();
@@ -558,7 +559,7 @@ class Files_model extends CI_Model {
 					'id' => $archive_file->file_id,
 					'original_name' => $archive_file->file_original_name,
 					'title' => $archive_file->file_title,
-					'licence' => $archive_file->file_licence,
+					'licence' => $archive_file->licence_name_short,
 					'uploaded' => $archive_file->file_uploaded_timestamp,
 					'size' => $archive_file->file_size,
 					'visibility' => $archive_file->file_visibility,
