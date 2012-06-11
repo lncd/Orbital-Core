@@ -178,6 +178,10 @@ class Projects extends Orbital_Controller {
 				$response->project = $project;
 				$response->status = TRUE;
 				$response->archive_files = $this->files_model->list_public_for_project($identifier);
+				
+				// Public project Timeline Items
+				$response->timeline = $this->timeline_model->get_public_for_project($identifier);
+
 				$this->response($response, 200);
 			}
 		}
