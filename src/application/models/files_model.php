@@ -265,9 +265,9 @@ class Files_model extends CI_Model {
 	{
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
+			->join('licences', 'licence_id = file_licence')
+			->order_by('file_title')
 			->where('file_visibility', 'public')
-			->where('file_upload_status', 'uploaded')
-			->order_by('file_uploaded_timestamp')
 			->limit($limit)
 			->get('archive_files'))
 		{
@@ -277,9 +277,14 @@ class Files_model extends CI_Model {
 			{
 				$output[] = array
 				(
-					'file_set_id' => $file_set->set_id,
-					'file_set_name' => $file_set->set_name,
-					'file_set_visibility' => $file_set->set_visibility
+					'id' => $archive_file->file_id,
+					'title' => $archive_file->file_title,
+					'size' => $archive_file->file_size,
+					'original_name' => $archive_file->file_original_name,
+					'uploaded' => $archive_file->file_uploaded_timestamp,
+					'visibility' => $archive_file->file_visibility,
+					'status' => $archive_file->file_upload_status,
+					'licence' => $archive_file->licence_name_short
 				);
 			}
 			return $output;

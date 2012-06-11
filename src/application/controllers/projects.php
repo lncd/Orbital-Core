@@ -47,7 +47,7 @@ class Projects extends Orbital_Controller {
 			$response->projects = array();
 
 			// Timeline Items
-			$response->timeline = $this->timeline_model->get_for_user($user);
+			$response->timeline = $this->timeline_model->get_all_projects_activity_for_user($user);
 
 			// Iterate through projects, and append each one to the projects array.
 			if ($projects = $this->projects_model->list_user($user))
@@ -158,39 +158,58 @@ class Projects extends Orbital_Controller {
 		}
 	}
 	
+
 	/**
-	 * Public view Get
+	 * Public View Get
 	 *
-	 * Gets public details
+	 * Gets public project details
 	 */
-	
+	 
 	public function view_public_get($identifier)
 	{
-		$this->load->model('projects_model');
-		$this->load->model('files_model');
+			$this->load->model('projects_model');
+			$this->load->model('files_model');
 
-
-		//Check project exists
-		if($project = $this->projects_model->get_project($identifier))
-		{
-			if ($project['public_view'] === 'visible')
+			//Check project exists
+			if($project = $this->projects_model->get_project($identifier))
 			{
-				$response->project = $project;
-				$response->status = TRUE;
-				$response->archive_files = $this->files_model->list_public_for_project($identifier);
+				if ($project['public_view'] === 'visible')
+				{			
+					$this->load->model('files_model');
 				
-				// Public project Timeline Items
-				$response->timeline = $this->timeline_model->get_public_for_project($identifier);
+					if ($this->get('limit'))
+					{
+						$limit = $this->get('limit');
+					}
+					else
+					{
+						$limit = 20;
+					}
+				
+					$response->project = $project;
+					$response->archive_files = $this->files_model->list_public_for_project($identifier, $limit);
+					$response->file_sets = $this->files_model->list_public_file_sets($identifier, $limit);
+					
+					// Project Timeline Items
+					$response->timeline = $this->timeline_model->get_public_for_project($identifier);
 
-				$this->response($response, 200);
+					$response->status = TRUE;
+					$this->response($response, 200);
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'You do not have permission to access this project.';
+					$this->response($response, 401);
+				}
 			}
-		}
-		else
-		{
-			$response->status = FALSE;
-			$response->error = 'The specified project does not exist.';
-			$this->response($response, 404);
-		}	
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified project does not exist.';
+				$this->response($response, 404);
+			}
+		
 	}
 	
 	/**
