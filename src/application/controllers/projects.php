@@ -109,6 +109,8 @@ class Projects extends Orbital_Controller {
 		{
 			$this->load->model('projects_model');
 			$this->load->model('files_model');
+			$this->load->model('dataset_model');
+
 
 			//Check project exists
 			if($project = $this->projects_model->get_project($identifier))
@@ -131,6 +133,7 @@ class Projects extends Orbital_Controller {
 					$response->users = $this->projects_model->get_project_users($identifier);
 					$response->archive_files = $this->files_model->list_for_project($identifier, $limit);
 					$response->file_sets = $this->files_model->list_file_sets($identifier, $limit);
+					$response->datasets = $this->dataset_model->list_project_datasets($identifier, $limit);
 					$response->upload_token = $this->files_model->get_upload_token($identifier, $user);
 					
 					// Project Timeline Items
@@ -165,6 +168,7 @@ class Projects extends Orbital_Controller {
 	{
 		$this->load->model('projects_model');
 		$this->load->model('files_model');
+		$this->load->model('dataset_model');
 
 
 		//Check project exists
@@ -175,6 +179,7 @@ class Projects extends Orbital_Controller {
 				$response->project = $project;
 				$response->status = TRUE;
 				$response->archive_files = $this->files_model->list_public_for_project($identifier);
+				$response->datasets = $this->dataset_model->list_project_datasets($identifier, $limit, TRUE);
 				$this->response($response, 200);
 			}
 		}
