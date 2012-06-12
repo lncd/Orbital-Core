@@ -130,14 +130,48 @@ class Datasets extends Orbital_Controller {
 	
 	
 	/**
-	 * Add Datapoints
+	 * Get dataset details
 	 *
-	 * Adds datapoints to the specified dataset
+	 * gets specified dataset details
 	 */
 	
-	function specific_get($dataset)
+	function specific_get($dataset_identifier)
 	{
-		
+		//Check user is valid
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+			
+			//Check file exists
+			if($dataset = $this->dataset_model->get_dataset_details($dataset_identifier))
+			{
+				//Check user has permission to files project
+				//if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
+				//{
+				
+					$this->load->model('projects_model');
+					$response->permissions = $this->projects_model->get_permissions_project_user($user, $dataset['project']);
+				
+					//CHECK FOR CREATE FILE PERMISSION
+	
+					if ($dataset['visibility'] === 'public')
+					{
+						$response->status = TRUE;
+						$response->dataset = $this->dataset_model->get_dataset_details_public($dataset_identifier);
+						//$response->archive_files = $this->files_model->dataset_get_files_public($identifier);
+						$this->response($response, 200);
+					}
+					else
+					{
+						$response->status = TRUE;
+						$response->dataset = $this->dataset_model->get_dataset_details($dataset_identifier);
+						//$response->archive_files = $this->files_model->file_set_get_files($dataset_identifier);
+						//$response->archive_files_project = $this->files_model->list_for_project($response->dataset['project'], 9999999); //CHANGE LIMIT TO UNLIMITED
+						$this->response($response, 200);
+					}
+				//}
+			}
+		}
 	}
 
 }

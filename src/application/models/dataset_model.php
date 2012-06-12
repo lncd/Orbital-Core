@@ -132,6 +132,33 @@ class Dataset_model extends CI_Model {
 			))
 			->update('dataset_' . $dataset, array('upsert' => TRUE));
 	}
+	
+	function get_dataset_details($identifier)
+	{
+		if ($archive_dataset = $this->db
+			->where('dset_id', $identifier)
+			->join('projects', 'project_id = dset_project')
+			->get('datasets'))
+		{
+			$archive_dataset = $archive_dataset->row();
+
+			return array
+			(
+				'id' => $archive_dataset->dset_id,
+				'title' => $archive_dataset->dset_name,
+				'description' => $archive_dataset->dset_description,
+				'licence' => $archive_dataset->dset_licence,
+				'visibility' => $archive_dataset->dset_visibility,
+				'project' => $archive_dataset->project_id,
+				'project_name' => $archive_dataset->project_name,
+				'project_public_view' => $archive_dataset->project_public_view
+			);
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file dataset_model.php
