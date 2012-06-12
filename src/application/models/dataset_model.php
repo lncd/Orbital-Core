@@ -187,15 +187,32 @@ class Dataset_model extends CI_Model {
 				switch ($type){
 				
 					case 'equals':
-						$queries['last_data.' . $key] = $value;
+						$this->mongo_db->where('data.' . $key, $value);
+						break;
+						
+					case 'gt':
+						$this->mongo_db->where_gt('data.' . $key, $value);
+						break;
+						
+					case 'gte':
+						$this->mongo_db->where_gte('data.' . $key, $value);
+						break;
+						
+					case 'lt':
+						$this->mongo_db->where_lt('data.' . $key, $value);
+						break;
+						
+					case 'lte':
+						$this->mongo_db->where_lte('data.' . $key, $value);
 						break;
 				}
 			}
 		}
+		
+		var_dump($this->mongo_db->wheres);
 	
 		$datapoints = $this->mongo_db
-			->select(array('_id', 'last_data'))
-			->where($queries)
+			->select(array('_id', 'data'))
 			->get('dataset_' . $dataset);
 			
 		$output = array();
@@ -204,7 +221,7 @@ class Dataset_model extends CI_Model {
 		{
 			$output[] = array_merge(array(
 				'id' => $datapoint['_id']
-			), $datapoint['last_data']);
+			), $datapoint['data']);
 				
 		}
 		
