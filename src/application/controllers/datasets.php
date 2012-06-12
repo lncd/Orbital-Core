@@ -30,7 +30,9 @@ class Datasets extends Orbital_Controller {
 	function __construct()
 	{
 		parent::__construct();
-<<<<<<< HEAD
+		
+		// Load the model for all functions
+		$this->load->model('dataset_model');
 	}
 
 	/**
@@ -57,12 +59,7 @@ class Datasets extends Orbital_Controller {
 					$this->response($response, 201);
 				}
 			}
-		}
-	}
-=======
-		
-		// Load the model for all functions
-		$this->load->model('dataset_model');
+		}		
 	}
 	
 	/**
@@ -75,8 +72,19 @@ class Datasets extends Orbital_Controller {
 	{
 		
 	}
+	
+	
+	/**
+	 * Add Datapoints
+	 *
+	 * Adds datapoints to the specified dataset
+	 */
+	
+	function specific_get($dataset)
+	{
+		
+	}
 
->>>>>>> a5c27f50e4d63113eaaf77333d443fa3772aeaee
 }
 
 // End of file datasets.php
