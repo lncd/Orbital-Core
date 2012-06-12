@@ -228,7 +228,8 @@ class Dataset_model extends CI_Model {
 				'visibility' => $archive_dataset->dset_visibility,
 				'project' => $archive_dataset->project_id,
 				'project_name' => $archive_dataset->project_name,
-				'project_public_view' => $archive_dataset->project_public_view
+				'project_public_view' => $archive_dataset->project_public_view,
+				'token' => $archive_dataset->dset_key
 			);
 		}
 		else
