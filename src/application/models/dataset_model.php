@@ -176,6 +176,42 @@ class Dataset_model extends CI_Model {
 			->update('dataset_' . $dataset, array('upsert' => TRUE));
 	}
 	
+	function query_dataset($dataset, $query)
+	{
+	
+		foreach ($query as $key => $limits)
+		{
+			
+			foreach ($limits as $type => $value)
+			{
+				switch ($type){
+				
+					case 'equals':
+						$queries['last_data.' . $key] = $value;
+						break;
+				}
+			}
+		}
+	
+		$datapoints = $this->mongo_db
+			->select(array('_id', 'last_data'))
+			->where($queries)
+			->get('dataset_' . $dataset);
+			
+		$output = array();
+		
+		foreach ($datapoints as $datapoint)
+		{
+			$output[] = array_merge(array(
+				'id' => $datapoint['_id']
+			), $datapoint['last_data']);
+				
+		}
+		
+		return $output;
+		
+	}
+
 	function get_dataset_details($identifier)
 	{
 		if ($archive_dataset = $this->db
@@ -194,7 +230,8 @@ class Dataset_model extends CI_Model {
 				'visibility' => $archive_dataset->dset_visibility,
 				'project' => $archive_dataset->project_id,
 				'project_name' => $archive_dataset->project_name,
-				'project_public_view' => $archive_dataset->project_public_view
+				'project_public_view' => $archive_dataset->project_public_view,
+				'token' => $archive_dataset->dset_key
 			);
 		}
 		else

@@ -124,6 +124,63 @@ class Datasets extends Orbital_Controller {
 		
 	}
 	
+<<<<<<< HEAD
+=======
+	/**
+	 * Get Datapoints
+	 *
+	 * Retrieve datapoints from the specified set meeting the criteria
+	 */
+	
+	function data_get($dataset)
+	{
+		if ($this->get('token'))
+		{
+			// Test to see if token is valid
+			if (is_string($this->get('token')) AND $this->dataset_model->validate_token($dataset, $this->get('token')))
+			{
+				// Make sure we can decode the query
+				if ($this->get('q') AND $query = json_decode(urldecode($this->get('q'))))
+				{
+					if (isset($query->statements))
+					{
+						
+						// Query the damn thing
+						$results = $this->dataset_model->query_dataset($dataset, $query->statements);
+						
+						var_dump($results);
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'Query does not contain any statements.';
+						$this->response($response, 400);
+					}
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'No or invalid query.';
+					$this->response($response, 400);
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'Invalid token provided.';
+				$this->response($response, 400);
+			}
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'No token provided.';
+			$this->response($response, 400);
+		}
+	}
+	
+	
+>>>>>>> 62b16be456f1c44a9ee0eb50fdecc18cbc49c31d
 	/**
 	 * Get dataset details
 	 *
