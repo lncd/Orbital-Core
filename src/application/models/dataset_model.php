@@ -132,6 +132,41 @@ class Dataset_model extends CI_Model {
 			))
 			->update('dataset_' . $dataset, array('upsert' => TRUE));
 	}
+	
+	function query_dataset($dataset, $query)
+	{
+	
+		foreach ($query as $key => $limits)
+		{
+			
+			foreach ($limits as $type => $value)
+			{
+				switch ($type){
+				
+					case 'equals':
+						$queries['last_data.' . $key] = $value;
+						break;
+				}
+			}
+		}
+	
+		$datapoints = $this->mongo_db
+			->select(array('_id', 'last_data'))
+			->where($queries)
+			->get('dataset_' . $dataset);
+			
+		$output = array();
+		
+		foreach ($datapoints as $datapoint)
+		{
+			$output[] = array_merge(array(
+				'id' => $datapoint['_id']
+			), $datapoint['last_data']);
+				
+		}
+		
+		return $output;
+	}
 }
 
 // End of file dataset_model.php
