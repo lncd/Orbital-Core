@@ -6,11 +6,7 @@ require APPPATH.'/libraries/Orbital_Controller.php';
 /**
  * Datasets
  *
-<<<<<<< HEAD
  * Allows manipulation of a project's datasets.
-=======
- * Gets a list of all projects a user has access to.
->>>>>>> 9cb29bbefc81a4f88db783af4e1ee1170473761d
  *
  * @package    Orbital
  * @subpackage Core
@@ -30,10 +26,36 @@ class Datasets extends Orbital_Controller {
 	function __construct()
 	{
 		parent::__construct();
-<<<<<<< HEAD
 		
 		// Load the model for all functions
 		$this->load->model('dataset_model');
+	}
+
+	/**
+	 * Dataset Create Post
+	 *
+	 * Creates a dataset
+	 */
+
+	public function dataset_create_post()
+	{
+		if ($user = $this->access->valid_user(array('create_projects')))
+		{
+			if ($this->access->user_has_permission($user, 'project_create'))
+			{
+				$this->load->model('dataset_model');
+
+				if ($dataset = $this->dataset_model->create_dataset($this->input->post('project_identifier'), $this->input->post('dataset_name'), $this->input->post('dataset_description')))
+				{
+					$response->dataset_id = $dataset;
+					$this->output->set_header('Location: ' . site_url('collection/' . $dataset));
+
+					$response->status = TRUE;
+					$response->message = 'Dataset created.';
+					$this->response($response, 201);
+				}
+			}
+		}		
 	}
 	
 	/**
@@ -101,37 +123,53 @@ class Datasets extends Orbital_Controller {
 		}
 		
 	}
-
-=======
-	}
-
+	
+	
 	/**
-	 * Dataset Create Post
+	 * Get dataset details
 	 *
-	 * Creates a dataset
+	 * gets specified dataset details
 	 */
-
-	public function dataset_create_post()
+	
+	function specific_get($dataset_identifier)
 	{
-		if ($user = $this->access->valid_user(array('create_projects')))
+		//Check user is valid
+		if ($user = $this->access->valid_user(array('projects')))
 		{
-			if ($this->access->user_has_permission($user, 'project_create'))
+			$this->load->model('files_model');
+			
+			//Check file exists
+			if($dataset = $this->dataset_model->get_dataset_details($dataset_identifier))
 			{
-				$this->load->model('datasets_model');
-
-				if ($dataset = $this->datasets_model->create_dataset($this->input->post('project_identifier'), $this->input->post('dataset_name'), $this->input->post('dataset_description')))
-				{
-					$response->dataset_id = $dataset;
-					$this->output->set_header('Location: ' . site_url('collection/' . $dataset));
-
-					$response->status = TRUE;
-					$response->message = 'Dataset created.';
-					$this->response($response, 201);
-				}
+				//Check user has permission to files project
+				//if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
+				//{
+				
+					$this->load->model('projects_model');
+					$response->permissions = $this->projects_model->get_permissions_project_user($user, $dataset['project']);
+				
+					//CHECK FOR CREATE FILE PERMISSION
+	
+					if ($dataset['visibility'] === 'public')
+					{
+						$response->status = TRUE;
+						$response->dataset = $this->dataset_model->get_dataset_details_public($dataset_identifier);
+						//$response->archive_files = $this->files_model->dataset_get_files_public($identifier);
+						$this->response($response, 200);
+					}
+					else
+					{
+						$response->status = TRUE;
+						$response->dataset = $this->dataset_model->get_dataset_details($dataset_identifier);
+						//$response->archive_files = $this->files_model->file_set_get_files($dataset_identifier);
+						//$response->archive_files_project = $this->files_model->list_for_project($response->dataset['project'], 9999999); //CHANGE LIMIT TO UNLIMITED
+						$this->response($response, 200);
+					}
+				//}
 			}
 		}
 	}
->>>>>>> 9cb29bbefc81a4f88db783af4e1ee1170473761d
+
 }
 
 // End of file datasets.php

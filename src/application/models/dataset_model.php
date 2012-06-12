@@ -57,6 +57,8 @@ class Dataset_model extends CI_Model {
 			$output[] = array(
 				'id' => $dataset->dset_id,
 				'name' => $dataset->dset_name,
+				'description' => $dataset->dset_description,
+				'licence' => $dataset->dset_licence,
 				'visibility' => $dataset->dset_visibility
 			);
 		}
