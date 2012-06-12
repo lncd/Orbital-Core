@@ -68,8 +68,63 @@ class Datasets extends Orbital_Controller {
 	 * Adds datapoints to the specified dataset
 	 */
 	
-	function post_specific($dataset)
+	function specific_post($dataset)
 	{
+		
+		// Make sure we can decode the POST payload
+		if ($payload = json_decode(file_get_contents('php://input')))
+		{
+			var_dump($payload);
+			
+			if (isset($payload->token))
+			{
+				// Test to see if token is valid
+				if (is_string($payload->token) AND $this->dataset_model->validate_token($dataset, $payload->token))
+				{
+					// Make sure we can decode the POST payload
+					if ($payload = json_decode(file_get_contents('php://input')))
+					{
+						if (isset($payload->data) AND is_array($payload->data))
+						{
+							foreach ($payload->data as $datapoint)
+							{
+								$this->dataset_model->add_datapoint($dataset, $datapoint);
+							}
+						}
+						else
+						{
+							$response->status = FALSE;
+							$response->error = 'Payload does not contain array of data.';
+							$this->response($response, 400);
+						}
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'Invalid payload provided.';
+						$this->response($response, 400);
+					}
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'Invalid token provided.';
+					$this->response($response, 400);
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'No token provided.';
+				$this->response($response, 400);
+			}
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'Invalid payload provided.';
+			$this->response($response, 400);
+		}
 		
 	}
 	
