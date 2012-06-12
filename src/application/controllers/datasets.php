@@ -124,7 +124,6 @@ class Datasets extends Orbital_Controller {
 		
 	}
 	
-	
 	/**
 	 * Get dataset details
 	 *
@@ -169,7 +168,10 @@ class Datasets extends Orbital_Controller {
 			}
 		}
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9cee12ed5851491af0dfcfad475a27854792294a
 }
 
 // End of file datasets.php
