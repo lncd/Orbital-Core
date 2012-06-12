@@ -47,9 +47,9 @@ class Datasets extends Orbital_Controller {
 		{
 			if ($this->access->user_has_permission($user, 'project_create'))
 			{
-				$this->load->model('datasets_model');
+				$this->load->model('dataset_model');
 
-				if ($dataset = $this->datasets_model->create_dataset($this->input->post('project_identifier'), $this->input->post('dataset_name'), $this->input->post('dataset_description')))
+				if ($dataset = $this->dataset_model->create_dataset($this->input->post('project_identifier'), $this->input->post('dataset_name'), $this->input->post('dataset_description')))
 				{
 					$response->dataset_id = $dataset;
 					$this->output->set_header('Location: ' . site_url('collection/' . $dataset));

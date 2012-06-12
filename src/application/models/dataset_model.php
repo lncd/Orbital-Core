@@ -25,6 +25,47 @@ class Dataset_model extends CI_Model {
 		parent::__construct();
 	}
 	
+	
+	/**
+	 * Create dataset
+	 *
+	 * Creates a new dataset.
+	 *
+	 * @param string $identifier          The project identifier
+	 * @param string $dataset_name        The dataset name
+	 * @param string $dataset_description The dataset description
+	 *
+	 * @return ARRAY
+	 */
+
+	function create_dataset($project_identifier, $dataset_name, $dataset_description)
+	{
+		$identifier = uniqid($this->config->item('orbital_cluster_sn'));
+		$dset_key = random_string('alnum', 64);
+		
+		$insert = array(
+			'dset_id' => $identifier,
+			'dset_name' => $dataset_name,
+			'dset_description' => $dataset_description,
+			'dset_project' => $project_identifier,
+			'dset_key' => $dset_key,
+			'dset_licence' => 4,
+			'dset_visibility' => 'private'
+		);
+
+		// Attempt create
+
+		if ($this->db->insert('datasets', $insert))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+		echo mysqli_error();
+	}
+	
 	/**
 	 * List Project Datasets
 	 *
