@@ -123,8 +123,8 @@ class Dataset_model extends CI_Model {
 		$this->mongo_db
 			->where(array('_id' => $id))
 			->set(array(
-				'last_update_time' => time(),
-				'last_data' => $datapoint
+				'update_time' => time(),
+				'data' => $datapoint
 			))
 			->push('history', array(
 				'time' => time(),
