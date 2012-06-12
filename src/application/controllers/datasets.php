@@ -6,11 +6,7 @@ require APPPATH.'/libraries/Orbital_Controller.php';
 /**
  * Datasets
  *
-<<<<<<< HEAD
  * Allows manipulation of a project's datasets.
-=======
- * Gets a list of all projects a user has access to.
->>>>>>> 9cb29bbefc81a4f88db783af4e1ee1170473761d
  *
  * @package    Orbital
  * @subpackage Core
@@ -30,7 +26,6 @@ class Datasets extends Orbital_Controller {
 	function __construct()
 	{
 		parent::__construct();
-<<<<<<< HEAD
 		
 		// Load the model for all functions
 		$this->load->model('dataset_model');
@@ -102,9 +97,6 @@ class Datasets extends Orbital_Controller {
 		
 	}
 
-=======
-	}
-
 	/**
 	 * Dataset Create Post
 	 *
@@ -131,7 +123,6 @@ class Datasets extends Orbital_Controller {
 			}
 		}
 	}
->>>>>>> 9cb29bbefc81a4f88db783af4e1ee1170473761d
 }
 
 // End of file datasets.php
