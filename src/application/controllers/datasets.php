@@ -124,8 +124,7 @@ class Datasets extends Orbital_Controller {
 		
 	}
 	
-<<<<<<< HEAD
-=======
+	
 	/**
 	 * Get Datapoints
 	 *
@@ -180,7 +179,6 @@ class Datasets extends Orbital_Controller {
 	}
 	
 	
->>>>>>> 62b16be456f1c44a9ee0eb50fdecc18cbc49c31d
 	/**
 	 * Get dataset details
 	 *
