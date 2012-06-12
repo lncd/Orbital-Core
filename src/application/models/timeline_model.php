@@ -96,6 +96,98 @@ class Timeline_model extends CI_Model {
 		}
 	}
 	
+	
+	/**
+	 * Get Timeline for Project
+	 *
+	 * Returns entire timeline for a given project.
+	 *
+	 * @param string $identifier Identifier of project.
+	 *
+	 * @return array|false Array of timeline items, or FALSE if project does not exist.
+	 */
+
+	function get_public_for_project($identifier)
+	{
+		if ($project = $this->db->where('project_id', $identifier)->get('projects'))
+		{ 
+			if ($project->num_rows() === 1)
+			{
+				$project = $project->row();
+				$items = $this->db
+					->where('tl_project', $identifier)
+					->where('tl_visibility', 'public')
+					->order_by('tl_timestamp')
+					->get('timeline');
+					
+				$output = array();
+					
+				foreach ($items->result() as $item)
+				{
+					$output[] = array(
+						'id' => $item->tl_id,
+						'text' => $item->tl_text,
+						'payload' => $item->tl_payload,
+						'timestamp' => $item->tl_timestamp,
+						'timestamp_unix' => strtotime($item->tl_timestamp),
+						'timestamp_human' => date('D jS M Y \a\t g.ia', strtotime($item->tl_timestamp)),
+						'user' => $item->tl_user,
+						'visibility' => $item->tl_visibility
+					);
+				}
+				
+				return $output;
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	
+	
+	/**
+	 * Get Timeline for Project
+	 *
+	 * Returns entire timeline for a given project.
+	 *
+	 * @param string $identifier Identifier of project.
+	 *
+	 * @return array|false Array of timeline items, or FALSE if project does not exist.
+	 */
+
+	function get_all_projects_activity_for_user($user)
+	{
+		$items = $this->db
+			->where('p_proj_user', $user)
+			->where('p_proj_read',  1)
+			->join('permissions_projects', 'p_proj_project = tl_project')
+			->get('timeline');
+			
+		$output = array();
+				
+		foreach ($items->result() as $item)
+		{
+			$output[] = array(
+				'id' => $item->tl_id,
+				'text' => $item->tl_text,
+				'payload' => $item->tl_payload,
+				'timestamp' => $item->tl_timestamp,
+				'timestamp_unix' => strtotime($item->tl_timestamp),
+				'timestamp_human' => date('D jS M Y \a\t g.ia', strtotime($item->tl_timestamp)),
+				'user' => $item->tl_user,
+				'visibility' => $item->tl_visibility
+			);
+		}
+		
+		return $output;
+	}
+	
 	/**
 	 * Get Timeline for User
 	 *

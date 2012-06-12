@@ -55,6 +55,7 @@ echo form_dropdown('licence', $file_licences, $default_licence, 'id="licence"');
 		<p>More information about this licence, including legal text, is available at:<br>
 		<span id="licenceInfoURL">Unknown Location</span></p>
 	</div>
+Select as many files as you want to upload with these details, then hit the upload button<br><br>
 
 <div id="file-uploader">		
 	<noscript>			

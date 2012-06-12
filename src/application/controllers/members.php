@@ -39,33 +39,51 @@ class Members extends Orbital_Controller {
 	{
 		if ($user = $this->access->valid_user(array('projects')))
 		{
-			$this->load->model('projects_model');
-
-			//Check project exists
-			if($project = $this->projects_model->get_project($identifier))
+			$this->load->model('users_model');
+				
+			if ($this->users_model->get_user($this->put('user')))
 			{
-				if ($this->access->user_has_project_permission($user, $identifier, 'write'))
+				$this->load->model('projects_model');
+	
+				//Check project exists
+				if($project = $this->projects_model->get_project($identifier))
 				{
-					if ($project = $this->projects_model->update_project_members($identifier, $this->put('user'), $this->put('read'), $this->put('write'), $this->put('delete'), $this->put('manage_users'), $this->put('archivefiles_read'), $this->put('archivefiles_write'), $this->put('sharedworkspace_read'), $this->put('dataset_create')))
+					if ($this->access->user_has_project_permission($user, $identifier, 'write'))
 					{
-						$response->project = $project;
-						$response->status = TRUE;
-						$this->response($response, 200); // 200 being the HTTP response code
+						if ($project = $this->projects_model->update_project_members($identifier, $this->put('user'), $this->put('read'), $this->put('write'), $this->put('delete'), $this->put('manage_users'), $this->put('archivefiles_read'), $this->put('archivefiles_write'), $this->put('sharedworkspace_read'), $this->put('dataset_create')))
+						{
+							$response->project = $project;
+							$response->status = TRUE;
+							$this->response($response, 200); // 200 being the HTTP response code
+						}
+						else
+						{
+							$response->status = FALSE;
+							$response->error = 'An unspecified error occured in updating the projects members.';
+							$this->response($response, 400);
+						}				
 					}
-					else
-					{
-						$response->status = FALSE;
-						$response->error = 'An unspecified error occured in updating the projects members.';
-						$this->response($response, 400);
-					}				
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'The specified project does not exist.';
+					$this->response($response, 404);
 				}
 			}
 			else
 			{
 				$response->status = FALSE;
-				$response->error = 'The specified project does not exist.';
+				$response->error_user = 1;
+				$response->error = 'The specified user does not exist.';
 				$this->response($response, 404);
 			}
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'You are not a valid user.';
+			$this->response($response, 404);
 		}
 	}
 	

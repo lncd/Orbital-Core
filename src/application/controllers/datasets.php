@@ -6,7 +6,11 @@ require APPPATH.'/libraries/Orbital_Controller.php';
 /**
  * Datasets
  *
+<<<<<<< HEAD
  * Allows manipulation of a project's datasets.
+=======
+ * Gets a list of all projects a user has access to.
+>>>>>>> 9cb29bbefc81a4f88db783af4e1ee1170473761d
  *
  * @package    Orbital
  * @subpackage Core
@@ -26,6 +30,7 @@ class Datasets extends Orbital_Controller {
 	function __construct()
 	{
 		parent::__construct();
+<<<<<<< HEAD
 		
 		// Load the model for all functions
 		$this->load->model('dataset_model');
@@ -97,6 +102,36 @@ class Datasets extends Orbital_Controller {
 		
 	}
 
+=======
+	}
+
+	/**
+	 * Dataset Create Post
+	 *
+	 * Creates a dataset
+	 */
+
+	public function dataset_create_post()
+	{
+		if ($user = $this->access->valid_user(array('create_projects')))
+		{
+			if ($this->access->user_has_permission($user, 'project_create'))
+			{
+				$this->load->model('datasets_model');
+
+				if ($dataset = $this->datasets_model->create_dataset($this->input->post('project_identifier'), $this->input->post('dataset_name'), $this->input->post('dataset_description')))
+				{
+					$response->dataset_id = $dataset;
+					$this->output->set_header('Location: ' . site_url('collection/' . $dataset));
+
+					$response->status = TRUE;
+					$response->message = 'Dataset created.';
+					$this->response($response, 201);
+				}
+			}
+		}
+	}
+>>>>>>> 9cb29bbefc81a4f88db783af4e1ee1170473761d
 }
 
 // End of file datasets.php
