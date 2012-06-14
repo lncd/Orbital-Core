@@ -48,6 +48,7 @@ class Projects_model extends CI_Model {
 					'abstract' => $project->project_abstract,
 					'start_date' => $project->project_start,
 					'end_date' => $project->project_end,
+					'created' => $project->project_created,
 					'research_group' => $project->project_research_group,
 					'public_view' => $project->project_public_view,
 					'default_licence' => $project->project_default_licence,
@@ -120,7 +121,7 @@ class Projects_model extends CI_Model {
 			return FALSE;
 		}		
 	}
-		
+	
 	/**
 	 * List datasets
 	 *
@@ -231,8 +232,12 @@ class Projects_model extends CI_Model {
 		// Attempt create
 
 		if ($this->db->insert('projects', $insert))
-			{ $this->load->model('permissions');
+		{
+			$this->load->model('permissions');
 			$this->add_permission($identifier, $user, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE);
+
+			$this->timeline_model->add_item($identifier, $user, $name . ' was added to Orbital');
+			$this->stream_model->add_item($user, 'created', 'project', $identifier);
 
 			return $identifier;
 		}
@@ -450,6 +455,68 @@ class Projects_model extends CI_Model {
 		if ($this->db->where('project_id', $identifier)->delete('projects'))
 		{
 			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function update_project_members($identifier, $user, $read, $write, $delete, $manage_users, $archivefiles_read, $archivefiles_write, $sharedworkspace_read, $dataset_create)
+	{	
+		$update = array(
+		'p_proj_read' => $read,
+		'p_proj_write' => $write,
+		'p_proj_delete' => $delete,
+		'p_proj_manage_users' => $manage_users,
+		'p_proj_workspace' => $sharedworkspace_read,
+		'p_proj_dataset_create' => $dataset_create,
+		'p_proj_archive_read' => $archivefiles_read,
+		'p_proj_archive_write' => $archivefiles_write
+		);
+
+		// Attempt update
+		if ($this->db->where('p_proj_project', $identifier) -> where('p_proj_user', $user) -> count_all_results('permissions_projects') > 0)
+		{
+			if ($this->db->where('p_proj_project', $identifier) -> where('p_proj_user', $user) -> update('permissions_projects', $update))
+			{
+				return $identifier;		
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+		//else insert
+		else
+		{
+			if ($this->db->where('user_email', $user) -> count_all_results('users') > 0)
+			{
+				$update['p_proj_project'] = $identifier;
+				$update['p_proj_user'] = $user;
+				
+				if ($this->db->insert('permissions_projects', $update))
+				{
+					return $identifier;
+				}
+				else
+				{
+					return FALSE;
+				}
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+	}
+	
+	function delete_project_members($identifier, $user)
+	{	
+		// Attempt delete
+		if ($this->db->where('p_proj_project', $identifier) -> where('p_proj_user', $user) -> delete('permissions_projects'))
+		{
+			return $identifier;		
 		}
 		else
 		{

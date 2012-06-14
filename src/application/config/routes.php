@@ -40,15 +40,28 @@
 
 $route['default_controller'] = "splash";
 $route['404_override'] = '';
+
 $route['project/(:any)/datasets'] = "projects/datasets/$1";
 $route['project/(:any)/public'] = "projects/view_public/$1";
+$route['project/(:any)/member/(:any)'] = "members/specific/$1/$2";
 $route['project/(:any)'] = "projects/view/$1";
+$route['members/(:any)'] = "members/view/$1";
+
 $route['file/(:any)/download'] = "files/download/$1";
 $route['file/(:any)/get_otk'] = "files/get_otk/$1";
 $route['file/(:any)/public'] = "files/file_view_public/$1";
 $route['file/(:any)'] = "files/file_view/$1";
-$route['licence/(:any)'] = "licences/specific/$1";
 
+$route['file_set/create'] = "files/file_set_create";
+$route['file_set/(:any)'] = "files/file_set_view/$1";
+$route['file_set_files/(:any)'] = "files/file_set_files/$1";
+$route['file_file_sets/(:any)'] = "files/file_file_sets/$1";
+
+$route['dataset/create'] = "datasets/dataset_create";
+$route['dataset/(:any)/data'] = "datasets/data/$1";
+$route['dataset/(:any)'] = "datasets/specific/$1";
+
+$route['licence/(:any)'] = "licences/specific/$1";
 
 $route['licences/enabled'] = "licences/list_enabled";
 $route['licence/(:num)'] = "licences/specific/$1";

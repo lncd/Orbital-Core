@@ -56,6 +56,9 @@ class Licences_model extends CI_Model {
 					'name' => $licence->licence_name_full,
 					'uri' => $licence->licence_summary_uri,
 					'enabled' => (bool) $licence->licence_enabled,
+					'allow' => $licence->licence_allow_list,
+					'forbid' => $licence->licence_forbid_list,
+					'condition' => $licence->licence_condition_list,
 					'in_use' => $in_use
 				);
 			}
@@ -158,13 +161,16 @@ class Licences_model extends CI_Model {
 	 * @return bool
 	 */
 	
-	function create_licence($name, $name_short, $licence_summary_uri)
+	function create_licence($name, $name_short, $licence_summary_uri, $allow, $forbid, $condition)
 	{
 			
 		$insert = array(
 			'licence_name_short' => $name_short,
 			'licence_name_full' => $name,
-			'licence_summary_uri' => $licence_summary_uri
+			'licence_summary_uri' => $licence_summary_uri,
+			'licence_allow_list' => $allow,
+			'licence_forbid_list' => $forbid,
+			'licence_condition_list' => $condition
 		);
 		
 		// Attempt insert
@@ -192,9 +198,8 @@ class Licences_model extends CI_Model {
 	 * @return bool
 	 */
 	
-	function update_licence($id, $name, $shortname, $uri, $enable = FALSE)
+	function update_licence($id, $name, $shortname, $uri, $allow, $forbid, $condition, $enable = FALSE)
 	{
-		
 		if ($this->get_licence($id))
 		{
 		
@@ -202,6 +207,9 @@ class Licences_model extends CI_Model {
 				'licence_name_full' => $name,
 				'licence_name_short' => $shortname,
 				'licence_summary_uri' => $uri,
+				'licence_allow_list' => $allow,
+				'licence_forbid_list' => $forbid,
+				'licence_condition_list' => $condition,
 				'licence_enabled' => (bool) $enable
 			);
 		

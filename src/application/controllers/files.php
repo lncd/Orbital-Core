@@ -47,8 +47,8 @@ class Files extends Orbital_Controller {
 			if($file = $this->files_model->file_get_details($identifier))
 			{
 				//Check user has permission to files project
-				//if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
-				//{
+				if ($this->access->user_has_project_permission($user, $file['project'], 'read'))
+				{
 					$this->load->model('projects_model');
 					$response->permissions = $this->projects_model->get_permissions_project_user($user, $file['project']);
 				
@@ -58,6 +58,8 @@ class Files extends Orbital_Controller {
 					{
 						$response->status = TRUE;
 						$response->file = $this->files_model->file_get_details_public($identifier);
+						$response->archive_file_sets = $this->files_model->file_file_set_list($identifier);
+						$response->archive_file_sets_project = $this->files_model->list_file_sets($response->file['project'], $limit = 999999); //CHANGE TO UNLIMITED
 						$this->response($response, 200);
 					}
 					else
@@ -66,14 +68,240 @@ class Files extends Orbital_Controller {
 						{
 							$response->status = TRUE;
 							$response->file = $this->files_model->file_get_details($identifier);
+							$response->archive_file_sets = $this->files_model->file_file_set_list($identifier);
 							$this->response($response, 200);
 						}
+					}
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'You do not have permission to access this file.';
+					$this->response($response, 401);
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+	
+
+	/**
+	 * Get File Set Information
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
+	 */
+
+	public function file_set_view_get($identifier)
+	{
+		//Check user is valid
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+			
+			//Check file exists
+			if($file = $this->files_model->file_set_get_details($identifier))
+			{
+				//Check user has permission to files project
+				//if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
+				//{
+				
+					$this->load->model('projects_model');
+					$response->permissions = $this->projects_model->get_permissions_project_user($user, $file['project']);
+				
+					//CHECK FOR CREATE FILE PERMISSION
+	
+					if ($file['visibility'] === 'public')
+					{
+						$response->status = TRUE;
+						$response->file_set = $this->files_model->file_set_get_details_public($identifier);
+						$response->archive_files = $this->files_model->file_set_get_files_public($identifier);
+						$this->response($response, 200);
+					}
+					else
+					{
+						$response->status = TRUE;
+						$response->file_set = $this->files_model->file_set_get_details($identifier);
+						$response->archive_files = $this->files_model->file_set_get_files($identifier);
+						$response->archive_files_project = $this->files_model->list_for_project($response->file_set['project'], 9999999); //CHANGE LIMIT TO UNLIMITED
+						$this->response($response, 200);
 					}
 				//}
 			}
 		}
 	}
 	
+	
+	/**
+	 * Set File Set Information
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
+	 */
+
+	public function file_set_view_put($identifier)
+	{
+		//Check for valid user
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+
+			//Check file set exists
+			if($file = $this->files_model->file_set_get_details($identifier))
+			{
+				//CHANGE TO CHECK FOR FILE PERMISSIONS
+				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
+				//{				
+				
+					if ($file_set = $this->files_model->update_file_set($identifier, $this->put('name'), $this->put('description'), $this->put('file_set_public')))
+					{
+						$response->file_set = $file_set;
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occurred in updating the file.';
+						$this->response($response, 400);
+					}
+				//}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+	
+	
+	/**
+	 * Set File Set Files
+	 *
+	 * @param string $identifier The file set identifier
+	 *
+	 * @return NULL
+	 */
+
+	public function file_set_files_put($identifier)
+	{
+		//Check for valid user
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+
+			//Check file set exists
+			if($file = $this->files_model->file_set_get_details($identifier))
+			{
+				//CHANGE TO CHECK FOR FILE PERMISSIONS
+				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
+				//{				
+				
+					if ($file_set = $this->files_model->update_file_set_files($identifier, $this->put('file'), $this->put('action')))
+					{
+						$response->file_set = $file_set;
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occurred in updating the file.';
+						$this->response($response, 400);
+					}
+				//}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+	
+		
+	/**
+	 * Set File File Sets
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
+	 */
+
+	public function file_file_sets_put($identifier)
+	{
+		//Check for valid user
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+
+			//Check file exists
+			if($file = $this->files_model->file_get_details($identifier))
+			{
+				//CHANGE TO CHECK FOR FILE PERMISSIONS
+				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
+				//{				
+				
+					if ($file_set = $this->files_model->update_file_file_sets($identifier, $this->put('file_set'), $this->put('action')))
+					{
+						$response->file_set = $file_set;
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occurred in updating the file.';
+						$this->response($response, 400);
+					}
+				//}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+	
+	
+	/**
+	 * Create Post
+	 *
+	 * Creates a file set
+	 */
+
+	public function file_set_create_post()
+	{
+		if ($user = $this->access->valid_user(array('create_projects')))
+		{
+			if ($this->access->user_has_permission($user, 'project_create'))
+			{
+				$this->load->model('files_model');
+
+				if ($file_set = $this->files_model->create_file_set($this->input->post('identifier'), $this->input->post('name'), $this->input->post('abstract')))
+				{
+					$response->file_set_id = $file_set;
+					$this->output->set_header('Location: ' . site_url('collection/' . $file_set));
+
+					$response->status = TRUE;
+					$response->message = 'File set created.';
+					$this->response($response, 201);
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Get Public File Information
@@ -150,7 +378,7 @@ class Files extends Orbital_Controller {
 			$this->load->model('files_model');
 
 			//Check file exists
-			if($file = $this->files_model->file_get_details($identifier))
+			if($file_current = $this->files_model->file_get_details($identifier))
 			{
 				//CHANGE TO CHECK FOR FILE PERMISSIONS
 				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
@@ -159,6 +387,8 @@ class Files extends Orbital_Controller {
 					{
 						$response->file = $file;
 						$response->status = TRUE;
+						$this->timeline_model->add_item($file_current['project'], $user, 'File ' . $this->put('name') . ' was updated');
+						$this->stream_model->add_item($user, 'updated', 'file', $identifier);
 						$this->response($response, 200); // 200 being the HTTP response code
 					}
 					else

@@ -69,7 +69,7 @@ class Licences extends Orbital_Controller {
 				{
 					$this->load->model('licences_model');
 	
-					if ($this->licences_model->create_licence($this->post('name'), $this->post('shortname'), $this->post('uri')))
+					if ($this->licences_model->create_licence($this->post('name'), $this->post('shortname'), $this->post('uri'), $this->post('allow'), $this->post('forbid'), $this->post('condition')))
 					{
 						$response->status = TRUE;
 						$this->response($response, 201);
@@ -158,7 +158,7 @@ class Licences extends Orbital_Controller {
 				
 					if ($this->post('enable'))
 					{
-						if ($this->licences_model->update_licence($identifier, $this->post('name'), $this->post('shortname'), $this->post('uri'), $this->post('enable')))
+						if ($this->licences_model->update_licence($identifier, $this->post('name'), $this->post('shortname'), $this->post('uri'), $this->post('allow'), $this->post('forbid'), $this->post('condition'), $this->post('enable')))
 						{
 							$response->status = TRUE;
 							$this->response($response, 200);
@@ -171,7 +171,7 @@ class Licences extends Orbital_Controller {
 					}
 					else
 					{
-						if ($this->licences_model->update_licence($identifier, $this->post('name'), $this->post('shortname'), $this->post('uri')))
+						if ($this->licences_model->update_licence($identifier, $this->post('name'), $this->post('shortname'), $this->post('uri'),  $this->post('allow'), $this->post('forbid'), $this->post('condition')))
 						{
 							$response->status = TRUE;
 							$this->response($response, 200);
@@ -245,7 +245,7 @@ class Licences extends Orbital_Controller {
 			$data['summary'] = htmlspecialchars(auto_typography($response['summary']));
 			$data['allow'] = $response['allow_list'];
 			$data['forbid'] = $response['forbid_list'];
-			$data['conditions'] = $response['condition_list'];
+			$data['condition'] = $response['condition_list'];
 
 			$this->output->set_output(json_encode($data));
 		}

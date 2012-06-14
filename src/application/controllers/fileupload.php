@@ -102,15 +102,19 @@ class Fileupload extends CI_Controller {
 					$this->load->helper('file');
 					$this->files_model->add_file(
 						$file_id,
-						$this->input->get('qqfile'),
-						strtolower(substr(strrchr($this->input->get('qqfile'), '.'), 1)),
-						get_mime_by_extension($this->input->get('qqfile')),
+						$uploader->file->getName(),
+						strtolower(substr(strrchr($uploader->file->getName(), '.'), 1)),
+						get_mime_by_extension($uploader->file->getName()),
+						$uploader->file->getSize(),
 						$token['project'],
 						(int) $this->input->get('licence'),
 						$file_visibility,
 						'staged',
 						$token['user']
 					);
+					$this->timeline_model->add_item($token['project'], $token['user'], $uploader->file->getName() . ' was uploaded');
+					$this->stream_model->add_item($token['user'], 'uploaded', 'file', $file_id);
+
 				}
 				// to pass data through iframe you will need to encode all html tags
 				$this->output->set_output(json_encode($result));
