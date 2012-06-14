@@ -47,8 +47,8 @@ class Files extends Orbital_Controller {
 			if($file = $this->files_model->file_get_details($identifier))
 			{
 				//Check user has permission to files project
-				//if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
-				//{
+				if ($this->access->user_has_project_permission($user, $file['project'], 'read'))
+				{
 					$this->load->model('projects_model');
 					$response->permissions = $this->projects_model->get_permissions_project_user($user, $file['project']);
 				
@@ -72,7 +72,19 @@ class Files extends Orbital_Controller {
 							$this->response($response, 200);
 						}
 					}
-				//}
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'You do not have permission to access this file.';
+					$this->response($response, 401);
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
 			}
 		}
 	}
