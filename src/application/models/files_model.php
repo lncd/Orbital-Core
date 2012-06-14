@@ -601,6 +601,7 @@ class Files_model extends CI_Model {
 				(
 					'id' => $archive_file->file_id,
 					'original_name' => $archive_file->file_original_name,
+					'title' => $archive_file->file_title,
 					'licence' => $archive_file->file_licence,
 					'uploaded' => $archive_file->file_uploaded_timestamp,
 					'size' => $archive_file->file_size,
