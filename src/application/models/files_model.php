@@ -770,11 +770,12 @@ class Files_model extends CI_Model {
 	 * @return $identifier.
 	 */
 
-	function update_file_set($identifier, $name, $description)
+	function update_file_set($identifier, $name, $description, $file_set_public)
 	{
 		$update = array(
 			'set_name' => $name,
-			'set_description' => $description
+			'set_description' => $description,
+			'set_visibility' => $file_set_public
 		);
 
 		// Attempt update

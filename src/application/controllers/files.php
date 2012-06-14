@@ -160,7 +160,7 @@ class Files extends Orbital_Controller {
 				//if ($this->access->user_has_project_permission($user, $identifier, 'write'))
 				//{				
 				
-					if ($file_set = $this->files_model->update_file_set($identifier, $this->put('name'), $this->put('description')))
+					if ($file_set = $this->files_model->update_file_set($identifier, $this->put('name'), $this->put('description'), $this->put('file_set_public')))
 					{
 						$response->file_set = $file_set;
 						$response->status = TRUE;
