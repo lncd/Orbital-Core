@@ -147,7 +147,9 @@ class Datasets extends Orbital_Controller {
 						// Query the damn thing
 						$results = $this->dataset_model->query_dataset($dataset, $query->statements);
 						
-						var_dump($results);
+						$response->status = TRUE;
+						$response->results = $results;
+						$this->response($response, 200);
 					}
 					else
 					{

@@ -208,8 +208,6 @@ class Dataset_model extends CI_Model {
 				}
 			}
 		}
-		
-		var_dump($this->mongo_db->wheres);
 	
 		$datapoints = $this->mongo_db
 			->select(array('_id', 'data'))
