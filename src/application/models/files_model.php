@@ -587,9 +587,9 @@ class Files_model extends CI_Model {
 
 	function file_set_get_files_public($identifier)
 	{
-		if ($archive_file_set = $this->db
+		if ($archive_files = $this->db
 			->where('fslink_set', $identifier)
-			->where('set_visibility', 'public')
+			->where('file_visibility', 'public')
 			->join('archive_files', 'file_id = fslink_file')
 			->get('archive_file_set_links'))
 		{
