@@ -89,7 +89,10 @@ class Licences_model extends CI_Model {
 					'id' => $licence->licence_id,
 					'short_name' => $licence->licence_name_short,
 					'name' => $licence->licence_name_full,
-					'uri' => $licence->licence_summary_uri
+					'uri' => $licence->licence_summary_uri,
+					'allow' => $licence->licence_allow_list,
+					'forbid' => $licence->licence_forbid_list,
+					'condition' => $licence->licence_condition_list
 				);
 			}
 			return $output;
