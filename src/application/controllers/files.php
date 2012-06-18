@@ -115,6 +115,42 @@ class Files extends Orbital_Controller {
 					$this->load->model('projects_model');
 					$response->permissions = $this->projects_model->get_permissions_project_user($user, $file['project']);
 				
+					$response->status = TRUE;
+					$response->file_set = $this->files_model->file_set_get_details($identifier);
+					$response->archive_files = $this->files_model->file_set_get_files($identifier);
+					$response->archive_files_project = $this->files_model->list_for_project($response->file_set['project'], 9999999); //CHANGE LIMIT TO UNLIMITED
+					$this->response($response, 200);
+				
+				//}
+			}
+		}
+	}
+	
+	/**
+	 * Get File Set Information
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
+	 */
+
+	public function file_set_public_view_get($identifier)
+	{
+		//Check user is valid
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+			
+			//Check file exists
+			if($file = $this->files_model->file_set_get_details_public($identifier))
+			{
+				//Check user has permission to files project
+				//if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
+				//{
+				
+					$this->load->model('projects_model');
+					$response->permissions = $this->projects_model->get_permissions_project_user($user, $file['project']);
+				
 					//CHECK FOR CREATE FILE PERMISSION
 	
 					if ($file['visibility'] === 'public')
@@ -126,13 +162,17 @@ class Files extends Orbital_Controller {
 					}
 					else
 					{
-						$response->status = TRUE;
-						$response->file_set = $this->files_model->file_set_get_details($identifier);
-						$response->archive_files = $this->files_model->file_set_get_files($identifier);
-						$response->archive_files_project = $this->files_model->list_for_project($response->file_set['project'], 9999999); //CHANGE LIMIT TO UNLIMITED
-						$this->response($response, 200);
+						$response->status = FALSE;
+						$response->error = 'You do not have permission to access this file set.';
+						$this->response($response, 401);
 					}
 				//}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file set does not exist.';
+				$this->response($response, 404);
 			}
 		}
 	}
