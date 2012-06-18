@@ -210,9 +210,9 @@ class Licences_model extends CI_Model {
 				'licence_name_full' => $name,
 				'licence_name_short' => $shortname,
 				'licence_summary_uri' => $uri,
-				'licence_allow_list' => $allow,
-				'licence_forbid_list' => $forbid,
-				'licence_condition_list' => $condition,
+				'licence_allow_list' => $allow !== '' ? $allow : NULL,
+				'licence_forbid_list' => $forbid !== '' ? $forbid : NULL,
+				'licence_condition_list' => $condition !== '' ? $condition : NULL,
 				'licence_enabled' => (bool) $enable
 			);
 		
