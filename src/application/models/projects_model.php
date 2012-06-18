@@ -37,7 +37,7 @@ class Projects_model extends CI_Model {
 
 	function get_project($identifier)
 	{
-		if ($project = $this->db->where('project_id', $identifier)->get('projects'))
+		if ($project = $this->db->where('project_id', $identifier)->join('licences', 'licence_id = project_default_licence')->get('projects'))
 		{ 
 			if ($project->num_rows() === 1)
 			{
@@ -52,6 +52,7 @@ class Projects_model extends CI_Model {
 					'research_group' => $project->project_research_group,
 					'public_view' => $project->project_public_view,
 					'default_licence' => $project->project_default_licence,
+					'default_licence_name' => $project->licence_name_full,
 					'google_analytics' => $project->project_google_analytics
 					); 
 			}
