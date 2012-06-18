@@ -25,9 +25,9 @@ foreach ($licences as $licence)
 
 if (isset($file_licences) AND count($file_licences) > 0)
 {
-	echo form_label('Licence to release these files under (if public)', 'licence');
 	echo form_label('Make these files publicly available?', 'public');
 	echo form_checkbox($form_public);
+	echo form_label('Licence to release these files under (if public)', 'licence');
 	echo form_dropdown('licence', $file_licences, $default_licence, 'id="licence"');
 
 
