@@ -10,73 +10,29 @@
 
 <?php
 
+if ($this->input->get('public') === 'checked')
+{
+	echo form_hidden('public', 'public');
+}
+echo form_hidden('licence', $this->input->get('licence'));
+
 $form_public = array(
 	'name'	=> 'public',
 	'id'	=> 'public',
 	'value'	=> 'public',
 );
-
-$licences = $this->licences_model->list_all_available();
-
-foreach ($licences as $licence)
-{
-	$file_licences[$licence['id']] = $licence['name'];
-}
-
-if (isset($file_licences) AND count($file_licences) > 0)
-{
-	echo form_label('Make these files publicly available?', 'public');
-	echo form_checkbox($form_public);
-	echo form_label('Licence to release these files under (if public)', 'licence');
-	echo form_dropdown('licence', $file_licences, $default_licence, 'id="licence"');
-
-
-	echo '<div class="well">
-	
-		<div id="licenceAllow" style="display:none">
-			<h4>This licence allows:</h4>
-			<div id="licenceAllowContent">
-			</div>
-		</div>
-		
-		<div id="licenceDeny" style="display:none">
-			<h4>This licence forbids:</h4>
-			<div id="licenceDenyContent">
-			</div>
-		</div>
-		
-		<div id="licenceConditions" style="display:none">
-			<h4>This licence has the following conditions:</h4>
-			<div id="licenceConditionsContent">
-			</div>
-		</div>
-		
-		<h4>Read More</h4>
-			<p>More information about this licence, including legal text, is available at:<br>
-			<span id="licenceInfoURL">Unknown Location</span></p>
-		</div>
-	Select as many files as you want to upload with these details, then hit the upload button<br><br>
-	
-	<div id="file-uploader">		
-		<noscript>			
-			<p>Your browser does not have JavaScript enabled. Please enable JavaScript to use the Archive Files uploader.</p>
-			<!-- or put a simple form for upload here -->
-		</noscript>         
-	</div>';
-}
-else
-{
-
-	echo '<div class="well">
-	
-
-		<h4>No Licences Available</h4>
-			<p>Unfortunately, as there are no enabled licences, file uploading is disabled.</p>
-		</div>';
-
-}
-
 ?>
+
+<div id="file-uploader">		
+	<noscript>			
+		<p>Your browser does not have JavaScript enabled. Please enable JavaScript to use the Archive Files uploader.</p>
+		<!-- or put a simple form for upload here -->
+	</noscript>         
+</div>
+
+
+
+
 
 <script>        
     function createUploader(){            
