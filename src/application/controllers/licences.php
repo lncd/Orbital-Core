@@ -245,7 +245,7 @@ class Licences extends Orbital_Controller {
 			$data['summary'] = htmlspecialchars(auto_typography($response['summary']));
 			$data['allow'] = $response['allow_list'];
 			$data['forbid'] = $response['forbid_list'];
-			$data['condition'] = $response['condition_list'];
+			$data['conditions'] = $response['condition_list'];
 
 			$this->output->set_output(json_encode($data));
 		}
