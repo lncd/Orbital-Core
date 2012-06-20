@@ -175,6 +175,7 @@ class Files_model extends CI_Model {
 					'title' => $archive_file->file_title,
 					'size' => $archive_file->file_size,
 					'original_name' => $archive_file->file_original_name,
+					'extension' => $archive_file->file_extension,
 					'uploaded' => $archive_file->file_uploaded_timestamp,
 					'visibility' => $archive_file->file_visibility,
 					'status' => $archive_file->file_upload_status,
@@ -279,6 +280,7 @@ class Files_model extends CI_Model {
 				(
 					'id' => $archive_file->file_id,
 					'title' => $archive_file->file_title,
+					'extension' => $archive_file->file_extension,
 					'size' => $archive_file->file_size,
 					'original_name' => $archive_file->file_original_name,
 					'uploaded' => $archive_file->file_uploaded_timestamp,
