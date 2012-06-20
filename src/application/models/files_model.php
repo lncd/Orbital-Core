@@ -643,6 +643,7 @@ class Files_model extends CI_Model {
 			(
 				'id' => $archive_file->file_id,
 				'original_name' => $archive_file->file_original_name,
+				'visibility' => $archive_file->file_visibility,
 				'title' => $archive_file->file_title,
 				'extension' => $archive_file->file_extension,
 				'mimetype' => $archive_file->file_mimetype,
