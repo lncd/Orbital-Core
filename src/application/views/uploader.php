@@ -39,7 +39,7 @@ $form_public = array(
         var uploader = new qq.FileUploader({
             element: document.getElementById('file-uploader'),
             action: '<?php echo site_url('fileupload'); ?>',
-            sizeLimit: 314572800,
+            sizeLimit: 2147483648,
             debug: true,
 			onSubmit: function(id, fileName){
 		    	uploader.setParams({
