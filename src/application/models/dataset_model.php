@@ -31,7 +31,7 @@ class Dataset_model extends CI_Model {
 	 *
 	 * Creates a new dataset.
 	 *
-	 * @param string $identifier          The project identifier
+	 * @param string $project_identifier  The project identifier
 	 * @param string $dataset_name        The dataset name
 	 * @param string $dataset_description The dataset description
 	 *
@@ -72,6 +72,7 @@ class Dataset_model extends CI_Model {
 	 * List dynamic datasets for the given project.
 	 *
 	 * @param string $project    The project identifier
+	 * @param int    $project    The limit of datasets to show
 	 * @param bool   $publiconly Should the list only include public datasets?
 	 *
 	 * @return ARRAY
@@ -138,6 +139,10 @@ class Dataset_model extends CI_Model {
 	 * Add Datapoint
 	 *
 	 * Add a datapoint to a dataset
+	 *
+	 * @param string $dataset   Identifier of the dataset
+ 	 * @param string $datapoint The datapoint to add
+	 *
 	 */
 	
 	function add_datapoint($dataset, $datapoint)
@@ -188,23 +193,23 @@ class Dataset_model extends CI_Model {
 				
 					case 'equals':
 						$this->mongo_db->where('data.' . $key, $value);
-						break;
+									break;
 						
 					case 'gt':
 						$this->mongo_db->where_gt('data.' . $key, $value);
-						break;
+									break;
 						
 					case 'gte':
 						$this->mongo_db->where_gte('data.' . $key, $value);
-						break;
+									break;
 						
 					case 'lt':
 						$this->mongo_db->where_lt('data.' . $key, $value);
-						break;
+									break;
 						
 					case 'lte':
 						$this->mongo_db->where_lte('data.' . $key, $value);
-						break;
+									break;
 				}
 			}
 		}

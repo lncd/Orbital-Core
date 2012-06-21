@@ -152,6 +152,7 @@ class Files_model extends CI_Model {
 	 * Lists all files for project and their upload status.
 	 *
 	 * @param string $identifier The project identifier
+	 * @param string $limit      The limit of files to show
 	 *
 	 * @return ARRAY
 	 */
@@ -195,9 +196,9 @@ class Files_model extends CI_Model {
 	 *
 	 * Creates a new file set.
 	 *
-	 * @param string $identifier The project identifier
-	 * @param string $identifier The file set name
-	 * @param string $identifier The file set description
+	 * @param string $project_identifier The project identifier
+	 * @param string $name               The file set name
+	 * @param string $description        The file set description
 	 *
 	 * @return ARRAY
 	 */
@@ -258,6 +259,7 @@ class Files_model extends CI_Model {
 	 * Lists all files for public project and their upload status.
 	 *
 	 * @param string $identifier The project identifier
+	 * @param string $limit      The limit of files to show
 	 *
 	 * @return ARRAY
 	 */
@@ -303,6 +305,7 @@ class Files_model extends CI_Model {
 	 * Lists all files sets.
 	 *
 	 * @param string $identifier The project identifier
+	 * @param string $limit      The limit of file sets to show
 	 *
 	 * @return ARRAY
 	 */
@@ -730,7 +733,7 @@ class Files_model extends CI_Model {
 	 * @param string $identifier      The file identifier
 	 * @param string $name            The file name
 	 * @param string $default_licence The file default_licence
-	 * @param array $other            Other information
+	 * @param array  $other           Other information
 	 *
 	 * @return $identifier.
 	 */
@@ -769,7 +772,7 @@ class Files_model extends CI_Model {
 	 * @param string $identifier  The file identifier
 	 * @param string $name        The file name
 	 * @param string $description The file description
-	 * @param array $other        Other information
+	 * @param array  $other       Other information
 	 *
 	 * @return $identifier.
 	 */
@@ -799,9 +802,9 @@ class Files_model extends CI_Model {
 	 *
 	 * Updates a file sets files.
 	 *
-	 * @param string $identifier  The file set identifier
-	 * @param string $file        The file
-	 * @param string $action      Add or remove the file
+	 * @param string $identifier The file set identifier
+	 * @param string $file       The file
+	 * @param string $action     Add or remove the file
 	 *
 	 * @return $identifier.
 	 */
@@ -845,9 +848,9 @@ class Files_model extends CI_Model {
 	 *
 	 * Updates a files file sets.
 	 *
-	 * @param string $identifier  The file identifier
-	 * @param string $file        The file set
-	 * @param string $action      Add or remove the file
+	 * @param string $identifier The file identifier
+	 * @param string $file       The file set
+	 * @param string $action     Add or remove the file
 	 *
 	 * @return $identifier.
 	 */
@@ -891,4 +894,4 @@ class Files_model extends CI_Model {
 
 
 
-// End of file projects.php
+// End of file files_model.php

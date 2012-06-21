@@ -38,6 +38,7 @@ class Format {
 	 *
 	 * @param mixed  $data      general date to be converted
 	 * @param string $from_type data format the file was provided in
+	 *
 	 * @return mixed
 	 */
 
@@ -84,6 +85,7 @@ class Format {
 	 * to_array
 	 *
 	 * @param mixed $data Data to convert to array
+	 *
 	 * @return array
 	 */
 
@@ -345,11 +347,11 @@ class Format {
 	 *
 	 * @return array
 	 */
-	 
+
 	private function _from_serialize($string)
 	{
 		return unserialize(trim($string));
 	}
 }
 
-/* End of file format.php */
+// End of file format.php //
