@@ -10,17 +10,14 @@
 
 <?php
 
-if ($this->input->get('public') === 'checked')
-{
-	echo form_hidden('public', 'public');
-}
+
 echo form_hidden('licence', $this->input->get('licence'));
 
-$form_public = array(
+echo form_hidden(array(
 	'name'	=> 'public',
 	'id'	=> 'public',
-	'value'	=> 'public',
-);
+	'value'	=> $this->input->get('public'),
+));
 ?>
 
 <div id="file-uploader">		
