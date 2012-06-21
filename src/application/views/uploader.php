@@ -39,7 +39,7 @@ $form_public = array(
         var uploader = new qq.FileUploader({
             element: document.getElementById('file-uploader'),
             action: '<?php echo site_url('fileupload'); ?>',
-            sizeLimit: 2147483648,
+            sizeLimit: 524288000,
             debug: true,
 			onSubmit: function(id, fileName){
 		    	uploader.setParams({
@@ -48,7 +48,7 @@ $form_public = array(
 					public: $('#public').val()
 				});
 		    },
-		    maxConnections: 2
+		    maxConnections: 1
         });           
     }
     

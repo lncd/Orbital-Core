@@ -33,7 +33,7 @@ class Fileupload extends CI_Controller {
 	 * @var $size_limit Allowed file size limit
 	 */
 	 
-	private $size_limit = 2147483648;
+	private $size_limit = 524288000;
 	
 	/**
 	 * File contruct.
@@ -81,7 +81,7 @@ class Fileupload extends CI_Controller {
 				// list of valid extensions, ex. array("jpeg", "xml", "bmp")
 				$allowed_extensions = array();
 				// max file size in bytes
-				$size_limit = 2147483648;
+				$size_limit = 524288000;
 
 				$file_id = $this->files_model->get_file_id();
 
