@@ -69,6 +69,7 @@ class Files extends Orbital_Controller {
 							$response->status = TRUE;
 							$response->file = $this->files_model->file_get_details($identifier);
 							$response->archive_file_sets = $this->files_model->file_file_set_list($identifier);
+							$response->archive_file_sets_project = $this->files_model->list_file_sets($response->file['project'], $limit = 999999); //CHANGE TO UNLIMITED
 							$this->response($response, 200);
 						}
 					}
