@@ -162,7 +162,7 @@ class Files_model extends CI_Model {
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
 			->join('licences', 'licence_id = file_licence')
-			->order_by('file_title')
+			->order_by('file_uploaded_timestamp')
 			->limit($limit)
 			->get('archive_files'))
 		{
@@ -269,8 +269,9 @@ class Files_model extends CI_Model {
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
 			->join('licences', 'licence_id = file_licence')
-			->order_by('file_title')
+			->order_by('file_uploaded_timestamp')
 			->where('file_visibility', 'public')
+			->or_where('file_visibility', 'visible')
 			->limit($limit)
 			->get('archive_files'))
 		{
@@ -638,6 +639,7 @@ class Files_model extends CI_Model {
 		if ($archive_file = $this->db
 			->where('file_id', $identifier)
 			->where('file_visibility', 'public')
+			->or_where('file_visibility', 'visible')
 			->join('projects', 'project_id = file_project')
 			->join('licences', 'licence_id = file_licence')
 			->get('archive_files'))

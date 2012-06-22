@@ -54,7 +54,7 @@ class Files extends Orbital_Controller {
 				
 					//CHECK FOR CREATE FILE PERMISSION
 	
-					if ($file['visibility'] === 'public')
+					if ($file['visibility'] === 'public' OR $file['visibility'] === 'visible')
 					{
 						$response->status = TRUE;
 						$response->file = $this->files_model->file_get_details_public($identifier);
@@ -360,7 +360,7 @@ class Files extends Orbital_Controller {
 		{
 			$this->load->model('projects_model');
 		
-			if ($file['visibility'] === 'public')
+			if ($file['visibility'] === 'public' OR $file['visibility'] === 'visible')
 			{
 				$response->status = TRUE;
 				$response->file = $this->files_model->file_get_details_public($identifier);

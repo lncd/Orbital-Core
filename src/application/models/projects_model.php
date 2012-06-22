@@ -107,7 +107,7 @@ class Projects_model extends CI_Model {
 
 	function list_public_archive_files($identifier)
 	{
-		if ($archive_files = $this->db->where('file_project', $identifier)->where('file_visibility', 'public')->get('archive_files'))
+		if ($archive_files = $this->db->where('file_project', $identifier)->where('file_visibility', 'public')->or_where('file_visibility', 'visible')->get('archive_files'))
 		{
 			$output = array();
 			
