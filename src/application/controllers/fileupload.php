@@ -74,7 +74,9 @@ class Fileupload extends CI_Controller {
 			if ($token = $this->session->userdata('form_' . $this->input->get('token')))
 			{
 
-				set_time_limit(900);
+				// Set us some more useful limits
+				ini_set('memory_limit', '2G');
+				set_time_limit(1800);
 
 				$this->load->helper('fileupload');
 
