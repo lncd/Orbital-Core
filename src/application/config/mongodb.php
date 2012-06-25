@@ -23,7 +23,11 @@ $config['default']['mongo_persist']  = TRUE;
 $config['default']['mongo_persist_key']	 = 'orbital_core_persist_key';
 if ($_SERVER['ORBITAL_MONGO_REPLICA_SET'] !== '')
 {
-	$config['default']['replica_set']  = $_SERVER['ORBITAL_MONGO_REPLICA_SET'];
+	$config['default']['replica_set'] = $_SERVER['ORBITAL_MONGO_REPLICA_SET'];
+}
+else
+{
+	$config['admin']['replica_set'] = FALSE;
 }
 $config['default']['mongo_query_safety'] = 'safe';
 $config['default']['mongo_supress_connect_error'] = TRUE;
