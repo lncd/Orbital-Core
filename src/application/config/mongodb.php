@@ -27,7 +27,7 @@ if ($_SERVER['ORBITAL_MONGO_REPLICA_SET'] !== '')
 }
 else
 {
-	$config['admin']['replica_set'] = FALSE;
+	$config['default']['replica_set'] = FALSE;
 }
 $config['default']['mongo_query_safety'] = 'safe';
 $config['default']['mongo_supress_connect_error'] = TRUE;
