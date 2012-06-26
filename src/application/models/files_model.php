@@ -891,6 +891,31 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	
+	/**
+	 * Delete File
+	 *
+	 * Deletes a file.
+	 *
+	 * @param string $identifier      The file identifier
+	 *
+	 * @return $identifier.
+	 */
+
+	function delete_file($identifier)
+	{
+		// Attempt delete
+
+		if ($this->db->where('file_id', $identifier) -> delete('archive_files'))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 

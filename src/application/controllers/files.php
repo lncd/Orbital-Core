@@ -448,6 +448,57 @@ class Files extends Orbital_Controller {
 			}
 		}
 	}
+	
+	
+	/**
+	 * View Delete
+	 *
+	 * Deletes a file
+	 *
+	 * @param $identifer string The identifier of the file
+	 */
+
+	public function file_view_delete($identifier)
+	{
+		//Check for valid user
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+			$this->load->library('storage/storage_rackspacecloud');
+
+			//Check file exists
+			if($file_current = $this->files_model->file_get_details($identifier))
+			{
+				$extension = $file_current['extension'];
+				if ($this->storage_rackspacecloud->delete($identifier . '.' . $extension, $file_current['project']))
+				{
+					if ($this->files_model->delete_file($identifier))
+					{
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occurred deleting the file.';
+						$this->response($response, 400);
+					}
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'An unspecified error occurred deleting the file.';
+					$this->response($response, 400);
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
 
 	
 	/**
