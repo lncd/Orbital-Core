@@ -32,7 +32,7 @@ echo '<input type="hidden" name="licence" id="licence" value="' . $this->input->
         var uploader = new qq.FileUploader({
             element: document.getElementById('file-uploader'),
             action: '<?php echo site_url('fileupload'); ?>',
-            sizeLimit: 524288000,
+            sizeLimit: 2147483648,
             debug: true,
 			onSubmit: function(id, fileName){
 		    	uploader.setParams({
