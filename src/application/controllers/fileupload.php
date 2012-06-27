@@ -33,7 +33,7 @@ class Fileupload extends CI_Controller {
 	 * @var $size_limit Allowed file size limit
 	 */
 	 
-	private $size_limit = 524288000;
+	private $size_limit = 2147483648;
 	
 	/**
 	 * File contruct.
