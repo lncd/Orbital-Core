@@ -916,6 +916,18 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function delete_file_from_upload_folder($identifier)
+	{
+		if(unlink($_SERVER['ORBITAL_STORAGE_DIRECTORY'] . $identifier))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 

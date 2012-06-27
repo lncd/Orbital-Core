@@ -469,26 +469,52 @@ class Files extends Orbital_Controller {
 			//Check file exists
 			if($file_current = $this->files_model->file_get_details($identifier))
 			{
-				$extension = $file_current['extension'];
-				if ($this->storage_rackspacecloud->delete($identifier . '.' . $extension, $file_current['project']))
-				{
-					if ($this->files_model->delete_file($identifier))
+				if($file_current['status'] === 'uploaded')
+				{				
+					$extension = $file_current['extension'];
+					if ($this->storage_rackspacecloud->delete($identifier . '.' . $extension, $file_current['project']))
 					{
-						$response->status = TRUE;
-						$this->response($response, 200); // 200 being the HTTP response code
+						if ($this->files_model->delete_file($identifier))
+						{
+							$response->status = TRUE;
+							$this->response($response, 200); // 200 being the HTTP response code
+						}
+						else
+						{
+							$response->status = FALSE;
+							$response->error = 'The file was deleted, but it\'s record remains. An error occurred deleting the file record from the database.';
+							$this->response($response, 400);
+						}
 					}
 					else
 					{
 						$response->status = FALSE;
-						$response->error = 'An unspecified error occurred deleting the file.';
+						$response->error = 'There was an error deleting this file from Rackspace.';
 						$this->response($response, 400);
 					}
 				}
 				else
 				{
-					$response->status = FALSE;
-					$response->error = 'An unspecified error occurred deleting the file.';
-					$this->response($response, 400);
+					if($this->files_model->delete_file_from_upload_folder($identifier))
+					{					
+						if ($this->files_model->delete_file($identifier))
+						{
+							$response->status = TRUE;
+							$this->response($response, 200); // 200 being the HTTP response code
+						}
+						else
+						{
+							$response->status = FALSE;
+							$response->error = 'The file was deleted, but it\'s record remains. An error occurred deleting the file record from the database.';
+							$this->response($response, 400);
+						}
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An error occurred deleting the file from the upload queue.';
+						$this->response($response, 400);
+					}
 				}
 			}
 			else
