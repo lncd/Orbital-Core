@@ -32,6 +32,8 @@ class Projects extends Orbital_Controller {
 	 * Get projects
 	 *
 	 * Gets projects list
+	 *
+	 * @return NULL
 	 */
 
 	public function index_get()
@@ -67,6 +69,8 @@ class Projects extends Orbital_Controller {
 	 * Public get
 	 *
 	 * Gets public projects list
+	 *
+	 * @return NULL
 	 */
 
 	public function public_get()
@@ -104,8 +108,12 @@ class Projects extends Orbital_Controller {
 	 * View Get
 	 *
 	 * Gets project details
+	 *
+	 * @param string $identifier The project identifier
+	 *
+	 * @return NULL
 	 */
-	 
+
 	public function view_get($identifier)
 	{
 		if ($user = $this->access->valid_user(array('projects')))
@@ -166,8 +174,12 @@ class Projects extends Orbital_Controller {
 	 * Public View Get
 	 *
 	 * Gets public project details
+	 *
+	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
 	 */
-	 
+
 	public function view_public_get($identifier)
 	{
 		$this->load->model('projects_model');
@@ -221,8 +233,12 @@ class Projects extends Orbital_Controller {
 	 * Dataset Get
 	 *
 	 * Gets Datasets for project
+	 *
+ 	 * @param string $identifier The file identifier
+	 *
+	 * @return NULL
 	 */
-	 
+
 	public function datasets_get($identifier)
 	{
 		if ($user = $this->access->valid_user(array('projects')))
@@ -257,7 +273,9 @@ class Projects extends Orbital_Controller {
 	 *
 	 * Updates a project
 	 *
-	 * @param $identifer string The identifier of the project
+	 * @param string $identifer The identifier of the project
+	 *
+	 * @return NULL
 	 */
 
 	public function view_put($identifier)
@@ -327,7 +345,9 @@ class Projects extends Orbital_Controller {
 	 *
 	 * Deletes a project
 	 *
-	 * @param $identifer string The identifier of the project
+	 * @param string $identifer The identifier of the project
+	 *
+	 * @return NULL
 	 */
 
 	public function view_delete($identifier)
@@ -389,6 +409,8 @@ class Projects extends Orbital_Controller {
 	 * Create Post
 	 *
 	 * Creates a project
+	 *
+	 * @return NULL
 	 */
 
 	public function create_post()

@@ -76,7 +76,7 @@ class Projects_model extends CI_Model {
 	 *
 	 * @return ARRAY The list of public projects.
 	 */
-	
+
 	function list_public($limit = 20)
 	{
 		if ($projects = $this->db->where('project_public_view', 'visible')->limit($limit)->get('projects'))
@@ -104,10 +104,10 @@ class Projects_model extends CI_Model {
 	 *
 	 * @return ARRAY The list of public archive files.
 	 */
-	
+
 	function list_public_archive_files($identifier)
 	{
-		if ($archive_files = $this->db->where('file_project', $identifier)->where('file_visibility', 'public')->get('archive_files'))
+		if ($archive_files = $this->db->where('file_project', $identifier)->where('file_visibility', 'public')->or_where('file_visibility', 'visible')->get('archive_files'))
 		{
 			$output = array();
 			
@@ -132,7 +132,7 @@ class Projects_model extends CI_Model {
 	 *
 	 * @return ARRAY The list of datasets.
 	 */
-	 
+
 	function list_datasets($identifier)
 	{
 		if ($datasets = $this->db->where('dset_project', $identifier)->where('dset_visibility', 'public')->get('datasets'))
@@ -184,8 +184,8 @@ class Projects_model extends CI_Model {
 	 *
 	 * Returns list of projects the user is part of.
 	 *
-	 * @param string $user The current user.
-	 * @param int $limit   The limit of projects to display.
+	 * @param string $user  The current user.
+	 * @param int    $limit The limit of projects to display.
 	 *
 	 * @return ARRAY The list of projects.
 	 */
@@ -253,15 +253,15 @@ class Projects_model extends CI_Model {
 	 *
 	 * Adds a permission to the specified user for the specified project.
 	 *
-	 * @param string $project_id  The specified project.
-	 * @param string $user        The specified user.
-	 * @param bool $read          Read permission.
-	 * @param bool $write         Write permission.
-	 * @param bool $delete        Delete permission.
-	 * @param bool $archive_read  Read archive files permission.
-	 * @param bool $archive_write Write archive files permission.
-	 * @param bool $workspace     View workspace permission.
-	 * @param bool $manage_users  Permission to manage users.
+	 * @param string $project_id    The specified project.
+	 * @param string $user          The specified user.
+	 * @param bool   $read          Read permission.
+	 * @param bool   $write         Write permission.
+	 * @param bool   $delete        Delete permission.
+	 * @param bool   $archive_read  Read archive files permission.
+	 * @param bool   $archive_write Write archive files permission.
+	 * @param bool   $workspace     View workspace permission.
+	 * @param bool   $manage_users  Permission to manage users.
 	 *
 	 * @return ARRAY The list of projects.
 	 */
@@ -313,15 +313,15 @@ class Projects_model extends CI_Model {
 			}
 			else
 			{
-				return false;
+				return FALSE;
 			}
 		}
 		else
 		{
-			return false;
+			return FALSE;
 		}
 	}
-		
+
 	/**
 	 * Get project users
 	 *
@@ -356,12 +356,12 @@ class Projects_model extends CI_Model {
 			}
 			else
 			{
-				return false;
+				return FALSE;
 			}
 		}
 		else
 		{
-			return false;
+			return FALSE;
 		}
 	}
 
@@ -377,7 +377,7 @@ class Projects_model extends CI_Model {
 	 * @param string $start_date      The project start_date
 	 * @param string $end_date        The project end_date
 	 * @param string $default_licence The project default_licence
-	 * @param array $other            Other information
+	 * @param array  $other           Other information
 	 *
 	 * @return ARRAY The list of permissions.
 	 */

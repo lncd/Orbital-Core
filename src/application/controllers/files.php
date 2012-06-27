@@ -54,7 +54,7 @@ class Files extends Orbital_Controller {
 				
 					//CHECK FOR CREATE FILE PERMISSION
 	
-					if ($file['visibility'] === 'public')
+					if ($file['visibility'] === 'public' OR $file['visibility'] === 'visible')
 					{
 						$response->status = TRUE;
 						$response->file = $this->files_model->file_get_details_public($identifier);
@@ -69,6 +69,7 @@ class Files extends Orbital_Controller {
 							$response->status = TRUE;
 							$response->file = $this->files_model->file_get_details($identifier);
 							$response->archive_file_sets = $this->files_model->file_file_set_list($identifier);
+							$response->archive_file_sets_project = $this->files_model->list_file_sets($response->file['project'], $limit = 999999); //CHANGE TO UNLIMITED
 							$this->response($response, 200);
 						}
 					}
@@ -360,7 +361,7 @@ class Files extends Orbital_Controller {
 		{
 			$this->load->model('projects_model');
 		
-			if ($file['visibility'] === 'public')
+			if ($file['visibility'] === 'public' OR $file['visibility'] === 'visible')
 			{
 				$response->status = TRUE;
 				$response->file = $this->files_model->file_get_details_public($identifier);
@@ -438,6 +439,57 @@ class Files extends Orbital_Controller {
 						$this->response($response, 400);
 					}
 				//}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'The specified file does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+	
+	
+	/**
+	 * View Delete
+	 *
+	 * Deletes a file
+	 *
+	 * @param $identifer string The identifier of the file
+	 */
+
+	public function file_view_delete($identifier)
+	{
+		//Check for valid user
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+			$this->load->library('storage/storage_rackspacecloud');
+
+			//Check file exists
+			if($file_current = $this->files_model->file_get_details($identifier))
+			{
+				$extension = $file_current['extension'];
+				if ($this->storage_rackspacecloud->delete($identifier . '.' . $extension, $file_current['project']))
+				{
+					if ($this->files_model->delete_file($identifier))
+					{
+						$response->status = TRUE;
+						$this->response($response, 200); // 200 being the HTTP response code
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'An unspecified error occurred deleting the file.';
+						$this->response($response, 400);
+					}
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'An unspecified error occurred deleting the file.';
+					$this->response($response, 400);
+				}
 			}
 			else
 			{

@@ -48,6 +48,7 @@ $route['project/(:any)'] = "projects/view/$1";
 $route['members/(:any)'] = "members/view/$1";
 
 $route['file/(:any)/download'] = "files/download/$1";
+$route['file/(:any)/delete'] = "files/file_view/$1";
 $route['file/(:any)/get_otk'] = "files/get_otk/$1";
 $route['file/(:any)/public'] = "files/file_view_public/$1";
 $route['file/(:any)'] = "files/file_view/$1";

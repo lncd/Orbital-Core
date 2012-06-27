@@ -109,6 +109,7 @@ class Licences_model extends CI_Model {
 	 * Gets a specific licence.
 	 *
 	 * @param string $id The identifier of the licence
+	 *
 	 * @return ARRAY
 	 */
 	
@@ -158,9 +159,12 @@ class Licences_model extends CI_Model {
 	 *
 	 * Creates a new licence.
 	 *
-	 * @param  string $name                The full name of the licence
-	 * @param  string $name_short          The short name of the licence
-	 * @param  string $licence_summary_uri The uri of the licence
+	 * @param string $name                The full name of the licence
+	 * @param string $name_short          The short name of the licence
+	 * @param string $licence_summary_uri The uri of the licence
+	 * @param string $allow               The allow field
+	 * @param string $forbid              The forbid field
+	 * @param string $condition           The condition field
 	 * @return bool
 	 */
 	
@@ -193,11 +197,14 @@ class Licences_model extends CI_Model {
 	 *
 	 * Updates a licence.
 	 *
-	 * @param  string $id        The licence identifier
-	 * @param  string $name      The full name of the licence
-	 * @param  string $shortname The short name of the licence
-	 * @param  string $uri       The full name of the licence
-	 * @param  bool   $enable    If the licence is enabled
+	 * @param string $id        The licence identifier
+	 * @param string $name      The full name of the licence
+	 * @param string $shortname The short name of the licence
+	 * @param string $uri       The full name of the licence
+	 * @param string $allow     The allow field
+	 * @param string $forbid    The forbid field
+	 * @param string $condition The condition field
+	 * @param bool   $enable    If the licence is enabled
 	 * @return bool
 	 */
 	
@@ -238,7 +245,8 @@ class Licences_model extends CI_Model {
 	 *
 	 * Deletes a licence.
 	 *
-	 * @param  string $id The licence identifier
+	 * @param string $id The licence identifier
+	 *
 	 * @return bool
 	 */
 	
@@ -266,4 +274,4 @@ class Licences_model extends CI_Model {
 	}
 }
 
-// End of file licences.php
+// End of file licences_model.php
