@@ -162,7 +162,7 @@ class Files_model extends CI_Model {
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
 			->join('licences', 'licence_id = file_licence')
-			->order_by('file_uploaded_timestamp')
+			->order_by('file_uploaded_timestamp', 'desc')
 			->limit($limit)
 			->get('archive_files'))
 		{
@@ -269,7 +269,7 @@ class Files_model extends CI_Model {
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
 			->join('licences', 'licence_id = file_licence')
-			->order_by('file_uploaded_timestamp')
+			->order_by('file_uploaded_timestamp', 'desc')
 			->where('file_visibility', 'public')
 			->or_where('file_visibility', 'visible')
 			->limit($limit)
@@ -436,28 +436,35 @@ class Files_model extends CI_Model {
 			->join('licences', 'licence_id = file_licence')
 			->get('archive_files'))
 		{
-			$archive_file = $archive_file->row();
-
-			return array
-			(
-				'id' => $archive_file->file_id,
-				'original_name' => $archive_file->file_original_name,
-				'title' => $archive_file->file_title,
-				'extension' => $archive_file->file_extension,
-				'mimetype' => $archive_file->file_mimetype,
-				'project' => $archive_file->file_project,
-				'size' => $archive_file->file_size,
-				'licence' => $archive_file->file_licence,
-				'visibility' => $archive_file->file_visibility,
-				'status' => $archive_file->file_upload_status,
-				'uploaded_by' => $archive_file->file_uploaded_by,
-				'timestamp' => $archive_file->file_uploaded_timestamp,
-				'project' => $archive_file->project_id,
-				'project_name' => $archive_file->project_name,
-				'project_public_view' => $archive_file->project_public_view,
-				'licence_name' => $archive_file->licence_name_full,
-				'licence_uri' => $archive_file->licence_summary_uri
-			);
+			if (count($archive_file->row()) > 0)		
+			{
+				$archive_file = $archive_file->row();
+	
+				return array
+				(
+					'id' => $archive_file->file_id,
+					'original_name' => $archive_file->file_original_name,
+					'title' => $archive_file->file_title,
+					'extension' => $archive_file->file_extension,
+					'mimetype' => $archive_file->file_mimetype,
+					'project' => $archive_file->file_project,
+					'size' => $archive_file->file_size,
+					'licence' => $archive_file->file_licence,
+					'visibility' => $archive_file->file_visibility,
+					'status' => $archive_file->file_upload_status,
+					'uploaded_by' => $archive_file->file_uploaded_by,
+					'timestamp' => $archive_file->file_uploaded_timestamp,
+					'project' => $archive_file->project_id,
+					'project_name' => $archive_file->project_name,
+					'project_public_view' => $archive_file->project_public_view,
+					'licence_name' => $archive_file->licence_name_full,
+					'licence_uri' => $archive_file->licence_summary_uri
+				);
+			}
+			else
+			{
+				return FALSE;
+			}
 		}
 		else
 		{
