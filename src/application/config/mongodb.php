@@ -21,7 +21,14 @@ $config['default']['mongo_username'] = $_SERVER['ORBITAL_MONGO_USER'];
 $config['default']['mongo_password'] = $_SERVER['ORBITAL_MONGO_PASSWORD'];
 $config['default']['mongo_persist']  = TRUE;
 $config['default']['mongo_persist_key']	 = 'orbital_core_persist_key';
-$config['default']['replica_set']  = 'orbital';
+if ($_SERVER['ORBITAL_MONGO_REPLICA_SET'] !== '')
+{
+	$config['default']['replica_set'] = $_SERVER['ORBITAL_MONGO_REPLICA_SET'];
+}
+else
+{
+	$config['default']['replica_set'] = FALSE;
+}
 $config['default']['mongo_query_safety'] = 'safe';
 $config['default']['mongo_supress_connect_error'] = TRUE;
 $config['default']['mongo_host_db_flag']   = TRUE;

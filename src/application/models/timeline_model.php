@@ -44,6 +44,27 @@ class Timeline_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function add_event($project, $user, $text, $payload = NULL, $type = 'system', $time_stamp)
+	{
+		$insert = array(
+			'tl_project' => $project,
+			'tl_user' => $user,
+			'tl_text' => $text,
+			'tl_payload' => $payload,
+			'tl_type' => $type,
+			'tl_timestamp' => $time_stamp
+		);
+		
+		if ($this->db->insert('timeline', $insert))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 
 	/**
 	 * Get Timeline for Project

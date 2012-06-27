@@ -1,5 +1,3 @@
-![Orbital Core](http://dl.dropbox.com/u/2331256/orbital-github-logo.png)
-
 # Orbital Core
 
 This repository is the Orbital Core, responsible for the deposit, storage, retrieval and modification of research data as part of the Orbital project. See also [Orbital Manager](https://github.com/lncd/Orbital-Manager)
@@ -14,7 +12,7 @@ http://orbital.blogs.lincoln.ac.uk
 
 Orbital Core is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-Foobar is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+Orbital Core is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License along with Orbital Core. If not, see <http://www.gnu.org/licenses/>.
 

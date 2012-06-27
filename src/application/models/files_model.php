@@ -152,6 +152,7 @@ class Files_model extends CI_Model {
 	 * Lists all files for project and their upload status.
 	 *
 	 * @param string $identifier The project identifier
+	 * @param string $limit      The limit of files to show
 	 *
 	 * @return ARRAY
 	 */
@@ -161,7 +162,7 @@ class Files_model extends CI_Model {
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
 			->join('licences', 'licence_id = file_licence')
-			->order_by('file_title')
+			->order_by('file_uploaded_timestamp')
 			->limit($limit)
 			->get('archive_files'))
 		{
@@ -175,6 +176,7 @@ class Files_model extends CI_Model {
 					'title' => $archive_file->file_title,
 					'size' => $archive_file->file_size,
 					'original_name' => $archive_file->file_original_name,
+					'extension' => $archive_file->file_extension,
 					'uploaded' => $archive_file->file_uploaded_timestamp,
 					'visibility' => $archive_file->file_visibility,
 					'status' => $archive_file->file_upload_status,
@@ -194,9 +196,9 @@ class Files_model extends CI_Model {
 	 *
 	 * Creates a new file set.
 	 *
-	 * @param string $identifier The project identifier
-	 * @param string $identifier The file set name
-	 * @param string $identifier The file set description
+	 * @param string $project_identifier The project identifier
+	 * @param string $name               The file set name
+	 * @param string $description        The file set description
 	 *
 	 * @return ARRAY
 	 */
@@ -257,6 +259,7 @@ class Files_model extends CI_Model {
 	 * Lists all files for public project and their upload status.
 	 *
 	 * @param string $identifier The project identifier
+	 * @param string $limit      The limit of files to show
 	 *
 	 * @return ARRAY
 	 */
@@ -266,8 +269,9 @@ class Files_model extends CI_Model {
 		if ($archive_files = $this->db
 			->where('file_project', $identifier)
 			->join('licences', 'licence_id = file_licence')
-			->order_by('file_title')
+			->order_by('file_uploaded_timestamp')
 			->where('file_visibility', 'public')
+			->or_where('file_visibility', 'visible')
 			->limit($limit)
 			->get('archive_files'))
 		{
@@ -279,6 +283,7 @@ class Files_model extends CI_Model {
 				(
 					'id' => $archive_file->file_id,
 					'title' => $archive_file->file_title,
+					'extension' => $archive_file->file_extension,
 					'size' => $archive_file->file_size,
 					'original_name' => $archive_file->file_original_name,
 					'uploaded' => $archive_file->file_uploaded_timestamp,
@@ -301,6 +306,7 @@ class Files_model extends CI_Model {
 	 * Lists all files sets.
 	 *
 	 * @param string $identifier The project identifier
+	 * @param string $limit      The limit of file sets to show
 	 *
 	 * @return ARRAY
 	 */
@@ -633,6 +639,7 @@ class Files_model extends CI_Model {
 		if ($archive_file = $this->db
 			->where('file_id', $identifier)
 			->where('file_visibility', 'public')
+			->or_where('file_visibility', 'visible')
 			->join('projects', 'project_id = file_project')
 			->join('licences', 'licence_id = file_licence')
 			->get('archive_files'))
@@ -728,7 +735,7 @@ class Files_model extends CI_Model {
 	 * @param string $identifier      The file identifier
 	 * @param string $name            The file name
 	 * @param string $default_licence The file default_licence
-	 * @param array $other            Other information
+	 * @param array  $other           Other information
 	 *
 	 * @return $identifier.
 	 */
@@ -767,7 +774,7 @@ class Files_model extends CI_Model {
 	 * @param string $identifier  The file identifier
 	 * @param string $name        The file name
 	 * @param string $description The file description
-	 * @param array $other        Other information
+	 * @param array  $other       Other information
 	 *
 	 * @return $identifier.
 	 */
@@ -797,9 +804,9 @@ class Files_model extends CI_Model {
 	 *
 	 * Updates a file sets files.
 	 *
-	 * @param string $identifier  The file set identifier
-	 * @param string $file        The file
-	 * @param string $action      Add or remove the file
+	 * @param string $identifier The file set identifier
+	 * @param string $file       The file
+	 * @param string $action     Add or remove the file
 	 *
 	 * @return $identifier.
 	 */
@@ -843,9 +850,9 @@ class Files_model extends CI_Model {
 	 *
 	 * Updates a files file sets.
 	 *
-	 * @param string $identifier  The file identifier
-	 * @param string $file        The file set
-	 * @param string $action      Add or remove the file
+	 * @param string $identifier The file identifier
+	 * @param string $file       The file set
+	 * @param string $action     Add or remove the file
 	 *
 	 * @return $identifier.
 	 */
@@ -884,9 +891,34 @@ class Files_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	
+	/**
+	 * Delete File
+	 *
+	 * Deletes a file.
+	 *
+	 * @param string $identifier      The file identifier
+	 *
+	 * @return $identifier.
+	 */
+
+	function delete_file($identifier)
+	{
+		// Attempt delete
+
+		if ($this->db->where('file_id', $identifier) -> delete('archive_files'))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 
 
 
-// End of file projects.php
+// End of file files_model.php
