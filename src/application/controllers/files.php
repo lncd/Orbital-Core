@@ -548,6 +548,10 @@ class Files extends Orbital_Controller {
 				
 				if ($queued_file->file_upload_status === 'staged')
 				{
+				
+					// Set us some more useful limits
+					ini_set('memory_limit', '3G');
+					set_time_limit(1800);
 			
 					$queued_file = $queued_files->row();
 					$this->load->library('storage/storage_rackspacecloud');

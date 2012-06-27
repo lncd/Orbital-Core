@@ -75,7 +75,7 @@ class Fileupload extends CI_Controller {
 			{
 
 				// Set us some more useful limits
-				ini_set('memory_limit', '2G');
+				ini_set('memory_limit', '3G');
 				set_time_limit(1800);
 
 				$this->load->helper('fileupload');
