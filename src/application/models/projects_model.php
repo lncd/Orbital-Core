@@ -163,7 +163,7 @@ class Projects_model extends CI_Model {
 	
 	function list_archive_files($identifier)
 	{
-		if ($archive_files = $this->db->where('file_project', $identifier)->get('archive_files'))
+		if ($archive_files = $this->db->where('file_project', $identifier)->order_by('file_uploaded_timestamp', 'desc')->get('archive_files'))
 		{
 			$output = array();
 			
@@ -176,7 +176,7 @@ class Projects_model extends CI_Model {
 		else
 		{
 			return FALSE;
-		}		
+		}
 	}
 	
 	/**
