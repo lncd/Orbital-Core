@@ -136,7 +136,7 @@ class Projects extends Orbital_Controller {
 					}
 					else
 					{
-						$limit = 20;
+						$limit = 20; //Change to higher limit?
 					}
 				
 					$response->project = $project;
