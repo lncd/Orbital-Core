@@ -344,6 +344,36 @@ class Files extends Orbital_Controller {
 		}
 	}
 	
+	
+	/**
+	 * Delete File set
+	 *
+	 * Deletes a file set
+	 */
+
+	public function file_set_delete($identifier)
+	{
+		if ($user = $this->access->valid_user(array('create_projects'))) //CHANGE TO CHECK FOR DELETE PERMISSIONS?
+		{
+			if ($this->access->user_has_permission($user, 'project_create'))
+			{
+				$this->load->model('files_model');
+
+				if ($file_set = $this->files_model->delete_file_set($identifier))
+				{
+					$response->status = TRUE;
+					$this->response($response, 200); // 200 being the HTTP response code
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'An unknown error occurred deleting the file set.';
+					$this->response($response, 400);
+				}				
+			}
+		}
+	}
+	
 	/**
 	 * Get Public File Information
 	 *
