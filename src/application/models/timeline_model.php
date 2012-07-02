@@ -45,7 +45,7 @@ class Timeline_model extends CI_Model {
 		}
 	}
 	
-	function add_event($project, $user, $text, $payload = NULL, $type = 'system', $time_stamp, $event_enddate = NULL)
+	function add_event($project, $user, $text, $payload = NULL, $type = 'system', $time_stamp, $event_enddate = NULL, $publicity)
 	{
 		$insert = array(
 			'tl_project' => $project,
@@ -54,7 +54,8 @@ class Timeline_model extends CI_Model {
 			'tl_payload' => $payload,
 			'tl_type' => $type,
 			'tl_timestamp' => $time_stamp,
-			'tl_event_enddate' => $event_enddate
+			'tl_event_enddate' => $event_enddate,
+			'tl_visibility' => $publicity
 		);
 		
 		if ($this->db->insert('timeline', $insert))
