@@ -243,6 +243,66 @@ class Datasets extends Orbital_Controller {
 		}
 	}
 	
+	
+	/**
+	 * Get Saved Query
+	 *
+	 * Retrieve a saved query
+	 */
+	
+	function csv_get($dataset, $query)
+	{
+		if ($this->get('token'))
+		{
+			// Test to see if token is valid
+			if (is_string($this->get('token')) AND $this->dataset_model->validate_token($dataset, $this->get('token')))
+			{
+				// Make sure we can decode the query
+				if ($query = $this->dataset_model->get_query($dataset, $query))
+				{
+					if (isset($query['statements']))
+					{						
+						// Query the damn thing
+						$results = $this->dataset_model->query_dataset($dataset,
+							isset($query['statements']) ? $query['statements'] : array(),
+							isset($query['fields']) ? $query['fields'] : array()
+						);
+						
+						echo '\'' . implode('\',\'', $query['fields']) . '\'' . "\r\n";
+						
+						foreach ($results as $result)
+						{
+							echo "'LINE'\r\n";
+						}
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'Query does not contain any statements.';
+						$this->response($response, 400);
+					}
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'No or invalid query.';
+					$this->response($response, 400);
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'Invalid token provided.';
+				$this->response($response, 400);
+			}
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'No token provided.';
+			$this->response($response, 400);
+		}
+	}
 
 	
 	/**
