@@ -272,7 +272,7 @@ class Datasets extends Orbital_Controller {
 						
 						foreach ($results as $result)
 						{
-							echo "'LINE'\r\n";
+							echo '\'' . implode('\',\'', $result) . '\'' . "\r\n";
 						}
 					}
 					else
