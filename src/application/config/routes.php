@@ -62,6 +62,7 @@ $route['file_file_sets/(:any)'] = "files/file_file_sets/$1";
 
 $route['dataset/create'] = "datasets/dataset_create";
 $route['dataset/(:any)/data'] = "datasets/data/$1";
+$route['dataset/(:any)/query/(:any)'] = "datasets/query/$1/$2";
 $route['dataset/(:any)'] = "datasets/specific/$1";
 
 $route['licence/(:any)'] = "licences/specific/$1";
