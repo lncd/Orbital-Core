@@ -127,7 +127,7 @@ class Timeline extends Orbital_Controller {
 						$this->load->model('timeline_model');
 						
 						// Try to add!
-						if ($this->timeline_model->add_event($this->post('project'), $user, $user_details['name'] . ' posted an event:', $this->post('event'), $type = 'event', $this->post('date')))
+						if ($this->timeline_model->add_event($this->post('project'), $user, $user_details['name'] . ' posted an event:', $this->post('event'), $type = 'event', $this->post('start_date'), $this->post('end_date'), $this->post('publicity')))
 						{
 							$response->status = TRUE;
 							$this->response($response, 200);

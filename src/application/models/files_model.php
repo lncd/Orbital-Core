@@ -227,6 +227,35 @@ class Files_model extends CI_Model {
 		}
 	}
 	
+	/**
+	 * Delete file set
+	 *
+	 * Deletes a new file set.
+	 *
+	 * @param string $project_identifier The project identifier
+	 *
+	 * @return ARRAY
+	 */
+
+	function delete_file_set($identifier)
+	{
+		// Attempt to delete any files the file set contains
+		if ($this->db->where('fslink_set', $identifier)->delete('archive_file_set_links'))
+		{
+			if ($this->db->where('set_id', $identifier)->delete('archive_file_sets'))
+			{
+				return $identifier;
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 	
 	/**
 	 * Set file status
