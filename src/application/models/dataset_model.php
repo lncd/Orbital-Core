@@ -236,6 +236,15 @@ class Dataset_model extends CI_Model {
 		return $output;
 		
 	}
+	
+	function get_query($dataset_id, $query_id)
+	{		
+		$query = $this->mongo_db
+			->where(array('set' => $dataset_id, 'query' => $query_id))
+			->get('queries');
+			
+		return $query[0]['value'];
+	}
 
 	function get_dataset_details($identifier)
 	{
