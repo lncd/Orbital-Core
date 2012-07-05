@@ -268,7 +268,7 @@ class Datasets extends Orbital_Controller {
 							isset($query['fields']) ? $query['fields'] : array()
 						);
 						
-						echo '\'' . implode('\',\'', $query['fields']) . '\'' . "\r\n";
+						echo implode(',', $query['fields']) . "\r\n";
 						
 						foreach ($results as $result)
 						{
