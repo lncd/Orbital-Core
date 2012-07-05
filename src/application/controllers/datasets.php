@@ -268,10 +268,11 @@ class Datasets extends Orbital_Controller {
 							isset($query['fields']) ? $query['fields'] : array()
 						);
 						
-						echo implode(',', $query['fields']) . "\r\n";
+						//echo implode(',', $query['fields']) . "\r\n";
 						
 						foreach ($results as $result)
 						{
+							unset($result['id']);
 							echo implode(',', $result) . "\r\n";
 						}
 					}
