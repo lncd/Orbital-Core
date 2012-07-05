@@ -272,7 +272,7 @@ class Datasets extends Orbital_Controller {
 						
 						foreach ($results as $result)
 						{
-							unset $result['id'];
+							unset($result['id']);
 							echo implode(',', $result) . "\r\n";
 						}
 					}
