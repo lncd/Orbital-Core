@@ -273,6 +273,22 @@ class Dataset_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
+	function build_query($dataset_identifier, $query_id, $field, $operator, $value, $output_fields)
+	{
+		if ($this->mongo_db
+			->where(array('set' => $dataset_identifier, 'query' => $query_id))
+			->set(array('value.statements.' . $field . '.' . $operator => $value))
+			->set(array('value.statements.fields', $output_fields))
+			->update('queries', array('upsert' => TRUE)))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
 }
 
 // End of file dataset_model.php

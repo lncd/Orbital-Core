@@ -245,9 +245,9 @@ class Datasets extends Orbital_Controller {
 	
 	
 	/**
-	 * Get Saved Query
+	 * Get datapoints in csv format
 	 *
-	 * Retrieve a saved query
+	 * Retrieve datapoints from the specified set meeting the criteria
 	 */
 	
 	function csv_get($dataset, $query)
@@ -349,6 +349,30 @@ class Datasets extends Orbital_Controller {
 				//}
 			}
 		}
+	}
+
+
+	/**
+	 * Query builder
+	 *
+	 * Builds a query for a dataset
+	 */
+	
+	function edit_query_post($dataset_identifier, $query_identifier)
+	{	
+		$this->load->model('dataset_model');
+		if ($this->dataset_model->build_query($dataset_identifier, $query_identifier, $this->post('field'), $this->post('operator'), $this->post('value'), $this->post('output_fields')))
+		{
+			$response->status = TRUE;
+			$response->message = 'Query built.';
+			$this->response($response, 200);
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'An unspecified error occurred building the query.';
+			$this->response($response, 400);
+		}		
 	}
 }
 
