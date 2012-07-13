@@ -274,11 +274,25 @@ class Dataset_model extends CI_Model {
 		}
 	}
 	
-	function build_query($dataset_identifier, $query_id, $field, $operator, $value, $output_fields)
+	function build_query($dataset_identifier, $query_id, $field, $operator, $value)
 	{
 		if ($this->mongo_db
 			->where(array('set' => $dataset_identifier, 'query' => $query_id))
 			->set(array('value.statements.' . $field . '.' . $operator => $value))
+			->update('queries', array('upsert' => TRUE)))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function build_query_output_fields($dataset_identifier, $query_id, $output_fields)
+	{
+		if ($this->mongo_db
+			->where(array('set' => $dataset_identifier, 'query' => $query_id))
 			->set(array('value.statements.fields', $output_fields))
 			->update('queries', array('upsert' => TRUE)))
 		{
@@ -289,6 +303,7 @@ class Dataset_model extends CI_Model {
 			return FALSE;
 		}
 	}
+	
 }
 
 // End of file dataset_model.php

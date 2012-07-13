@@ -361,7 +361,24 @@ class Datasets extends Orbital_Controller {
 	function edit_query_post($dataset_identifier, $query_identifier)
 	{	
 		$this->load->model('dataset_model');
-		if ($this->dataset_model->build_query($dataset_identifier, $query_identifier, $this->post('field'), $this->post('operator'), $this->post('value'), $this->post('output_fields')))
+		if ($this->dataset_model->build_query($dataset_identifier, $query_identifier, $this->post('field'), $this->post('operator'), $this->post('value')))
+		{
+			$response->status = TRUE;
+			$response->message = 'Query built.';
+			$this->response($response, 200);
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'An unspecified error occurred building the query.';
+			$this->response($response, 400);
+		}		
+	}
+	
+	function edit_query_output_fields_post($dataset_identifier, $query_identifier)
+	{	
+		$this->load->model('dataset_model');
+		if ($this->dataset_model->build_query_output_fields($dataset_identifier, $query_identifier, $this->post('output_fields')))
 		{
 			$response->status = TRUE;
 			$response->message = 'Query built.';
