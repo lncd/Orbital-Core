@@ -335,6 +335,7 @@ class Datasets extends Orbital_Controller {
 					{
 						$response->status = TRUE;
 						$response->dataset = $this->dataset_model->get_dataset_details_public($dataset_identifier);
+						$response->dataset_queries = $this->dataset_model->get_dataset_queries($dataset_identifier);
 						//$response->archive_files = $this->files_model->dataset_get_files_public($identifier);
 						$this->response($response, 200);
 					}
@@ -342,6 +343,7 @@ class Datasets extends Orbital_Controller {
 					{
 						$response->status = TRUE;
 						$response->dataset = $this->dataset_model->get_dataset_details($dataset_identifier);
+						$response->dataset_queries = $this->dataset_model->get_dataset_queries($dataset_identifier);
 						//$response->archive_files = $this->files_model->file_set_get_files($dataset_identifier);
 						//$response->archive_files_project = $this->files_model->list_for_project($response->dataset['project'], 9999999); //CHANGE LIMIT TO UNLIMITED
 						$this->response($response, 200);

@@ -94,16 +94,22 @@ class Timeline_model extends CI_Model {
 					
 				foreach ($items->result() as $item)
 				{
-					$output[] = array(
+					$output_array = array(
 						'id' => $item->tl_id,
 						'text' => $item->tl_text,
+						'type' => $item->tl_type,
 						'payload' => $item->tl_payload,
 						'timestamp' => $item->tl_timestamp,
 						'timestamp_unix' => strtotime($item->tl_timestamp),
-						'timestamp_human' => date('D jS M Y \a\t g.ia', strtotime($item->tl_timestamp)),
+						'timestamp_human' => date('d/m/Y g.ia', strtotime($item->tl_timestamp)),
 						'user' => $item->tl_user,
 						'visibility' => $item->tl_visibility
 					);
+					if ($item->tl_event_enddate !== NULL)
+					{
+						$output_array['timestamp_end'] = date('d/m/Y g.ia', strtotime($item->tl_event_enddate));
+					}
+					$output[] = $output_array;
 				}
 				
 				return $output;
@@ -150,10 +156,11 @@ class Timeline_model extends CI_Model {
 					$output[] = array(
 						'id' => $item->tl_id,
 						'text' => $item->tl_text,
+						'type' => $item->tl_type,
 						'payload' => $item->tl_payload,
 						'timestamp' => $item->tl_timestamp,
 						'timestamp_unix' => strtotime($item->tl_timestamp),
-						'timestamp_human' => date('D jS M Y \a\t g.ia', strtotime($item->tl_timestamp)),
+						'timestamp_human' => date('d/m/Y g.ia', strtotime($item->tl_timestamp)),
 						'user' => $item->tl_user,
 						'visibility' => $item->tl_visibility
 					);
@@ -199,10 +206,11 @@ class Timeline_model extends CI_Model {
 			$output[] = array(
 				'id' => $item->tl_id,
 				'text' => $item->tl_text,
+				'type' => $item->tl_type,
 				'payload' => $item->tl_payload,
 				'timestamp' => $item->tl_timestamp,
 				'timestamp_unix' => strtotime($item->tl_timestamp),
-				'timestamp_human' => date('D jS M Y \a\t g.ia', strtotime($item->tl_timestamp)),
+				'timestamp_human' => date('d/m/Y g.ia', strtotime($item->tl_timestamp)),
 				'user' => $item->tl_user,
 				'visibility' => $item->tl_visibility
 			);
@@ -240,10 +248,11 @@ class Timeline_model extends CI_Model {
 					$output[] = array(
 						'id' => $item->tl_id,
 						'text' => $item->tl_text,
+						'type' => $item->tl_type,
 						'payload' => $item->tl_payload,
 						'timestamp' => $item->tl_timestamp,
 						'timestamp_unix' => strtotime($item->tl_timestamp),
-						'timestamp_human' => date('D jS M Y \a\t g.ia', strtotime($item->tl_timestamp)),
+						'timestamp_human' => date('d/m/Y g.ia', strtotime($item->tl_timestamp)),
 						'project' => $item->tl_project,
 						'visibility' => $item->tl_visibility
 					);
