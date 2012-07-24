@@ -294,6 +294,34 @@ class Dataset_model extends CI_Model {
 		}
 	}
 	
+	function get_query_details($dataset_identifier, $query_identifier)
+	{
+		if ($query = $this->mongo_db
+		->where(array('set' => $dataset_identifier, 'query' => $query_identifier))
+		->get('queries'))
+		{
+			return $query;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	function create_query($dataset_identifier, $query_name)
+	{		
+		$identifier = uniqid($this->config->item('orbital_cluster_sn'));
+
+		if ($this->mongo_db
+			->insert('queries', array('id' => $identifier, 'set' => $dataset_identifier, 'query' => $query_name)))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
 	function build_query($dataset_identifier, $query_id, $field, $operator, $value)
 	{
 		if ($this->mongo_db

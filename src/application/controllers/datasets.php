@@ -327,7 +327,7 @@ class Datasets extends Orbital_Controller {
 				//{
 				
 					$this->load->model('projects_model');
-					$response->permissions = $this->projects_model->get_permissions_project_user($user, $dataset['project']);
+					$response->permissions = $this->projects_model->get_permissions_project_user($user, $dataset['project']); //CHANGE THIS TO DATASET PERMISSIONS?
 				
 					//CHECK FOR CREATE FILE PERMISSION
 	
@@ -353,7 +353,55 @@ class Datasets extends Orbital_Controller {
 		}
 	}
 
+	/**
+	 * Get query details
+	 *
+	 * gets specified query details
+	 */
+	
+	function view_query_get($dataset_identifier, $query_identifier)
+	{
+		//Check user is valid
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('dataset_model');
+			
+			//Check dataset exists
+			if($query = $this->dataset_model->get_dataset_details($dataset_identifier))
+			{
+				$response->status = TRUE;
+				$response->query = $this->dataset_model->get_query_details($dataset_identifier, $query_identifier);
+				
+				//$response->archive_files = $this->files_model->dataset_get_files_public($identifier);
+				$this->response($response, 200);
+			}
+		}
+	}
 
+
+	/**
+	 * Create Query
+	 *
+	 * Creates a query for a dataset
+	 */
+	
+	function create_query_post($dataset_identifier)
+	{	
+		$this->load->model('dataset_model');
+		if ($this->dataset_model->create_query($dataset_identifier, $this->post('query_name')))
+		{
+			$response->status = TRUE;
+			$response->message = 'Query built.';
+			$this->response($response, 200);
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'An unspecified error occurred building the query.';
+			$this->response($response, 400);
+		}		
+	}
+	
 	/**
 	 * Query builder
 	 *
