@@ -287,6 +287,21 @@ class Dataset_model extends CI_Model {
 				$output[] = $query;
 			}
 			return $output;
+			}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	function get_dataset_count($identifier)
+	{
+		if ($archive_dataset = $this->db
+			->where('dset_id', $identifier)
+			->join('projects', 'project_id = dset_project')
+			->get('datasets'))
+		{
+			return $this->mongo_db->count('dataset_' . $identifier);
 		}
 		else
 		{
