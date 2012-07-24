@@ -312,7 +312,7 @@ class Dataset_model extends CI_Model {
 	function get_query_details($dataset_identifier, $query_identifier)
 	{
 		if ($query = $this->mongo_db
-		->where(array('set' => $dataset_identifier, 'query' => $query_identifier))
+		->where(array('set' => $dataset_identifier, 'id' => $query_identifier))
 		->get('queries'))
 		{
 			return $query;
