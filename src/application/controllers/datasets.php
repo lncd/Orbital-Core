@@ -319,7 +319,7 @@ class Datasets extends Orbital_Controller {
 		{
 			$this->load->model('files_model');
 			
-			//Check file exists
+			//Check dataset exists
 			if($dataset = $this->dataset_model->get_dataset_details($dataset_identifier))
 			{
 				//Check user has permission to files project
@@ -361,21 +361,22 @@ class Datasets extends Orbital_Controller {
 	 * gets specified query details
 	 */
 	
-	function view_query_get($dataset_identifier, $query_identifier)
+	function view_query_get($query_identifier)
 	{
 		//Check user is valid
 		if ($user = $this->access->valid_user(array('projects')))
 		{
 			$this->load->model('dataset_model');
-			
-			//Check dataset exists
-			if($query = $this->dataset_model->get_dataset_details($dataset_identifier))
-			{
+			if ($response->query = $this->dataset_model->get_query_details($query_identifier))
+			{	
 				$response->status = TRUE;
-				$response->query = $this->dataset_model->get_query_details($dataset_identifier, $query_identifier);
-				
-				//$response->archive_files = $this->files_model->dataset_get_files_public($identifier);
 				$this->response($response, 200);
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'Query does not exist.';
+				$this->response($response, 404);
 			}
 		}
 	}
@@ -393,13 +394,13 @@ class Datasets extends Orbital_Controller {
 		if ($this->dataset_model->create_query($dataset_identifier, $this->post('query_name')))
 		{
 			$response->status = TRUE;
-			$response->message = 'Query built.';
+			$response->message = 'Query created.';
 			$this->response($response, 200);
 		}
 		else
 		{
 			$response->status = FALSE;
-			$response->error = 'An unspecified error occurred building the query.';
+			$response->error = 'An unspecified error occurred creating the query.';
 			$this->response($response, 400);
 		}		
 	}
@@ -410,36 +411,42 @@ class Datasets extends Orbital_Controller {
 	 * Builds a query for a dataset
 	 */
 	
-	function edit_query_post($dataset_identifier, $query_identifier)
-	{	
+	function edit_query_post($query_identifier)
+	{
 		$this->load->model('dataset_model');
-		if ($this->dataset_model->build_query($dataset_identifier, $query_identifier, $this->post('field'), $this->post('operator'), $this->post('value')))
+		if ($this->dataset_model->update_query($query_identifier, $this->post('query_name'), json_decode($this->post('statements')), json_decode($this->post('fields'))))
 		{
 			$response->status = TRUE;
-			$response->message = 'Query built.';
+			$response->message = 'Query edited.';
 			$this->response($response, 200);
 		}
 		else
 		{
 			$response->status = FALSE;
-			$response->error = 'An unspecified error occurred building the query.';
+			$response->error = 'An unspecified error occurred editing the query.';
 			$this->response($response, 400);
 		}		
 	}
 	
-	function edit_query_output_fields_post($dataset_identifier, $query_identifier)
-	{	
+	/**
+	 * Delete query
+	 *
+	 * Deletes a query
+	 */
+	
+	function delete_query_delete($query_identifier)
+	{
 		$this->load->model('dataset_model');
-		if ($this->dataset_model->build_query_output_fields($dataset_identifier, $query_identifier, $this->post('output_fields')))
+		if ($this->dataset_model->delete_query($query_identifier))
 		{
 			$response->status = TRUE;
-			$response->message = 'Query built.';
+			$response->message = 'Query deleted.';
 			$this->response($response, 200);
 		}
 		else
 		{
 			$response->status = FALSE;
-			$response->error = 'An unspecified error occurred building the query.';
+			$response->error = 'An unspecified error occurred deleting the query.';
 			$this->response($response, 400);
 		}		
 	}

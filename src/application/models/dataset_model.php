@@ -309,10 +309,10 @@ class Dataset_model extends CI_Model {
 		}
 	}
 	
-	function get_query_details($dataset_identifier, $query_identifier)
+	function get_query_details($query_identifier)
 	{
 		if ($query = $this->mongo_db
-		->where(array('set' => $dataset_identifier, 'id' => $query_identifier))
+		->where(array('id' => $query_identifier))
 		->get('queries'))
 		{
 			return $query;
@@ -337,11 +337,13 @@ class Dataset_model extends CI_Model {
 		}
 	}
 	
-	function build_query($dataset_identifier, $query_id, $field, $operator, $value)
+	function update_query($query_identifier, $query_name, $statements_array, $fields_array)
 	{
 		if ($this->mongo_db
-			->where(array('set' => $dataset_identifier, 'query' => $query_id))
-			->set(array('value.statements.' . $field . '.' . $operator => $value))
+			->where(array('id' => $query_identifier))
+			->set(array('query' => $query_name))
+			->set(array('value.statements' => $statements_array))
+			->set(array('value.fields' => $fields_array))
 			->update('queries', array('upsert' => TRUE)))
 		{
 			return TRUE;
@@ -352,12 +354,11 @@ class Dataset_model extends CI_Model {
 		}
 	}
 	
-	function build_query_output_fields($dataset_identifier, $query_id, $output_fields)
+	function delete_query($query_identifier)
 	{
 		if ($this->mongo_db
-			->where(array('set' => $dataset_identifier, 'query' => $query_id))
-			->set(array('value.statements.fields', $output_fields))
-			->update('queries', array('upsert' => TRUE)))
+			->where(array('id' => $query_identifier))
+			->delete('queries'))
 		{
 			return TRUE;
 		}
@@ -366,7 +367,6 @@ class Dataset_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	
 }
 
 // End of file dataset_model.php
