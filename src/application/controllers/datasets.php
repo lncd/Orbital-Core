@@ -245,9 +245,9 @@ class Datasets extends Orbital_Controller {
 	
 	
 	/**
-	 * Get Saved Query
+	 * Get datapoints in csv format
 	 *
-	 * Retrieve a saved query
+	 * Retrieve datapoints from the specified set meeting the criteria
 	 */
 	
 	function csv_get($dataset, $query)
@@ -319,7 +319,7 @@ class Datasets extends Orbital_Controller {
 		{
 			$this->load->model('files_model');
 			
-			//Check file exists
+			//Check dataset exists
 			if($dataset = $this->dataset_model->get_dataset_details($dataset_identifier))
 			{
 				//Check user has permission to files project
@@ -327,7 +327,7 @@ class Datasets extends Orbital_Controller {
 				//{
 				
 					$this->load->model('projects_model');
-					$response->permissions = $this->projects_model->get_permissions_project_user($user, $dataset['project']);
+					$response->permissions = $this->projects_model->get_permissions_project_user($user, $dataset['project']); //CHANGE THIS TO DATASET PERMISSIONS?
 				
 					//CHECK FOR CREATE FILE PERMISSION
 	
@@ -335,6 +335,8 @@ class Datasets extends Orbital_Controller {
 					{
 						$response->status = TRUE;
 						$response->dataset = $this->dataset_model->get_dataset_details_public($dataset_identifier);
+						$response->dataset_queries = $this->dataset_model->get_dataset_queries($dataset_identifier);
+						$response->count = $this->dataset_model->get_dataset_count($dataset_identifier);
 						//$response->archive_files = $this->files_model->dataset_get_files_public($identifier);
 						$this->response($response, 200);
 					}
@@ -342,6 +344,8 @@ class Datasets extends Orbital_Controller {
 					{
 						$response->status = TRUE;
 						$response->dataset = $this->dataset_model->get_dataset_details($dataset_identifier);
+						$response->dataset_queries = $this->dataset_model->get_dataset_queries($dataset_identifier);
+						$response->count = $this->dataset_model->get_dataset_count($dataset_identifier);
 						//$response->archive_files = $this->files_model->file_set_get_files($dataset_identifier);
 						//$response->archive_files_project = $this->files_model->list_for_project($response->dataset['project'], 9999999); //CHANGE LIMIT TO UNLIMITED
 						$this->response($response, 200);
@@ -349,6 +353,115 @@ class Datasets extends Orbital_Controller {
 				//}
 			}
 		}
+	}
+
+	/**
+	 * Get query details
+	 *
+	 * gets specified query details
+	 */
+	
+	function view_query_get($query_identifier)
+	{
+		//Check user is valid
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('dataset_model');
+			if ($response->query = $this->dataset_model->get_query_details($query_identifier))
+			{
+				if (isset($response->query[0]['value']['statements']))
+				{						
+					// Query the damn thing
+					$response->query_count = $this->dataset_model->query_dataset_count($response->query[0]['set'],
+						isset($response->query[0]['value']['statements']) ? $response->query[0]['value']['statements'] : array(),
+						isset($response->query[0]['value']['fields']) ? $response->query[0]['value']['fields'] : array()
+					);
+				}
+				else
+				{
+					$response->query_count = 'N/A';
+				}
+				
+				$response->status = TRUE;
+				$this->response($response, 200);
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'Query does not exist.';
+				$this->response($response, 404);
+			}
+		}
+	}
+
+
+	/**
+	 * Create Query
+	 *
+	 * Creates a query for a dataset
+	 */
+	
+	function create_query_post($dataset_identifier)
+	{	
+		$this->load->model('dataset_model');
+		if ($this->dataset_model->create_query($dataset_identifier, $this->post('query_name')))
+		{
+			$response->status = TRUE;
+			$response->message = 'Query created.';
+			$this->response($response, 200);
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'An unspecified error occurred creating the query.';
+			$this->response($response, 400);
+		}		
+	}
+	
+	/**
+	 * Query builder
+	 *
+	 * Builds a query for a dataset
+	 */
+	
+	function edit_query_post($query_identifier)
+	{
+		$this->load->model('dataset_model');
+		if ($this->dataset_model->update_query($query_identifier, $this->post('query_name'), json_decode($this->post('statements')), json_decode($this->post('fields'))))
+		{
+			$response->status = TRUE;
+			$response->message = 'Query edited.';
+			$this->response($response, 200);
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'An unspecified error occurred editing the query.';
+			$this->response($response, 400);
+		}		
+	}
+	
+	/**
+	 * Delete query
+	 *
+	 * Deletes a query
+	 */
+	
+	function delete_query_delete($query_identifier)
+	{
+		$this->load->model('dataset_model');
+		if ($this->dataset_model->delete_query($query_identifier))
+		{
+			$response->status = TRUE;
+			$response->message = 'Query deleted.';
+			$this->response($response, 200);
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'An unspecified error occurred deleting the query.';
+			$this->response($response, 400);
+		}		
 	}
 }
 

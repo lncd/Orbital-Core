@@ -237,10 +237,54 @@ class Dataset_model extends CI_Model {
 		
 	}
 	
+	
+	function query_dataset_count($dataset, $query = array(), $select = array())
+	{
+	
+		foreach ($query as $key => $limits)
+		{
+			
+			foreach ($limits as $type => $value)
+			{
+				switch ($type){
+				
+					case 'equals':
+						$this->mongo_db->where('data.' . $key, $value);
+									break;
+						
+					case 'gt':
+						$this->mongo_db->where_gt('data.' . $key, $value);
+									break;
+						
+					case 'gte':
+						$this->mongo_db->where_gte('data.' . $key, $value);
+									break;
+						
+					case 'lt':
+						$this->mongo_db->where_lt('data.' . $key, $value);
+									break;
+						
+					case 'lte':
+						$this->mongo_db->where_lte('data.' . $key, $value);
+									break;
+				}
+			}
+		}
+		
+		foreach ($select as $field)
+		{
+			$this->mongo_db->select(array('data.' . $field));
+		}
+	
+		return $this->mongo_db
+			->select(array('_id'))
+			->count('dataset_' . $dataset);		
+	}
+	
 	function get_query($dataset_id, $query_id)
 	{		
 		$query = $this->mongo_db
-			->where(array('set' => $dataset_id, 'query' => $query_id))
+			->where(array('set' => $dataset_id, 'id' => $query_id))
 			->get('queries');
 			
 		return $query[0]['value'];
@@ -267,6 +311,100 @@ class Dataset_model extends CI_Model {
 				'project_public_view' => $archive_dataset->project_public_view,
 				'token' => $archive_dataset->dset_key
 			);
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function get_dataset_queries($identifier)
+	{
+		if ($queries = $this->mongo_db
+			->where(array('set' => $identifier))
+			->get('queries'))
+		{
+			$output = array();
+
+			foreach ($queries as $query)
+			{
+				$output[] = $query;
+			}
+			return $output;
+			}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+	function get_dataset_count($identifier)
+	{
+		if ($archive_dataset = $this->db
+			->where('dset_id', $identifier)
+			->join('projects', 'project_id = dset_project')
+			->get('datasets'))
+		{
+			return $this->mongo_db->count('dataset_' . $identifier);
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function get_query_details($query_identifier)
+	{
+		if ($query = $this->mongo_db
+		->where(array('id' => $query_identifier))
+		->get('queries'))
+		{
+			return $query;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	function create_query($dataset_identifier, $query_name)
+	{		
+		$identifier = uniqid($this->config->item('orbital_cluster_sn'));
+
+		if ($this->mongo_db
+			->insert('queries', array('id' => $identifier, 'set' => $dataset_identifier, 'query' => $query_name)))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function update_query($query_identifier, $query_name, $statements_array, $fields_array)
+	{
+		if ($this->mongo_db
+			->where(array('id' => $query_identifier))
+			->set(array('query' => $query_name))
+			->set(array('value.statements' => $statements_array))
+			->set(array('value.fields' => $fields_array))
+			->update('queries', array('upsert' => TRUE)))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
+	function delete_query($query_identifier)
+	{
+		if ($this->mongo_db
+			->where(array('id' => $query_identifier))
+			->delete('queries'))
+		{
+			return TRUE;
 		}
 		else
 		{
