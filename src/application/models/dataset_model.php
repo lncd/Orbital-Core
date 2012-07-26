@@ -373,7 +373,7 @@ class Dataset_model extends CI_Model {
 		if ($this->mongo_db
 			->insert('queries', array('id' => $identifier, 'set' => $dataset_identifier, 'query' => $query_name)))
 		{
-			return TRUE;
+			return $identifier;
 		}
 		else
 		{
