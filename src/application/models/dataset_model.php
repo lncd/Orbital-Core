@@ -237,10 +237,54 @@ class Dataset_model extends CI_Model {
 		
 	}
 	
+	
+	function query_dataset_count($dataset, $query = array(), $select = array())
+	{
+	
+		foreach ($query as $key => $limits)
+		{
+			
+			foreach ($limits as $type => $value)
+			{
+				switch ($type){
+				
+					case 'equals':
+						$this->mongo_db->where('data.' . $key, $value);
+									break;
+						
+					case 'gt':
+						$this->mongo_db->where_gt('data.' . $key, $value);
+									break;
+						
+					case 'gte':
+						$this->mongo_db->where_gte('data.' . $key, $value);
+									break;
+						
+					case 'lt':
+						$this->mongo_db->where_lt('data.' . $key, $value);
+									break;
+						
+					case 'lte':
+						$this->mongo_db->where_lte('data.' . $key, $value);
+									break;
+				}
+			}
+		}
+		
+		foreach ($select as $field)
+		{
+			$this->mongo_db->select(array('data.' . $field));
+		}
+	
+		return $this->mongo_db
+			->select(array('_id'))
+			->count('dataset_' . $dataset);		
+	}
+	
 	function get_query($dataset_id, $query_id)
 	{		
 		$query = $this->mongo_db
-			->where(array('set' => $dataset_id, 'query' => $query_id))
+			->where(array('set' => $dataset_id, 'id' => $query_id))
 			->get('queries');
 			
 		return $query[0]['value'];

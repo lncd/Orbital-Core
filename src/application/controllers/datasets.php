@@ -368,7 +368,20 @@ class Datasets extends Orbital_Controller {
 		{
 			$this->load->model('dataset_model');
 			if ($response->query = $this->dataset_model->get_query_details($query_identifier))
-			{	
+			{
+				if (isset($response->query[0]['value']['statements']))
+				{						
+					// Query the damn thing
+					$response->query_count = $this->dataset_model->query_dataset_count($response->query[0]['set'],
+						isset($response->query[0]['value']['statements']) ? $response->query[0]['value']['statements'] : array(),
+						isset($response->query[0]['value']['fields']) ? $response->query[0]['value']['fields'] : array()
+					);
+				}
+				else
+				{
+					$response->query_count = 'N/A';
+				}
+				
 				$response->status = TRUE;
 				$this->response($response, 200);
 			}
