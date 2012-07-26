@@ -62,9 +62,13 @@ $route['file_file_sets/(:any)'] = "files/file_file_sets/$1";
 
 $route['dataset/create'] = "datasets/dataset_create";
 $route['dataset/(:any)/data'] = "datasets/data/$1";
-$route['dataset/(:any)/query/(:any)'] = "datasets/query/$1/$2";
+$route['dataset/(:any)/query/new'] = "datasets/create_query/$1";
 $route['dataset/(:any)/csv/(:any)'] = "datasets/csv/$1/$2";
 $route['dataset/(:any)'] = "datasets/specific/$1";
+
+$route['query/(:any)/delete'] = "datasets/delete_query/$1";
+$route['query/(:any)/edit'] = "datasets/edit_query/$1";
+$route['query/(:any)'] = "datasets/view_query/$1";
 
 $route['licence/(:any)'] = "licences/specific/$1";
 
