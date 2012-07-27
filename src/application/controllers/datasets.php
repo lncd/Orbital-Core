@@ -404,9 +404,10 @@ class Datasets extends Orbital_Controller {
 	function create_query_post($dataset_identifier)
 	{	
 		$this->load->model('dataset_model');
-		if ($this->dataset_model->create_query($dataset_identifier, $this->post('query_name')))
+		if ($identifier = $this->dataset_model->create_query($dataset_identifier, $this->post('query_name')))
 		{
 			$response->status = TRUE;
+			$response->query_id = $identifier;
 			$response->message = 'Query created.';
 			$this->response($response, 200);
 		}

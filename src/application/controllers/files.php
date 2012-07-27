@@ -526,7 +526,7 @@ class Files extends Orbital_Controller {
 				else
 				{
 					if($this->files_model->delete_file_from_upload_folder($identifier))
-					{					
+					{
 						if ($this->files_model->delete_file($identifier))
 						{
 							$response->status = TRUE;
