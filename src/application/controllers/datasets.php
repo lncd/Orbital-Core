@@ -41,18 +41,49 @@ class Datasets extends Orbital_Controller {
 	{
 		if ($user = $this->access->valid_user(array('create_projects')))
 		{
-			if ($this->access->user_has_permission($user, 'project_create'))
+			if ($this->access->user_has_project_permission($user, 'dataset_create'))
 			{
 				$this->load->model('dataset_model');
 
 				if ($dataset = $this->dataset_model->create_dataset($this->input->post('project_identifier'), $this->input->post('dataset_name'), $this->input->post('dataset_description')))
 				{
 					$response->dataset_id = $dataset;
-					$this->output->set_header('Location: ' . site_url('collection/' . $dataset));
+					$this->output->set_header('Location: ' . site_url('dataset/' . $dataset));
 
 					$response->status = TRUE;
 					$response->message = 'Dataset created.';
 					$this->response($response, 201);
+				}
+			}
+		}		
+	}
+	
+	/**
+	 * Edit Dataset
+	 *
+	 * Edits a dataset
+	 */
+
+	public function dataset_edit_post($dataset_identifier)
+	{
+		if ($user = $this->access->valid_user(array('create_projects')))
+		{
+			//Check dataset exists
+			if($dataset = $this->dataset_model->get_dataset_details($dataset_identifier))
+			{
+				if ($this->access->user_has_project_permission($user, $dataset['project'], 'dataset_create'))
+				{
+					$this->load->model('dataset_model');
+	
+					if ($dataset = $this->dataset_model->edit_dataset($dataset_identifier, $this->input->post('dataset_name'), $this->input->post('dataset_description'), $this->input->post('dataset_visibility'), $this->input->post('dataset_licence')))
+					{
+						$response->dataset_id = $dataset;
+						$this->output->set_header('Location: ' . site_url('dataset/' . $dataset));
+	
+						$response->status = TRUE;
+						$response->message = 'Dataset created.';
+						$this->response($response, 201);
+					}
 				}
 			}
 		}		
@@ -329,6 +360,43 @@ class Datasets extends Orbital_Controller {
 					$this->load->model('projects_model');
 					$response->permissions = $this->projects_model->get_permissions_project_user($user, $dataset['project']); //CHANGE THIS TO DATASET PERMISSIONS?
 				
+					$response->status = TRUE;
+					$response->dataset = $this->dataset_model->get_dataset_details($dataset_identifier);
+					$response->dataset_queries = $this->dataset_model->get_dataset_queries($dataset_identifier);
+					$response->count = $this->dataset_model->get_dataset_count($dataset_identifier);
+					//$response->archive_files = $this->files_model->file_set_get_files($dataset_identifier);
+					//$response->archive_files_project = $this->files_model->list_for_project($response->dataset['project'], 9999999); //CHANGE LIMIT TO UNLIMITED
+					$this->response($response, 200);
+				
+				//}
+			}
+		}
+	}
+	
+	
+	/**
+	 * Get public dataset details
+	 *
+	 * gets specified public dataset details
+	 */
+	
+	function specific_public_get($dataset_identifier)
+	{
+		//Check user is valid
+		if ($user = $this->access->valid_user(array('projects')))
+		{
+			$this->load->model('files_model');
+			
+			//Check dataset exists
+			if($dataset = $this->dataset_model->get_dataset_details($dataset_identifier))
+			{
+				//Check user has permission to files project
+				//if ($this->access->user_has_project_permission($user, $file['project'], 'write'))
+				//{
+				
+					$this->load->model('projects_model');
+					$response->permissions = $this->projects_model->get_permissions_project_user($user, $dataset['project']); //CHANGE THIS TO DATASET PERMISSIONS?
+				
 					//CHECK FOR CREATE FILE PERMISSION
 	
 					if ($dataset['visibility'] === 'public')
@@ -338,16 +406,6 @@ class Datasets extends Orbital_Controller {
 						$response->dataset_queries = $this->dataset_model->get_dataset_queries($dataset_identifier);
 						$response->count = $this->dataset_model->get_dataset_count($dataset_identifier);
 						//$response->archive_files = $this->files_model->dataset_get_files_public($identifier);
-						$this->response($response, 200);
-					}
-					else
-					{
-						$response->status = TRUE;
-						$response->dataset = $this->dataset_model->get_dataset_details($dataset_identifier);
-						$response->dataset_queries = $this->dataset_model->get_dataset_queries($dataset_identifier);
-						$response->count = $this->dataset_model->get_dataset_count($dataset_identifier);
-						//$response->archive_files = $this->files_model->file_set_get_files($dataset_identifier);
-						//$response->archive_files_project = $this->files_model->list_for_project($response->dataset['project'], 9999999); //CHANGE LIMIT TO UNLIMITED
 						$this->response($response, 200);
 					}
 				//}

@@ -66,6 +66,42 @@ class Dataset_model extends CI_Model {
 		echo mysqli_error();
 	}
 	
+		
+	/**
+	 * Edit dataset
+	 *
+	 * Edits a dataset.
+	 *
+	 * @param string $project_identifier  The project identifier
+	 * @param string $dataset_name        The dataset name
+	 * @param string $dataset_description The dataset description
+	 *
+	 * @return ARRAY
+	 */
+
+	function edit_dataset($dataset_id, $dataset_name, $dataset_description, $dataset_visibility, $dataset_licence)
+	{	
+		$update = array(
+			'dset_name' => $dataset_name,
+			'dset_description' => $dataset_description,
+			'dset_visibility' => $dataset_visibility,
+			'dset_licence' => $dataset_licence
+		);
+
+		// Attempt create
+
+		if ($identifier = $this->db
+			->where('dset_id', $dataset_id)
+			->update('datasets', $update))
+		{
+			return $identifier;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+	
 	/**
 	 * List Project Datasets
 	 *
