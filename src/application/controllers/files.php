@@ -525,6 +525,12 @@ class Files extends Orbital_Controller {
 				}
 				else if($file_current['status'] === 'staged')
 				{
+					$response->status = FALSE;
+					$response->error = ' The file cannot be deleted as it is currently being uploaded.';
+					$this->response($response, 400);
+
+				
+				/*
 					if($this->files_model->delete_file_from_upload_folder($identifier))
 					{
 						if ($this->files_model->delete_file($identifier))
@@ -545,6 +551,7 @@ class Files extends Orbital_Controller {
 						$response->error = ' An error occurred deleting the file from the upload queue.';
 						$this->response($response, 400);
 					}
+					*/
 				}
 				else if($file_current['status'] === 'uploading')
 				{
