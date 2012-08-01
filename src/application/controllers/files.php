@@ -512,18 +512,18 @@ class Files extends Orbital_Controller {
 						else
 						{
 							$response->status = FALSE;
-							$response->error = 'The file was deleted, but it\'s record remains. An error occurred deleting the file record from the database.';
+							$response->error = ' The file was deleted, but it\'s record remains. An error occurred deleting the file record from the database.';
 							$this->response($response, 400);
 						}
 					}
 					else
 					{
 						$response->status = FALSE;
-						$response->error = 'There was an error deleting this file from Rackspace.';
+						$response->error = ' There was an error deleting this file from Rackspace.';
 						$this->response($response, 400);
 					}
 				}
-				else if($file_current['status'] === 'uploading')
+				else if($file_current['status'] === 'staged')
 				{
 					if($this->files_model->delete_file_from_upload_folder($identifier))
 					{
@@ -535,16 +535,22 @@ class Files extends Orbital_Controller {
 						else
 						{
 							$response->status = FALSE;
-							$response->error = 'The file was deleted, but it\'s record remains. An error occurred deleting the file record from the database.';
+							$response->error = ' The file was deleted, but it\'s record remains. An error occurred deleting the file record from the database.';
 							$this->response($response, 400);
 						}
 					}
 					else
 					{
 						$response->status = FALSE;
-						$response->error = 'An error occurred deleting the file from the upload queue.';
+						$response->error = ' An error occurred deleting the file from the upload queue.';
 						$this->response($response, 400);
 					}
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = ' Cannot delete file while it is being uploaded to rackspace.';
+					$this->response($response, 400);
 				}
 			}
 			else
