@@ -116,9 +116,41 @@ class Dataset_model extends CI_Model {
 
 	function delete_dataset($dataset_identifier)
 	{
-		//STUFF
+		if ($this->mongo_db
+			->drop_collection($_SERVER['ORBITAL_MONGO_DATABASE'], $dataset_identifier))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}	
 	}
 	
+		
+	/**
+	 * Delete dataset details
+	 *
+	 * Deletes a datasets details from SQL.
+	 *
+	 * @param string $project_identifier  The dataset identifier
+	 *
+	 * @return ARRAY
+	 */
+
+	function delete_dataset_details($dataset_identifier)
+	{
+		if ($this->db
+			->where(array('dset_id' => $dataset_identifier))
+			->delete('datasets'))
+		{
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}	
+	}
 	
 	/**
 	 * List Project Datasets

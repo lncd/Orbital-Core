@@ -107,11 +107,38 @@ class Datasets extends Orbital_Controller {
 				{	
 					if ($dataset = $this->dataset_model->delete_dataset($dataset_identifier))
 					{	
-						$response->status = TRUE;
-						$response->message = 'Dataset created.';
-						$this->response($response, 201);
+						if ($dataset = $this->dataset_model->delete_dataset_details($dataset_identifier))
+						{	
+							$response->status = TRUE;
+							$response->message = 'Dataset deleted.';
+							$this->response($response, 201);
+						}
+						else
+						{
+							$response->status = FALSE;
+							$response->error = 'Could not delete Dataset details from the database.';
+							$this->response($response, 400);
+						}
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'Could not delete Dataset from MongoDB.';
+						$this->response($response, 400);
 					}
 				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'You do not hvae permission to delete this dataset.';
+					$this->response($response, 400);
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'Dataset does not exist.';
+				$this->response($response, 400);
 			}
 		}		
 	}
@@ -533,7 +560,7 @@ class Datasets extends Orbital_Controller {
 	 * Deletes a query
 	 */
 	
-	function delete_query_delete($query_identifier)
+	function query_delete($query_identifier)
 	{
 		$this->load->model('dataset_model');
 		if ($this->dataset_model->delete_query($query_identifier))
