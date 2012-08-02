@@ -72,9 +72,11 @@ class Dataset_model extends CI_Model {
 	 *
 	 * Edits a dataset.
 	 *
-	 * @param string $project_identifier  The project identifier
+	 * @param string $dataset_id  The dataset identifier
 	 * @param string $dataset_name        The dataset name
 	 * @param string $dataset_description The dataset description
+	 * @param string $dataset_visibility The dataset visibility
+	 * @param string $dataset_licence The dataset licence
 	 *
 	 * @return ARRAY
 	 */
@@ -101,6 +103,22 @@ class Dataset_model extends CI_Model {
 			return FALSE;
 		}
 	}
+		
+	/**
+	 * Delete dataset
+	 *
+	 * Deletes a dataset.
+	 *
+	 * @param string $project_identifier  The dataset identifier
+	 *
+	 * @return ARRAY
+	 */
+
+	function delete_dataset($dataset_identifier)
+	{
+		//STUFF
+	}
+	
 	
 	/**
 	 * List Project Datasets

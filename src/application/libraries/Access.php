@@ -251,9 +251,7 @@ class Access {
 	 */
  
 	function user_has_project_permission($user, $project, $permission, $softfail = FALSE)
-	{
-		
-	
+	{	
 		$user = $this->_ci->db
 			->where('p_proj_user', $user)
 			->where('p_proj_project', $project)

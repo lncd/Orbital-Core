@@ -89,6 +89,33 @@ class Datasets extends Orbital_Controller {
 		}		
 	}
 	
+		
+	/**
+	 * Delete Dataset
+	 *
+	 * Deletes a dataset
+	 */
+
+	public function dataset_delete($dataset_identifier)
+	{
+		if ($user = $this->access->valid_user(array('create_projects')))
+		{
+			//Check dataset exists
+			if($dataset = $this->dataset_model->get_dataset_details($dataset_identifier))
+			{
+				if ($this->access->user_has_project_permission($user, $dataset['project'], 'dataset_create'))
+				{	
+					if ($dataset = $this->dataset_model->delete_dataset($dataset_identifier))
+					{	
+						$response->status = TRUE;
+						$response->message = 'Dataset created.';
+						$this->response($response, 201);
+					}
+				}
+			}
+		}		
+	}
+	
 	/**
 	 * Add Datapoints
 	 *

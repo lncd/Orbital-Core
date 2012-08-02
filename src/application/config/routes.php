@@ -63,6 +63,7 @@ $route['file_file_sets/(:any)'] = "files/file_file_sets/$1";
 $route['dataset/create'] = "datasets/dataset_create";
 $route['dataset/(:any)/data'] = "datasets/data/$1";
 $route['dataset/(:any)/edit'] = "datasets/dataset_edit/$1";
+$route['dataset/(:any)/delete'] = "datasets/dataset/$1";
 $route['dataset/(:any)/query/new'] = "datasets/create_query/$1";
 $route['dataset/(:any)/csv/(:any)'] = "datasets/csv/$1/$2";
 $route['dataset/(:any)'] = "datasets/specific/$1";
