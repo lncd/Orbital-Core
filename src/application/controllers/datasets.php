@@ -43,7 +43,6 @@ class Datasets extends Orbital_Controller {
 		{
 			if ($this->access->user_has_project_permission($user, $this->input->post('project_identifier'), 'dataset_create'))
 			{
-				$this->load->model('dataset_model');
 
 				if ($dataset = $this->dataset_model->create_dataset($this->input->post('project_identifier'), $this->input->post('dataset_name'), $this->input->post('dataset_description')))
 				{
@@ -426,8 +425,6 @@ class Datasets extends Orbital_Controller {
 	{
 		//Check user is valid
 		if ($user = $this->access->valid_user(array('projects')))
-		{
-			$this->load->model('files_model');
 			
 			//Check dataset exists
 			if($dataset = $this->dataset_model->get_dataset_details($dataset_identifier))
@@ -600,6 +597,66 @@ class Datasets extends Orbital_Controller {
 			$this->response($response, 400);
 		}		
 	}
+	
+	/**
+	 * Analyse Data
+	 *
+	 * Analyses the data in a set to update the description
+	 */
+	
+	function analyse_data_get($dataset)
+	{
+		if ($this->get('token'))
+		{
+			// Test to see if token is valid
+			if (is_string($this->get('token')) AND $this->dataset_model->validate_token($dataset, $this->get('token')))
+			{
+				// Make sure we can decode the query
+				if ($this->get('q') AND $query = json_decode(urldecode($this->get('q'))))
+				{
+					if (isset($query->statements))
+					{
+						
+						// Query the damn thing
+						$results = $this->dataset_model->query_dataset($dataset,
+							isset($query->statements) ? $query->statements : array(),
+							isset($query->fields) ? $query->fields : array()
+						);
+						
+						$response->status = TRUE;
+						$response->count = count($results);
+						$response->results = $results;
+						$this->response($response, 200);
+					}
+					else
+					{
+						$response->status = FALSE;
+						$response->error = 'Query does not contain any statements.';
+						$this->response($response, 400);
+					}
+				}
+				else
+				{
+					$response->status = FALSE;
+					$response->error = 'No or invalid query.';
+					$this->response($response, 400);
+				}
+			}
+			else
+			{
+				$response->status = FALSE;
+				$response->error = 'Invalid token provided.';
+				$this->response($response, 400);
+			}
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'No token provided.';
+			$this->response($response, 400);
+		}
+	}
+	
 }
 
 // End of file datasets.php
