@@ -526,7 +526,7 @@ class Files extends Orbital_Controller {
 				else if($file_current['status'] === 'staged')
 				{
 					$response->status = FALSE;
-					$response->error = ' The file cannot be deleted as it is currently being uploaded.';
+					$response->error = ' Cannot be deleted as it is currently being uploaded.';
 					$this->response($response, 400);
 
 				
@@ -556,7 +556,7 @@ class Files extends Orbital_Controller {
 				else if($file_current['status'] === 'uploading')
 				{
 					$response->status = FALSE;
-					$response->error = ' Cannot delete file while it is being uploaded to rackspace.';
+					$response->error = ' Cannot be deleted while it is being uploaded to rackspace.';
 					$this->response($response, 400);
 				}
 			}
