@@ -41,7 +41,7 @@ class Datasets extends Orbital_Controller {
 	{
 		if ($user = $this->access->valid_user(array('create_projects')))
 		{
-			if ($this->access->user_has_project_permission($user, 'dataset_create'))
+			if ($this->access->user_has_project_permission($user, $this->input->post('project_identifier'), 'dataset_create'))
 			{
 				$this->load->model('dataset_model');
 
