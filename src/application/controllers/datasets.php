@@ -130,7 +130,7 @@ class Datasets extends Orbital_Controller {
 				else
 				{
 					$response->status = FALSE;
-					$response->error = 'You do not hvae permission to delete this dataset.';
+					$response->error = 'You do not have permission to delete this dataset.';
 					$this->response($response, 400);
 				}
 			}
@@ -226,26 +226,10 @@ class Datasets extends Orbital_Controller {
 				// Make sure we can decode the query
 				if ($this->get('q') AND $query = json_decode(urldecode($this->get('q'))))
 				{
-					if (isset($query->statements))
-					{
-						
-						// Query the damn thing
-						$results = $this->dataset_model->query_dataset($dataset,
-							isset($query->statements) ? $query->statements : array(),
-							isset($query->fields) ? $query->fields : array()
-						);
-						
-						$response->status = TRUE;
-						$response->count = count($results);
-						$response->results = $results;
-						$this->response($response, 200);
-					}
-					else
-					{
-						$response->status = FALSE;
-						$response->error = 'Query does not contain any statements.';
-						$this->response($response, 400);
-					}
+					$this->_query_dataset($dataset,
+						isset($query->statements) ? $query->statements : array(),
+						isset($query->fields) ? $query->fields : array(),
+						$this->get('output') ? $this->get('output') : NULL);
 				}
 				else
 				{
@@ -268,6 +252,9 @@ class Datasets extends Orbital_Controller {
 			$this->response($response, 400);
 		}
 	}
+	
+	
+	
 	
 	
 	/**
@@ -276,58 +263,96 @@ class Datasets extends Orbital_Controller {
 	 * Retrieve a saved query
 	 */
 	
-	function query_get($dataset, $query)
-	{
-		if ($this->get('token'))
+	function query_get($query)
+	{	
+		if ($query_details = $this->dataset_model->get_query_details($query))
 		{
-			// Test to see if token is valid
-			if (is_string($this->get('token')) AND $this->dataset_model->validate_token($dataset, $this->get('token')))
+			if ($this->get('token'))
 			{
-				// Make sure we can decode the query
-				if ($query = $this->dataset_model->get_query($dataset, $query))
+				// Test to see if token is valid
+				if (is_string($this->get('token')) AND $this->dataset_model->validate_token($query_details[0]['set'], $this->get('token')))
 				{
-					if (isset($query['statements']))
-					{						
-						// Query the damn thing
-						$results = $this->dataset_model->query_dataset($dataset,
+					// Make sure we can decode the query
+					if ($query = $this->dataset_model->get_query($query_details[0]['set'], $query))
+					{
+						$this->_query_dataset($query_details[0]['set'],
 							isset($query['statements']) ? $query['statements'] : array(),
-							isset($query['fields']) ? $query['fields'] : array()
-						);
-						
-						$response->status = TRUE;
-						$response->count = count($results);
-						$response->results = $results;
-						$this->response($response, 200);
+							isset($query['fields']) ? $query['fields'] : array(),
+							$this->get('output') ? $this->get('output') : NULL);
 					}
 					else
 					{
 						$response->status = FALSE;
-						$response->error = 'Query does not contain any statements.';
+						$response->error = 'No or invalid query.';
 						$this->response($response, 400);
 					}
 				}
 				else
 				{
 					$response->status = FALSE;
-					$response->error = 'No or invalid query.';
+					$response->error = 'Invalid token provided.';
 					$this->response($response, 400);
 				}
 			}
 			else
 			{
 				$response->status = FALSE;
-				$response->error = 'Invalid token provided.';
+				$response->error = 'No token provided.';
 				$this->response($response, 400);
 			}
 		}
 		else
 		{
 			$response->status = FALSE;
-			$response->error = 'No token provided.';
-			$this->response($response, 400);
+			$response->error = 'Query does not exist.';
+			$this->response($response, 404);
 		}
 	}
 	
+	/**
+	 * Query dataset
+	 *
+	 * Private function to query the dataset
+	 */
+	
+	private function _query_dataset($dataset, $statements, $fields, $output = 'json')
+	{
+		if (isset($statements))
+		{			
+			// Query the damn thing
+			$results = $this->dataset_model->query_dataset($dataset, $statements, $fields);
+			
+			switch ($output)
+			{
+				case 'csv':
+					echo implode(',', $fields) . "\r\n";
+					foreach ($results as $result)
+					{
+						$row = array();
+						foreach ($fields as $field)
+						{
+							$row[] = $result[$field];
+						}
+						echo implode(',', $row) . "\r\n";
+					}
+				break;
+				
+				case 'json':
+				default:
+					$response->status = TRUE;
+					$response->count = count($results);
+					$response->results = $results;
+					$this->response($response, 200);
+				break;	
+			}			
+		}
+		else
+		{
+			$response->status = FALSE;
+			$response->error = 'Query does not contain any statements.';
+			$this->response($response, 400);
+		}
+	}
 	
 	/**
 	 * Get datapoints in csv format
@@ -478,7 +503,6 @@ class Datasets extends Orbital_Controller {
 		//Check user is valid
 		if ($user = $this->access->valid_user(array('projects')))
 		{
-			$this->load->model('dataset_model');
 			if ($response->query = $this->dataset_model->get_query_details($query_identifier))
 			{
 				if (isset($response->query[0]['value']['statements']))

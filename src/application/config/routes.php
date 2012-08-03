@@ -68,6 +68,7 @@ $route['dataset/(:any)/query/new'] = "datasets/create_query/$1";
 $route['dataset/(:any)/csv/(:any)'] = "datasets/csv/$1/$2";
 $route['dataset/(:any)'] = "datasets/specific/$1";
 
+$route['query/(:any)/data'] = "datasets/query/$1";
 $route['query/(:any)/delete'] = "datasets/query/$1";
 $route['query/(:any)/edit'] = "datasets/edit_query/$1";
 $route['query/(:any)'] = "datasets/view_query/$1";

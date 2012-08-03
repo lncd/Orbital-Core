@@ -267,7 +267,7 @@ class Dataset_model extends CI_Model {
 			->update('dataset_' . $dataset, array('upsert' => TRUE));
 	}
 	
-	function query_dataset($dataset, $query = array(), $select = array())
+	function query_dataset($dataset, $query = array(), $select = array(), $limit = 10000)
 	{
 	
 		foreach ($query as $key => $limits)
@@ -306,6 +306,7 @@ class Dataset_model extends CI_Model {
 		}
 	
 		$datapoints = $this->mongo_db
+			->limit($limit)
 			->select(array('_id'))
 			->get('dataset_' . $dataset);
 			
