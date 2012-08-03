@@ -447,7 +447,6 @@ class Datasets extends Orbital_Controller {
 				//}
 			}
 		}
-	}
 	
 	
 	/**
@@ -611,36 +610,91 @@ class Datasets extends Orbital_Controller {
 			// Test to see if token is valid
 			if (is_string($this->get('token')) AND $this->dataset_model->validate_token($dataset, $this->get('token')))
 			{
-				// Make sure we can decode the query
-				if ($this->get('q') AND $query = json_decode(urldecode($this->get('q'))))
+				// Retrieve entire dataset
+				$results = $this->dataset_model->retrieve_analysis_dataset($dataset);
+				
+				$total = count($results);
+				
+				$keys = array();
+				
+				foreach ($results as $result)
 				{
-					if (isset($query->statements))
+					foreach ($result as $key => $value)
 					{
+						// Test for key presence, if not initialise it
+						if (!isset($keys[$key]))
+						{
+							$keys[$key] = array(
+								'count' => 0,
+								'types' => array()
+							);
+						}
 						
-						// Query the damn thing
-						$results = $this->dataset_model->query_dataset($dataset,
-							isset($query->statements) ? $query->statements : array(),
-							isset($query->fields) ? $query->fields : array()
-						);
+						$keys[$key]['count']++;
 						
-						$response->status = TRUE;
-						$response->count = count($results);
-						$response->results = $results;
-						$this->response($response, 200);
-					}
-					else
-					{
-						$response->status = FALSE;
-						$response->error = 'Query does not contain any statements.';
-						$this->response($response, 400);
+						$type = gettype($value);
+						
+						// Test for type presence, if not initialise it
+						if (!isset($keys[$key]['types'][$type]))
+						{
+							$keys[$key]['types'][$type] = 0;
+						}
+						
+						$keys[$key]['types'][$type]++;
 					}
 				}
-				else
+				
+				// Do crunching on the keys
+				foreach ($keys as $key => $data)
 				{
-					$response->status = FALSE;
-					$response->error = 'No or invalid query.';
-					$this->response($response, 400);
+					// Calculate key presence ratio
+					$keys[$key]['present'] = $data['count'] / $total;
+					
+					// If data type double is present, treat all integers as doubles.
+					
+					if (isset($keys[$key]['types']['double']) AND isset($keys[$key]['types']['integer']))
+					{
+						$keys[$key]['types']['double'] = $keys[$key]['types']['double'] + $keys[$key]['types']['integer'];
+						$data['types']['double'] = $data['types']['double'] + $data['types']['integer'];
+					}
+					
+					// Find the most popular type
+					asort($data['types']);
+					$keys[$key]['suggested_type'] = array_pop(array_keys($data['types']));
+					$keys[$key]['suggestion_presence'] = $data['types'][$keys[$key]['suggested_type']] / $data['count'];
+					
 				}
+				
+				// Update the description nodes.
+				foreach ($keys as $key => $data)
+				{
+				
+					// Solver to match analysed data types to valid data type					
+					switch ($data['suggested_type'])
+					{
+					
+						case 'integer':
+							$type = 'int';
+							break;
+							
+						case 'double':
+							$type = 'float';
+							break;
+						
+						case 'string':
+						default:
+							$type = 'string';
+							break;
+						
+					}
+				
+					$this->dataset_model->update_data_description($dataset, $key, $type);
+				}
+				
+				$response->response = $keys;
+				
+				$response->status = TRUE;
+				$this->response($response, 200);
 			}
 			else
 			{

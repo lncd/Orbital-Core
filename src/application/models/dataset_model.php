@@ -153,6 +153,54 @@ class Dataset_model extends CI_Model {
 	}
 	
 	/**
+	 * Update Data Description
+	 *
+	 * Creates or updates a node in the dataset description table
+	 *
+	 * @return ARRAY
+	 */
+
+	function update_data_description($id, $key, $type = NULL, $friendly = NULL, $index = FALSE)
+	{	
+		$data = array(
+			'dd_dataset' => $id,
+			'dd_key' => $key,
+			'dd_type' => $type,
+			'dd_friendly' => $friendly,
+			'dd_index' => $index,
+		);
+
+		// Test for existence
+		if ($this->db->where(array('dd_dataset' => $id, 'dd_key' => $key))->get('dataset_descriptions')->num_rows() === 1)
+		{
+			// Node exists. Update.
+			if ($this->db
+				->where(array('dd_dataset' => $id, 'dd_key' => $key))
+				->update('dataset_descriptions', $data))
+			{
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			// New description node. Create.
+			if ($this->db
+				->insert('dataset_descriptions', $data))
+			{
+				return TRUE;
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+	}
+	
+	/**
 	 * List Project Datasets
 	 *
 	 * List dynamic datasets for the given project.
@@ -497,6 +545,34 @@ class Dataset_model extends CI_Model {
 		{
 			return FALSE;
 		}
+	}
+	
+	/*
+	 * Retrieve Analysis Dataset
+	 *
+	 * Retrieves a subset of the data to be used for classification analysis
+	 */
+	
+	function retrieve_analysis_dataset($dataset)
+	{
+	
+		// Pull back the latest 20,000 pieces of data for throwing into the analysis process.
+		$this->mongo_db->select(array('data'));
+		$this->mongo_db->limit(20000);
+		$this->mongo_db->order_by(array('update_time' => -1));
+		
+		$datapoints = $this->mongo_db->get('dataset_' . $dataset);
+			
+		$output = array();
+		
+		foreach ($datapoints as $datapoint)
+		{
+			$output[] = $datapoint['data'];
+				
+		}
+		
+		return $output;
+		
 	}
 }
 
